@@ -11,9 +11,33 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/categories",
+     *     tags={"Category"},
+     *     summary="Finds all categories",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="viewAllCategories",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="active",
+     *             type="string",
+     *             enum={"active", "inactive"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
      */
     public function index()
     {
@@ -21,12 +45,7 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         try {

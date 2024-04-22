@@ -1,10 +1,10 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "L5 OpenApi",
-        "description": "L5 Swagger OpenApi description",
+        "title": "Tropski bar",
+        "description": "Swagger - tropski bar",
         "contact": {
-            "email": "darius@matulionis.lt"
+            "email": "dtahirovic2@gmail.com"
         },
         "license": {
             "name": "Apache 2.0",
@@ -13,13 +13,107 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/": {
+        "/api/categories": {
             "get": {
-                "description": "Home page",
-                "operationId": "58658e34a5c8bd71c4a0afed6de10d20",
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Finds all categories",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "viewAllCategories",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
-                    "default": {
-                        "description": "Welcome page"
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/hotels": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Finds all hotels",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "viewAllHotels",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/main-categories": {
+            "get": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Finds all main categories",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "viewAllMainCategories",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
                     }
                 }
             }
