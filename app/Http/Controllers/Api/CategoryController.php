@@ -16,7 +16,7 @@ class CategoryController extends Controller
      *     tags={"Category"},
      *     summary="Finds all categories",
      *     description="Multiple status values can be provided with comma separated string",
-     *     operationId="viewAllCategories",
+     *     operationId="categories.index",
      *     @OA\Parameter(
      *         name="status",
      *         in="query",
@@ -45,7 +45,7 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
-    
+
     public function store(Request $request)
     {
         try {
@@ -97,7 +97,9 @@ class CategoryController extends Controller
             $mainCategory = MainCategory::findOrFail($request->input('main_cat_id'));
             $main_cat_id = $request->input('main_cat_id');
             $category->update(['main_cat_id' => $main_cat_id]);
-            Media::where('model_id', 6)->delete();
+            Media::where('model_id', $id)
+                ->where('model_type', Category::class)
+                ->delete();
             $category->addMediaFromRequest('image')->toMediaCollection();
             $category->getMedia();
             return response()->json(['data' => $category]);
@@ -114,6 +116,12 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $category = Category::findOrFail($id);
+            $category->delete();
+            return response()->json(['data' => $category]);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 }

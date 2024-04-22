@@ -20,7 +20,77 @@
                 ],
                 "summary": "Finds all categories",
                 "description": "Multiple status values can be provided with comma separated string",
-                "operationId": "viewAllCategories",
+                "operationId": "categories.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/extras": {
+            "get": {
+                "tags": [
+                    "Extra"
+                ],
+                "summary": "Finds all Extras",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "extras.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/extra-groups": {
+            "get": {
+                "tags": [
+                    "ExtraGorup"
+                ],
+                "summary": "Finds all Extra groups",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "extra-groups.index",
                 "parameters": [
                     {
                         "name": "status",
@@ -83,6 +153,41 @@
                 }
             }
         },
+        "/api/main-categories-all": {
+            "get": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Finds all main categories with its subcategories",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "main-categories.mainCategoriesWithCategories",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/main-categories": {
             "get": {
                 "tags": [
@@ -90,7 +195,7 @@
                 ],
                 "summary": "Finds all main categories",
                 "description": "Multiple status values can be provided with comma separated string",
-                "operationId": "viewAllMainCategories",
+                "operationId": "main-categories.index",
                 "parameters": [
                     {
                         "name": "status",

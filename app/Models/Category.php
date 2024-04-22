@@ -13,7 +13,8 @@ class Category extends Model implements HasMedia
 
     use InteractsWithMedia;
     protected $fillable = [
-        'main_cat_id'
+        'main_cat_id',
+        
     ];
 
     public function categoryTrans()
@@ -28,6 +29,7 @@ class Category extends Model implements HasMedia
 
     public function mainCategory()
     {
-        return $this->belongsTo(MainCategory::class);
+        return $this->belongsTo(MainCategory::class, 'main_cat_id');
     }
+    
 }

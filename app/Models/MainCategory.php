@@ -24,7 +24,7 @@ class MainCategory extends Model implements HasMedia
 
     public function categories()
     {
-        return $this->hasMany(Category::class);
+        return $this->hasMany(Category::class, 'main_cat_id');
     }
 
     public function mainCategoryTrans()
