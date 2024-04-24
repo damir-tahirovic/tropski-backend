@@ -3,62 +3,196 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\ExtraGroup;
+use App\Models\Item;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ItemController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/items",
+     *     tags={"Item"},
+     *     summary="Finds all items",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="items.index",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="active",
+     *             type="string",
+     *             enum={"active", "inactive"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
      */
     public function index()
     {
-        //
+        $items = Item::with('media')->get();
+        return response()->json(['items' => $items]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/items",
+     *     tags={"Item"},
+     *     summary="Creates a new item",
+     *     description="Creates a new item with the provided data",
+     *     operationId="items.store",
+     *     @OA\RequestBody(
+     *         description="Item object that needs to be added",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="image",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="category_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="extra_group_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="code",
+     *                     type="string"
+     *                 ),
+     *                 example={"image": "image.jpg", "category_id": 1, "extra_group_id": 1, "code": "ITEM001"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
-    
+        try {
+            $validated = $request->validate([
+                'image' => 'required',
+                'category_id' => 'required',
+                'extra_group_id' => 'required',
+                'code' => 'required'
+            ]);
+            $category = Category::findOrFail($request->input('category_id'));
+            $extraGroup = ExtraGroup::findOrFail($request->input('extra_group_id'));
+            $item = Item::create($request->all());
+            $item->addMediaFromRequest('image')->toMediaCollection();
+            $item->getMedia();
+            return response()->json(['items' => $item]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/items/{id}",
+     *     tags={"Item"},
+     *     summary="Finds an item by its ID",
+     *     description="Returns a single item",
+     *     operationId="items.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the item to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item not found"
+     *     )
+     * )
      */
     public function show($id)
     {
-        //
+        try {
+            $item = Item::findOrFail($id);
+            $item->getMedia();
+            return response()->json(['item' => $item]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'image' => 'required',
+                'category_id' => 'required',
+                'extra_group_id' => 'required',
+                'code' => 'required'
+            ]);
+            $item = Item::findOrFail($id);
+            $category = Category::findOrFail($request->input('category_id'));
+            $extraGroup = ExtraGroup::findOrFail($request->input('extra_group_id'));
+            Media::where('model_id', $id)
+                ->where('model_type', Item::class)
+                ->delete();
+            $item->addMediaFromRequest('image')->toMediaCollection();
+            $item->getMedia();
+            return response()->json(['item' => $item]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            $item = Item::findOrFail($id);
+            $item->delete();
+            return response()->json(['item' => $item]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 }

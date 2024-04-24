@@ -10,7 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class MainCategory extends Model implements HasMedia
 {
     use HasFactory;
-    
+
     use InteractsWithMedia;
 
     protected $fillable = [
@@ -29,7 +29,7 @@ class MainCategory extends Model implements HasMedia
 
     public function mainCategoryTrans()
     {
-        return $this->hasMany(MainCategoryTran::class);
+        return $this->hasMany(MainCategoryTran::class, 'main_cat_id');
     }
 
     public function orderPlaces()

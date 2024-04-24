@@ -14,7 +14,7 @@ class MainCategoryTran extends Model
         'lang_id',
         'main_cat_id'
     ];
-    
+
     public function mainCategories()
     {
         return $this->belongsTo(MainCategory::class);
@@ -22,6 +22,6 @@ class MainCategoryTran extends Model
 
     public function languages()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'lang_id');
     }
 }

@@ -12,9 +12,10 @@ class Category extends Model implements HasMedia
     use HasFactory;
 
     use InteractsWithMedia;
+
     protected $fillable = [
         'main_cat_id',
-        
+        'category_id'
     ];
 
     public function categoryTrans()
@@ -31,5 +32,20 @@ class Category extends Model implements HasMedia
     {
         return $this->belongsTo(MainCategory::class, 'main_cat_id');
     }
-    
+
+    public function parentCategory()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function allSubcategories()
+    {
+        return $this->subcategories()->with('allSubcategories');
+    }
+
+    public function subCategories()
+    {
+        return $this->hasMany(Category::class, 'category_id');
+    }
+
 }

@@ -20,7 +20,7 @@ class Language extends Model
 
     public function itemTypeTrans()
     {
-        return $this->hasMany(ItemTypeTran::class);
+        return $this->hasMany(ItemTypeTran::class, 'lang_id');
     }
 
     public function categoryTrans()

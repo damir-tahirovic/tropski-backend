@@ -13,6 +13,41 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/categories-all": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Finds all categories with its subcategories",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "categories.categoriesWithSubcategories",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/categories": {
             "get": {
                 "tags": [
@@ -21,6 +56,41 @@
                 "summary": "Finds all categories",
                 "description": "Multiple status values can be provided with comma separated string",
                 "operationId": "categories.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/category-trans": {
+            "get": {
+                "tags": [
+                    "CategoryTran"
+                ],
+                "summary": "Finds all categories on different languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "category-trans.index",
                 "parameters": [
                     {
                         "name": "status",
@@ -118,6 +188,41 @@
                 }
             }
         },
+        "/api/extra-trans": {
+            "get": {
+                "tags": [
+                    "ExtraTran"
+                ],
+                "summary": "Finds all extras on different languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "extra-trans.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/hotels": {
             "get": {
                 "tags": [
@@ -153,14 +258,231 @@
                 }
             }
         },
-        "/api/main-categories-all": {
+        "/api/items": {
             "get": {
                 "tags": [
-                    "MainCategory"
+                    "Item"
                 ],
-                "summary": "Finds all main categories with its subcategories",
+                "summary": "Finds all items",
                 "description": "Multiple status values can be provided with comma separated string",
-                "operationId": "main-categories.mainCategoriesWithCategories",
+                "operationId": "items.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Creates a new item",
+                "description": "Creates a new item with the provided data",
+                "operationId": "items.store",
+                "requestBody": {
+                    "description": "Item object that needs to be added",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "type": "string"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    },
+                                    "extra_group_id": {
+                                        "type": "integer"
+                                    },
+                                    "code": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "image": "image.jpg",
+                                    "category_id": 1,
+                                    "extra_group_id": 1,
+                                    "code": "ITEM001"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/items/{id}": {
+            "get": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Finds an item by its ID",
+                "description": "Returns a single item",
+                "operationId": "items.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the item to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
+            }
+        },
+        "/api/item-trans": {
+            "get": {
+                "tags": [
+                    "ItemTran"
+                ],
+                "summary": "Finds all items on different languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "item-trans.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/item-types": {
+            "get": {
+                "tags": [
+                    "ItemType"
+                ],
+                "summary": "Finds all item types",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "item-types.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/item-type-trans": {
+            "get": {
+                "tags": [
+                    "ItemTypeTran"
+                ],
+                "summary": "Finds all main item-types on different languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "item-types-trans.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/languages": {
+            "get": {
+                "tags": [
+                    "Language"
+                ],
+                "summary": "Finds all languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "languages.index",
                 "parameters": [
                     {
                         "name": "status",
@@ -193,9 +515,74 @@
                 "tags": [
                     "MainCategory"
                 ],
-                "summary": "Finds all main categories",
+                "summary": "Finds all main categories with its subcategories",
                 "description": "Multiple status values can be provided with comma separated string",
                 "operationId": "main-categories.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/main-categories/{id}": {
+            "get": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Finds a main category by its ID along with its subcategories",
+                "description": "Returns a single main category with its subcategories",
+                "operationId": "main-categories.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the main category to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "404": {
+                        "description": "MainCategory not found"
+                    }
+                }
+            }
+        },
+        "/api/main-category-trans": {
+            "get": {
+                "tags": [
+                    "MainCategoryTran"
+                ],
+                "summary": "Finds all main categories on different languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "main-category-trans.index",
                 "parameters": [
                     {
                         "name": "status",

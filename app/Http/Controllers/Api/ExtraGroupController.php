@@ -112,6 +112,12 @@ class ExtraGroupController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $extraGroup = ExtraGroup::findOrFail($id);
+            $extraGroup->delete();
+            return response()->json(['extraGroups' => $extraGroup]);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 }
