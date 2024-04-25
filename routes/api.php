@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\ExtraGroupExtraPivotController;
 use App\Http\Controllers\Api\ExtraTranController;
 use App\Http\Controllers\Api\ItemTranController;
 use App\Http\Controllers\Api\ItemTypeTranController;
+use App\Http\Controllers\Api\OrderPlaceController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryController;
@@ -28,9 +30,12 @@ use App\Http\Controllers\Api\ItemTypeController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::post('/auth/register', [UserController::class, 'createUser'])->name('create-user');
+Route::post('/auth/login', [UserController::class, 'loginUser'])->name('login-user');
 
 
 //Rute za MainCategory
@@ -163,19 +168,10 @@ Route::put('extra-group-extra-pivots/{id}', [ExtraGroupExtraPivotController::cla
 Route::delete('extra-group-extra-pivots/{id}', [ExtraGroupExtraPivotController::class, 'destroy'])->name('extra-group-extra-pivots.destroy');
 
 
-//Rute za ExtraGroupExtraPivot
-
-Route::get('extra-group-extra-pivots', [ExtraGroupExtraPivotController::class, 'index'])->name('extra-group-extra-pivots.index');
-Route::post('extra-group-extra-pivots', [ExtraGroupExtraPivotController::class, 'store'])->name('extra-group-extra-pivots.store');
-Route::get('extra-group-extra-pivots/{id}', [ExtraGroupExtraPivotController::class, 'show'])->name('extra-group-extra-pivots.show');
-Route::put('extra-group-extra-pivots/{id}', [ExtraGroupExtraPivotController::class, 'update'])->name('extra-group-extra-pivots.update');
-Route::delete('extra-group-extra-pivots/{id}', [ExtraGroupExtraPivotController::class, 'destroy'])->name('extra-group-extra-pivots.destroy');
-
-
 //Rute za OrderPlace
 
-Route::get('order-places', [ExtraGroupExtraPivotController::class, 'index'])->name('order-places.index');
-Route::post('order-places', [ExtraGroupExtraPivotController::class, 'store'])->name('order-places.store');
-Route::get('order-places/{id}', [ExtraGroupExtraPivotController::class, 'show'])->name('order-places.show');
-Route::put('order-places/{id}', [ExtraGroupExtraPivotController::class, 'update'])->name('order-places.update');
-Route::delete('order-places/{id}', [ExtraGroupExtraPivotController::class, 'destroy'])->name('order-places.destroy');
+Route::get('order-places', [OrderPlaceController::class, 'index'])->name('order-places.index');
+Route::post('order-places', [OrderPlaceController::class, 'store'])->name('order-places.store');
+Route::get('order-places/{id}', [OrderPlaceController::class, 'show'])->name('order-places.show');
+Route::put('order-places/{id}', [OrderPlaceController::class, 'update'])->name('order-places.update');
+Route::delete('order-places/{id}', [OrderPlaceController::class, 'destroy'])->name('order-places.destroy');
