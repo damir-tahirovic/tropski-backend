@@ -5,12 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Hotel",
+ *     required={"name", "his_id"},
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="The name of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="his_id",
+ *         type="integer",
+ *         description="The HIS ID of the hotel"
+ *     )
+ * )
+ */
 class Hotel extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        "name", 
+        "name",
         "his_id",
     ];
 
@@ -44,5 +60,5 @@ class Hotel extends Model
         return $this->hasMany(ExtraGroup::class);
     }
 
-    
+
 }

@@ -25,7 +25,7 @@ class HotelController extends Controller
      *         @OA\Schema(
      *             default="active",
      *             type="string",
-     *             enum={"active", "inactive"} 
+     *             enum={"active", "inactive"}
      *         )
      *     ),
      *     @OA\Response(
@@ -46,10 +46,26 @@ class HotelController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/hotels",
+     *     tags={"Hotel"},
+     *     summary="Create a new hotel",
+     *     description="Create a new hotel with the provided data",
+     *     operationId="createHotel",
+     *     @OA\RequestBody(
+     *         description="Hotel data",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Hotel")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Hotel created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -62,10 +78,35 @@ class HotelController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/hotels/{id}",
+     *     tags={"Hotel"},
+     *     summary="Find hotel by ID",
+     *     description="Returns a single hotel",
+     *     operationId="getHotelById",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of hotel to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -78,11 +119,40 @@ class HotelController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *     path="/api/hotels/{id}",
+     *     tags={"Hotel"},
+     *     summary="Updates a hotel with new data",
+     *     description="Updates a hotel with new data",
+     *     operationId="updateHotel",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of hotel to update",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Updated hotel data",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Hotel")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Hotel updated successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel not found"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -100,10 +170,35 @@ class HotelController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/hotels/{id}",
+     *     tags={"Hotel"},
+     *     summary="Deletes a hotel",
+     *     description="Deletes a hotel",
+     *     operationId="deleteHotel",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of hotel to delete",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Hotel deleted successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

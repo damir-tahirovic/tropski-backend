@@ -188,6 +188,41 @@
                 }
             }
         },
+        "/api/extra-group-extra-pivots": {
+            "get": {
+                "tags": [
+                    "ExtraGroupExtraPivot"
+                ],
+                "summary": "Finds all extra groups and pivots",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "extra-group-extra-pivots.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/extra-trans": {
             "get": {
                 "tags": [
@@ -254,6 +289,139 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Create a new hotel",
+                "description": "Create a new hotel with the provided data",
+                "operationId": "createHotel",
+                "requestBody": {
+                    "description": "Hotel data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Hotel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hotel created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/hotels/{id}": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Find hotel by ID",
+                "description": "Returns a single hotel",
+                "operationId": "getHotelById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of hotel to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Hotel not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Updates a hotel with new data",
+                "description": "Updates a hotel with new data",
+                "operationId": "updateHotel",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of hotel to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Updated hotel data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Hotel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Hotel updated successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Hotel not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Deletes a hotel",
+                "description": "Deletes a hotel",
+                "operationId": "deleteHotel",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of hotel to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hotel deleted successfully"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Hotel not found"
                     }
                 }
             }
@@ -608,6 +776,222 @@
                         "description": "Invalid status value"
                     }
                 }
+            }
+        },
+        "/api/order-places": {
+            "get": {
+                "tags": [
+                    "OrderPlace"
+                ],
+                "summary": "Finds all order places",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "order-places.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "OrderPlace"
+                ],
+                "summary": "Create a new order place",
+                "operationId": "order-places.store",
+                "requestBody": {
+                    "description": "OrderPlace object that needs to be added",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderPlace"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OrderPlace created"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/order-places/{id}": {
+            "get": {
+                "tags": [
+                    "OrderPlace"
+                ],
+                "summary": "Find order place by ID",
+                "description": "Returns a single order place",
+                "operationId": "order-places.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of order place to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderPlace"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Order place not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "OrderPlace"
+                ],
+                "summary": "Updates an order place",
+                "operationId": "order-places.update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "OrderPlace id to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "OrderPlace object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderPlace"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OrderPlace updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "OrderPlace"
+                ],
+                "summary": "Deletes an order place",
+                "operationId": "order-places.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "OrderPlace id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OrderPlace deleted"
+                    },
+                    "400": {
+                        "description": "Invalid OrderPlace id"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Hotel": {
+                "required": [
+                    "name",
+                    "his_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the hotel",
+                        "type": "string"
+                    },
+                    "his_id": {
+                        "description": "The HIS ID of the hotel",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderPlace": {
+                "required": [
+                    "hotel_id",
+                    "main_cat_id",
+                    "name",
+                    "code",
+                    "reported"
+                ],
+                "properties": {
+                    "hotel_id": {
+                        "description": "The ID of the hotel",
+                        "type": "integer"
+                    },
+                    "main_cat_id": {
+                        "description": "The ID of the main category",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the order place",
+                        "type": "string"
+                    },
+                    "code": {
+                        "description": "The code of the order place",
+                        "type": "string"
+                    },
+                    "reported": {
+                        "description": "Whether the order place is reported or not",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
             }
         }
     }
