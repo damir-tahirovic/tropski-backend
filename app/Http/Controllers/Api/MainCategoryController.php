@@ -298,4 +298,6 @@ class MainCategoryController extends Controller
             return response()->json($e->getMessage());
         }
     }
+
+
 }

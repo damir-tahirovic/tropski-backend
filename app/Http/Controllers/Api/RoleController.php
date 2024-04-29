@@ -3,62 +3,208 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RoleController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/roles",
+     *     tags={"Role"},
+     *     summary="Get all roles",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="roles.index",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="active",
+     *             type="string",
+     *             enum={"active", "inactive"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+        return response()->json(['roles' => $roles], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/roles",
+     *     tags={"Role"},
+     *     summary="Create a new role",
+     *     operationId="roles.store",
+     *     @OA\RequestBody(
+     *         description="Role data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Role")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Role created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'description' => 'required'
+            ]);
+            $role = Role::create($validated);
+            return response()->json(['role' => $role], 201);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/roles/{id}",
+     *     tags={"Role"},
+     *     summary="Find role by ID",
+     *     description="Returns a single role",
+     *     operationId="roles.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of role to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid role ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Role not found"
+     *     )
+     * )
      */
     public function show($id)
     {
-        //
+        try {
+            $role = Role::findOrFail($id);
+            return response()->json($role, 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *     path="/api/roles/{id}",
+     *     tags={"Role"},
+     *     summary="Update an existing role",
+     *     description="",
+     *     operationId="roles.update",
+     *     @OA\RequestBody(
+     *         description="Role object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Role")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Role not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $role = Role::findOrFail($id);
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'description' => 'required'
+            ]);
+            $role = Role::update($validated);
+            return response()->json(['role' => $role], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/roles/{id}",
+     *     tags={"Role"},
+     *     summary="Deletes a role",
+     *     description="",
+     *     operationId="roles.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Role id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Role not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {
-        //
+        try {
+            $role = Role::findOrFail($id);
+            $role->delete();
+            return response()->json(['role' => $role]);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

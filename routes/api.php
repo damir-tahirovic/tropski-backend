@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\HotelUserController;
 use App\Http\Controllers\Api\ItemTranController;
 use App\Http\Controllers\Api\ItemTypeTranController;
 use App\Http\Controllers\Api\OrderPlaceController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\RoleHotelUserController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -192,4 +194,22 @@ Route::post('hotel-users', [HotelUserController::class, 'store'])->name('hotel-u
 Route::get('hotel-users/{id}', [HotelUserController::class, 'show'])->name('hotel-users.show');
 Route::put('hotel-users/{id}', [HotelUserController::class, 'update'])->name('hotel-users.update');
 Route::delete('hotel-users/{id}', [HotelUserController::class, 'destroy'])->name('hotel-users.destroy');
+
+
+//Rute za Role
+
+Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
+Route::get('roles/{id}', [RoleController::class, 'show'])->name('roles.show');
+Route::put('roles/{id}', [RoleController::class, 'update'])->name('roles.update');
+Route::delete('roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+
+//Rute za RoleHotelUser
+
+Route::get('role-hotel-users', [RoleHotelUserController::class, 'index'])->name('role-hotel-users.index');
+Route::post('role-hotel-users', [RoleHotelUserController::class, 'store'])->name('role-hotel-users.store');
+Route::get('role-hotel-users/{id}', [RoleHotelUserController::class, 'show'])->name('role-hotel-users.show');
+Route::put('role-hotel-users/{id}', [RoleHotelUserController::class, 'update'])->name('role-hotel-users.update');
+Route::delete('role-hotel-users/{id}', [RoleHotelUserController::class, 'destroy'])->name('role-hotel-users.destroy');
 

@@ -2649,6 +2649,318 @@
                     }
                 }
             }
+        },
+        "/api/roles": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get all roles",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "roles.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Create a new role",
+                "operationId": "roles.store",
+                "requestBody": {
+                    "description": "Role data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Role"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Role created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/roles/{id}": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Find role by ID",
+                "description": "Returns a single role",
+                "operationId": "roles.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of role to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid role ID supplied"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Update an existing role",
+                "description": "",
+                "operationId": "roles.update",
+                "requestBody": {
+                    "description": "Role object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Role"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Deletes a role",
+                "description": "",
+                "operationId": "roles.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Role id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    }
+                }
+            }
+        },
+        "/api/role-hotel-users": {
+            "get": {
+                "tags": [
+                    "RoleHotelUser"
+                ],
+                "summary": "Get all role hotel users",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "role-hotel-users.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "RoleHotelUser"
+                ],
+                "summary": "Create a new role hotel user",
+                "operationId": "role-hotel-users.store",
+                "requestBody": {
+                    "description": "Role hotel user data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoleHotelUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Role hotel user created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/role-hotel-users/{id}": {
+            "get": {
+                "tags": [
+                    "RoleHotelUser"
+                ],
+                "summary": "Find role hotel user by ID",
+                "description": "Returns a single role hotel user",
+                "operationId": "role-hotel-users.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of role hotel user to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid role hotel user ID supplied"
+                    },
+                    "404": {
+                        "description": "Role hotel user not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "RoleHotelUser"
+                ],
+                "summary": "Update an existing role hotel user",
+                "description": "",
+                "operationId": "role-hotel-users.update",
+                "requestBody": {
+                    "description": "Role hotel user object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoleHotelUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Role hotel user not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "RoleHotelUser"
+                ],
+                "summary": "Deletes a role hotel user",
+                "description": "",
+                "operationId": "role-hotel-users.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Role hotel user id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Role hotel user not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -3004,6 +3316,40 @@
                     "reported": {
                         "description": "Whether the order place is reported or not",
                         "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "Role": {
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the role",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The description of the role",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "RoleHotelUser": {
+                "required": [
+                    "role_id",
+                    "hotel_user_id"
+                ],
+                "properties": {
+                    "role_id": {
+                        "description": "The ID of the role",
+                        "type": "integer"
+                    },
+                    "hotel_user_id": {
+                        "description": "The ID of the hotel user",
+                        "type": "integer"
                     }
                 },
                 "type": "object"
