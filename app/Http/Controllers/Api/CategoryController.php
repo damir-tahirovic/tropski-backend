@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\CategoryTran;
 use App\Models\MainCategory;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,20 +14,6 @@ use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
-
-    public function getCategoryWithSubcategories($category)
-    {
-        $subcategories = $category->subcategories;
-
-        if ($subcategories !== null && $subcategories->isNotEmpty()) {
-            $category->subcategories = $subcategories->map(function ($subcategory) {
-
-                return $this->getCategoryWithSubcategories($subcategory);
-            });
-        }
-        $category->getMedia();
-        return $category;
-    }
 
     /**
      * @OA\Get(
@@ -68,6 +55,19 @@ class CategoryController extends Controller
         return response()->json(['categories' => $categoriesWithSubcategories]);
     }
 
+    public function getCategoryWithSubcategories($category)
+    {
+        $subcategories = $category->subcategories;
+
+        if ($subcategories !== null && $subcategories->isNotEmpty()) {
+            $category->subcategories = $subcategories->map(function ($subcategory) {
+
+                return $this->getCategoryWithSubcategories($subcategory);
+            });
+        }
+        $category->getMedia();
+        return $category;
+    }
 
     public function store(Request $request)
     {
@@ -75,9 +75,10 @@ class CategoryController extends Controller
             $validated = $request->validate([
                 'image' => 'required',
                 'main_cat_id' => 'required',
+                'name_me' => 'required|max:255',
+                'name_en' => 'required|max:255'
             ]);
             $category_id = $request->input('category_id');
-
             if ($category_id !== null) {
                 $parentCategory = Category::findOrFail($category_id);
                 $main_cat_id = $parentCategory->main_cat_id;
@@ -87,11 +88,31 @@ class CategoryController extends Controller
             } else {
                 $category = Category::create($request->all());
             }
-            $category->addMediaFromRequest('image')->toMediaCollection();
-            $category->getMedia();
-            return response()->json(['data' => $category]);
+
+            //Prevod za engleski jezik
+            $categoryTran1 = CategoryTran::create([
+                'category_id' => $category->id,
+                'name' => $validated['name_en'],
+                'lang_id' => '2'
+            ]);
+
+            //Prevod za crnogorski jezik
+            $categoryTran2 = CategoryTran::create([
+                'category_id' => $category->id,
+                'name' => $validated['name_me'],
+                'lang_id' => '1'
+            ]);
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $category->addMedia($image)->toMediaCollection();
+                $category->getMedia();
+            }
+            return response()->json(['category' => $category,
+                'categoryTran1' => $categoryTran1,
+                'categoryTran2' => $categoryTran2,], 201);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 

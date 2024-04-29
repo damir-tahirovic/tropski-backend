@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Extra;
 use App\Models\Hotel;
 use App\Models\MainCategory;
 use App\Models\MainCategoryTran;
@@ -23,26 +24,31 @@ class MainCategoryController extends Controller
         $this->categoryController = $categoryController;
     }
 
-    public function getMainCategoryWithCategories($mainCategory)
-    {
-        $categories = $mainCategory->categories;
-
-        if ($categories !== null && $categories->isNotEmpty()) {
-            $mainCategory->categories = $categories->map(function ($category) {
-                return $this->categoryController->getCategoryWithSubcategories($category);
-            });
-        }
-        return $mainCategory;
-    }
+//    public function getMainCategoryWithCategories($mainCategory)
+//    {
+//        $categories = $mainCategory->categories;
+//
+//        if ($categories !== null && $categories->isNotEmpty()) {
+//            $mainCategory->categories = $categories->map(function ($category) {
+//                return $this->categoryController->getCategoryWithSubcategories($category);
+//            });
+//        }
+//        return $mainCategory;
+//    }
 
     public function store(Request $request)
     {
         try {
+
+            $validated = $request->validate([
+                'hotel_id' => 'required',
+                'image' => 'required',
+                'name_en' => 'required',
+                'name_me' => 'required'
+            ]);
+
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $hotel_id = $hotel->id;
-            $name_en = $request->input('name_en');
-            $name_me = $request->input('name_me');
-
             $mainCategory = MainCategory::create([
                 'hotel_id' => $hotel_id,
             ]);
@@ -53,14 +59,17 @@ class MainCategoryController extends Controller
                 $mainCategory->getMedia();
             }
 
+            //Prevod za engleski jezik
             $mainCategoryTran1 = MainCategoryTran::create([
                 'main_cat_id' => $mainCategory->id,
-                'name' => $name_en,
+                'name' => $validated['name_en'],
                 'lang_id' => '2'
             ]);
+
+            //Prevod za crnogorski jezik
             $mainCategoryTran2 = MainCategoryTran::create([
                 'main_cat_id' => $mainCategory->id,
-                'name' => $name_me,
+                'name' => $validated['name_me'],
                 'lang_id' => '1'
             ]);
 
@@ -68,7 +77,7 @@ class MainCategoryController extends Controller
                 'mainCategoryTran1' => $mainCategoryTran1,
                 'mainCategoryTran2' => $mainCategoryTran2], '201');
         } catch (Exception $e) {
-            return response()->json($e->getMessage(), '417');
+            return response()->json($e->getMessage(), '400');
         }
     }
 

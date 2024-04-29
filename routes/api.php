@@ -71,6 +71,9 @@ Route::get('hotels/{id}', [HotelController::class, 'show'])->name('hotels.show')
 Route::put('hotels/{id}', [HotelController::class, 'update'])->name('hotels.update');
 Route::delete('hotels/{id}', [HotelController::class, 'destroy'])->name('hotels.destroy');
 
+Route::get('hotels-main-categories', [HotelController::class, 'allHotelsWithMainCategories'])->name('hotels.allHotelsWithMainCategories');
+Route::get('hotels-main-categories/{id}', [HotelController::class, 'hotelsWithMainCategories'])->name('hotels.hotelsWithMainCategories');
+
 
 //Rute za Extra
 
@@ -115,6 +118,8 @@ Route::post('main-category-trans', [MainCategoryTranController::class, 'store'])
 Route::get('main-category-trans/{id}', [MainCategoryTranController::class, 'show'])->name('main-category-trans.show');
 Route::put('main-category-trans/{id}', [MainCategoryTranController::class, 'update'])->name('main-category-trans.update');
 Route::delete('main-category-trans/{id}', [MainCategoryTranController::class, 'destroy'])->name('main-category-trans.destroy');
+
+Route::get('main-category-trans-languages', [MainCategoryTranController::class, 'mainCategoryNamesWithLanguages'])->name('main-category-trans.mainCategoryNamesWithLanguages');
 
 
 //Rute za CategoryTran
@@ -187,3 +192,4 @@ Route::post('hotel-users', [HotelUserController::class, 'store'])->name('hotel-u
 Route::get('hotel-users/{id}', [HotelUserController::class, 'show'])->name('hotel-users.show');
 Route::put('hotel-users/{id}', [HotelUserController::class, 'update'])->name('hotel-users.update');
 Route::delete('hotel-users/{id}', [HotelUserController::class, 'destroy'])->name('hotel-users.destroy');
+

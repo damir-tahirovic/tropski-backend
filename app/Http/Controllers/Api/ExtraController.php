@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Extra;
+use App\Models\ExtraTran;
 use App\Models\Hotel;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ExtraController extends Controller
@@ -26,7 +29,7 @@ class ExtraController extends Controller
      *         @OA\Schema(
      *             default="active",
      *             type="string",
-     *             enum={"active", "inactive"} 
+     *             enum={"active", "inactive"}
      *         )
      *     ),
      *     @OA\Response(
@@ -48,8 +51,8 @@ class ExtraController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -57,22 +60,46 @@ class ExtraController extends Controller
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
                 'hotel_id' => 'required',
-                'image' => 'required'
+                'image' => 'required',
+                'name_en' => 'required|max:255',
+                'name_me' => 'required|max:255',
             ]);
-            $extra = Extra::create($request->all());
-            $extra->addMediaFromRequest('image')->toMediaCollection();
-            $extra->getMedia();
-            return response()->json(['data' => $extra], '201');
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage());
+
+            $extra = Extra::create([
+                'hotel_id' => $request->input('hotel_id'),
+            ]);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $extra->addMedia($image)->toMediaCollection();
+                $extra->getMedia();
+            }
+
+            //Prevod za engleski jezik
+            $extraTran1 = ExtraTran::create([
+                'extra_id' => $extra->id,
+                'lang_id' => '2',
+                'name' => $request->input('name_en'),
+            ]);
+
+            //Prevod za crnogorski jezik
+            $extraTran2 = ExtraTran::create([
+                'extra_id' => $extra->id,
+                'lang_id' => '1',
+                'name' => $request->input('name_me'),
+            ]);
+            return response()->json(['extra' => $extra,
+                'extraTran1' => $extraTran1,
+                'extraTran2' => $extraTran2], '201');
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function show($id)
     {
@@ -80,7 +107,7 @@ class ExtraController extends Controller
             $extra = Extra::findOrFail($id);
             $extra->getMedia();
             return response()->json(['data' => $extra]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -88,9 +115,9 @@ class ExtraController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -108,7 +135,7 @@ class ExtraController extends Controller
             $extra->addMediaFromRequest('image')->toMediaCollection();
             $extra->getMedia();
             return response()->json(['data' => $extra], '200');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -116,8 +143,8 @@ class ExtraController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy($id)
     {
@@ -125,7 +152,7 @@ class ExtraController extends Controller
             $extra = Extra::findOrFail($id);
             $extra->delete();
             return response()->json(['data' => $extra]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }

@@ -223,6 +223,76 @@
                 }
             }
         },
+        "/api/hotels-main-categories": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Finds all hotels with its main categories",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "hotels.allHotelsWithMainCategories",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/hotels-main-categories/{id}": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Finds hotel with its main categories",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "hotels.hotelsWithMainCategories",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/hotels": {
             "get": {
                 "tags": [
@@ -230,7 +300,7 @@
                 ],
                 "summary": "Finds all hotels",
                 "description": "Multiple status values can be provided with comma separated string",
-                "operationId": "viewAllHotels",
+                "operationId": "hotels.index",
                 "parameters": [
                     {
                         "name": "status",
@@ -716,6 +786,41 @@
                 "summary": "Finds all main categories with its subcategories",
                 "description": "Multiple status values can be provided with comma separated string",
                 "operationId": "main-categories.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/api/main-category-trans-languages": {
+            "get": {
+                "tags": [
+                    "MainCategoryTran"
+                ],
+                "summary": "Finds all main categories names with its languages",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "main-category-trans.mainCategoryNamesWithLanguages",
                 "parameters": [
                     {
                         "name": "status",

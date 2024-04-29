@@ -9,9 +9,55 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Language;
+use Illuminate\Support\Facades\DB;
 
 class MainCategoryTranController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/main-category-trans-languages",
+     *     tags={"MainCategoryTran"},
+     *     summary="Finds all main categories names with its languages",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="main-category-trans.mainCategoryNamesWithLanguages",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="active",
+     *             type="string",
+     *             enum={"active", "inactive"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
+     */
+    public function mainCategoryNamesWithLanguages()
+    {
+        try {
+            $result = DB::table('main_categories as mc')
+                ->join('main_category_trans as mct', 'mct.main_cat_id', '=', 'mc.id')
+                ->join('languages as l', 'mct.lang_id', '=', 'l.id')
+                ->select('l.code', 'mc.id as main_category_id', 'mct.name as main_category_name')
+                ->get();
+            return response()->json($result);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+
     /**
      * @OA\Get(
      *     path="/api/main-category-trans",
@@ -125,8 +171,7 @@ class MainCategoryTranController extends Controller
             $mainCategoryTrans = MainCategoryTran::findOrFail($id);
             $mainCategoryTrans->delete();
             return response()->json(['mainCategoryTrans' => $mainCategoryTrans]);
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ItemTypeTran;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -62,14 +63,33 @@ class ItemTypeController extends Controller
             $validated = $request->validate([
                 'item_id' => 'required',
                 'quantity' => 'required',
-                'price' => 'required',
-                'unit' => 'required',
+                'unit' => 'required|max:255',
+                'price' => 'required|max:255',
+                'name_en' => 'required',
+                'name_me' => 'required'
             ]);
-            $item = Item::findOrFail($validated['item_id']);
-            $itemType = ItemType::create($request->all());
-            return response()->json(['itemType' => $itemType]);
-        } catch (Exception $e) {
 
+            $itemType = ItemType::create($validated);
+
+            //Prevod za engleski jezik
+            $itemTypeTran1 = ItemTypeTran::create([
+                'item_type_id' => $itemType->id,
+                'name' => $validated['name_en'],
+                'lang_id' => '2'
+            ]);
+
+            //Prevod za crnogorski jezik
+            $itemTypeTran2 = ItemTypeTran::create([
+                'item_type_id' => $itemType->id,
+                'name' => $validated['name_me'],
+                'lang_id' => '1'
+            ]);
+
+            return response()->json(['itemTypes' => $itemType,
+                'itemTypeTran1' => $itemTypeTran1,
+                'itemTypeTran2' => $itemTypeTran2], 201);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
         }
     }
 

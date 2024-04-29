@@ -10,13 +10,91 @@ use Illuminate\Http\Request;
 
 class HotelController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/hotels-main-categories",
+     *     tags={"Hotel"},
+     *     summary="Finds all hotels with its main categories",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="hotels.allHotelsWithMainCategories",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="active",
+     *             type="string",
+     *             enum={"active", "inactive"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
+     */
+    public function allHotelsWithMainCategories()
+    {
+        $hotels = Hotel::with('mainCategories')->get();
+        return response()->json($hotels);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/hotels-main-categories/{id}",
+     *     tags={"Hotel"},
+     *     summary="Finds hotel with its main categories",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="hotels.hotelsWithMainCategories",
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="active",
+     *             type="string",
+     *             enum={"active", "inactive"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
+     */
+
+    public function hotelsWithMainCategories($id)
+    {
+        try {
+            $hotel = Hotel::findOrFail($id);
+            $hotel->mainCategories;
+            return response()->json($hotel);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+
     /**
      * @OA\Get(
      *     path="/api/hotels",
      *     tags={"Hotel"},
      *     summary="Finds all hotels",
      *     description="Multiple status values can be provided with comma separated string",
-     *     operationId="viewAllHotels",
+     *     operationId="hotels.index",
      *     @OA\Parameter(
      *         name="status",
      *         in="query",
@@ -165,7 +243,7 @@ class HotelController extends Controller
             $hotel = Hotel::findOrFail($id);
             $validated = $request->validate([
                 "name" => "required|max:255",
-                "his_id" => "required"
+                "description" => "nullable",
             ]);
             $hotel->update($validated);
             return response()->json(["data" => $hotel]);
