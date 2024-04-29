@@ -48,10 +48,28 @@ class ItemTypeTranController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/item-type-trans",
+     *     tags={"ItemTypeTran"},
+     *     summary="Create a new item type translation",
+     *     operationId="item-types-trans.store",
+     *     @OA\RequestBody(
+     *         description="Item type translation data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ItemTypeTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Item type translation created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -71,10 +89,32 @@ class ItemTypeTranController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/item-type-trans/{id}",
+     *     tags={"ItemTypeTran"},
+     *     summary="Find item type translation by ID",
+     *     description="Returns a single item type translation",
+     *     operationId="item-types-trans.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of item type translation to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid item type translation ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item type translation not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -87,11 +127,37 @@ class ItemTypeTranController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/item-type-trans/{id}",
+     *     tags={"ItemTypeTran"},
+     *     summary="Update an existing item type translation",
+     *     description="",
+     *     operationId="item-types-trans.update",
+     *     @OA\RequestBody(
+     *         description="Item type translation object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ItemTypeTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item type translation not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -112,10 +178,32 @@ class ItemTypeTranController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/item-type-trans/{id}",
+     *     tags={"ItemTypeTran"},
+     *     summary="Deletes an item type translation",
+     *     description="",
+     *     operationId="item-types-trans.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Item type translation id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item type translation not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

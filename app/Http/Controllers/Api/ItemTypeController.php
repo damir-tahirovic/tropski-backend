@@ -52,10 +52,28 @@ class ItemTypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/item-types",
+     *     tags={"ItemType"},
+     *     summary="Create a new item type",
+     *     operationId="item-types.store",
+     *     @OA\RequestBody(
+     *         description="Item type data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ItemType")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Item type created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -94,10 +112,32 @@ class ItemTypeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/item-types/{id}",
+     *     tags={"ItemType"},
+     *     summary="Find item type by ID",
+     *     description="Returns a single item type",
+     *     operationId="item-types.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of item type to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid item type ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item type not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -110,11 +150,37 @@ class ItemTypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/item-types/{id}",
+     *     tags={"ItemType"},
+     *     summary="Update an existing item type",
+     *     description="",
+     *     operationId="item-types.update",
+     *     @OA\RequestBody(
+     *         description="Item type object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ItemType")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item type not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -135,10 +201,32 @@ class ItemTypeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/item-types/{id}",
+     *     tags={"ItemType"},
+     *     summary="Deletes an item type",
+     *     description="",
+     *     operationId="item-types.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Item type id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item type not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @OA\Schema(
+ *     schema="MainCategory",
+ *     required={"hotel_id"},
+ *     @OA\Property(
+ *         property="hotel_id",
+ *         type="integer",
+ *         description="The ID of the hotel"
+ *     )
+ * )
+ */
+
 class MainCategory extends Model implements HasMedia
 {
     use HasFactory;

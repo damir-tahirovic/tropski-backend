@@ -52,10 +52,28 @@ class CategoryTranController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/category-trans",
+     *     tags={"CategoryTran"},
+     *     summary="Create a new category translation",
+     *     operationId="category-trans.store",
+     *     @OA\RequestBody(
+     *         description="Category translation data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/CategoryTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Category translation created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -75,10 +93,32 @@ class CategoryTranController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/category-trans/{id}",
+     *     tags={"CategoryTran"},
+     *     summary="Find category translation by ID",
+     *     description="Returns a single category translation",
+     *     operationId="category-trans.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of category translation to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid category translation ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category translation not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -92,11 +132,37 @@ class CategoryTranController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/category-trans/{id}",
+     *     tags={"CategoryTran"},
+     *     summary="Update an existing category translation",
+     *     description="",
+     *     operationId="category-trans.update",
+     *     @OA\RequestBody(
+     *         description="Category translation object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/CategoryTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category translation not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -117,10 +183,32 @@ class CategoryTranController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/category-trans/{id}",
+     *     tags={"CategoryTran"},
+     *     summary="Deletes a category translation",
+     *     description="",
+     *     operationId="category-trans.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Category translation id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category translation not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

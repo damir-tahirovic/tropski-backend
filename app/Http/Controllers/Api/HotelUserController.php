@@ -48,10 +48,28 @@ class HotelUserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/hotel-users",
+     *     tags={"HotelUser"},
+     *     summary="Create a new hotel user",
+     *     operationId="hotel-users.store",
+     *     @OA\RequestBody(
+     *         description="Hotel user data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/HotelUser")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Hotel user created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -70,10 +88,32 @@ class HotelUserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/hotel-users/{id}",
+     *     tags={"HotelUser"},
+     *     summary="Find hotel user by ID",
+     *     description="Returns a single hotel user",
+     *     operationId="hotel-users.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of hotel user to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid hotel user ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel user not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -86,11 +126,37 @@ class HotelUserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/hotel-users/{id}",
+     *     tags={"HotelUser"},
+     *     summary="Update an existing hotel user",
+     *     description="",
+     *     operationId="hotel-users.update",
+     *     @OA\RequestBody(
+     *         description="Hotel user object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/HotelUser")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel user not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -109,10 +175,32 @@ class HotelUserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/hotel-users/{id}",
+     *     tags={"HotelUser"},
+     *     summary="Deletes a hotel user",
+     *     description="",
+     *     operationId="hotel-users.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Hotel user id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel user not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

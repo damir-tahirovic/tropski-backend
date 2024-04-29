@@ -48,10 +48,28 @@ class ExtraGroupExtraPivotController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/extra-group-extra-pivots",
+     *     tags={"ExtraGroupExtraPivot"},
+     *     summary="Create a new extra group pivot",
+     *     operationId="extra-group-extra-pivots.store",
+     *     @OA\RequestBody(
+     *         description="Extra group pivot data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ExtraGroupExtraPivot")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Extra group pivot created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -74,10 +92,32 @@ class ExtraGroupExtraPivotController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/extra-group-extra-pivots/{id}",
+     *     tags={"ExtraGroupExtraPivot"},
+     *     summary="Find extra group pivot by ID",
+     *     description="Returns a single extra group pivot",
+     *     operationId="extra-group-extra-pivots.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of extra group pivot to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid extra group pivot ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra group pivot not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -90,11 +130,37 @@ class ExtraGroupExtraPivotController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/extra-group-extra-pivots/{id}",
+     *     tags={"ExtraGroupExtraPivot"},
+     *     summary="Update an existing extra group pivot",
+     *     description="",
+     *     operationId="extra-group-extra-pivots.update",
+     *     @OA\RequestBody(
+     *         description="Extra group pivot object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ExtraGroupExtraPivot")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra group pivot not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -117,10 +183,32 @@ class ExtraGroupExtraPivotController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/extra-group-extra-pivots/{id}",
+     *     tags={"ExtraGroupExtraPivot"},
+     *     summary="Deletes an extra group pivot",
+     *     description="",
+     *     operationId="extra-group-extra-pivots.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Extra group pivot id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra group pivot not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

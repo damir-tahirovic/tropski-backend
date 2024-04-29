@@ -7,6 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @OA\Schema(
+ *     schema="Extra",
+ *     required={"hotel_id", "image"},
+ *     @OA\Property(
+ *         property="hotel_id",
+ *         type="integer",
+ *         description="The ID of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="image",
+ *         type="string",
+ *         format="binary",
+ *         description="The image of the extra"
+ *     )
+ * )
+ */
+
 class Extra extends Model implements HasMedia
 {
     use HasFactory;

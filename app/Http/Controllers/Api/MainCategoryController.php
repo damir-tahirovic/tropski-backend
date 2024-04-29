@@ -36,6 +36,31 @@ class MainCategoryController extends Controller
 //        return $mainCategory;
 //    }
 
+    /**
+     * @OA\Post(
+     *     path="/api/main-categories",
+     *     tags={"MainCategory"},
+     *     summary="Create a new main category",
+     *     operationId="main-categories.store",
+     *     @OA\RequestBody(
+     *         description="Main category data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/MainCategory")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Main category created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
+     */
+
     public function store(Request $request)
     {
         try {
@@ -180,12 +205,39 @@ class MainCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/main-categories/{id}",
+     *     tags={"MainCategory"},
+     *     summary="Update an existing main category",
+     *     description="",
+     *     operationId="main-categories.update",
+     *     @OA\RequestBody(
+     *         description="Main category object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/MainCategory")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Main category not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
+
     public function update(Request $request, $id)
     {
 
@@ -209,10 +261,32 @@ class MainCategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/main-categories/{id}",
+     *     tags={"MainCategory"},
+     *     summary="Deletes a main category",
+     *     description="",
+     *     operationId="main-categories.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Main category id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Main category not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

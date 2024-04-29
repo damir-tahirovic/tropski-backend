@@ -46,6 +46,127 @@
                         "description": "Invalid status value"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Create a new category",
+                "operationId": "categories.store",
+                "requestBody": {
+                    "description": "Category data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Category created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Find category by ID",
+                "description": "Returns a single category",
+                "operationId": "categories.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of category to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid category ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update an existing category",
+                "description": "",
+                "operationId": "categories.update",
+                "requestBody": {
+                    "description": "Category object that needs to be added to the store",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Deletes a category",
+                "description": "",
+                "operationId": "categories.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                }
             }
         },
         "/api/category-trans": {
@@ -79,6 +200,127 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CategoryTran"
+                ],
+                "summary": "Create a new category translation",
+                "operationId": "category-trans.store",
+                "requestBody": {
+                    "description": "Category translation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoryTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Category translation created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/category-trans/{id}": {
+            "get": {
+                "tags": [
+                    "CategoryTran"
+                ],
+                "summary": "Find category translation by ID",
+                "description": "Returns a single category translation",
+                "operationId": "category-trans.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of category translation to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid category translation ID supplied"
+                    },
+                    "404": {
+                        "description": "Category translation not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CategoryTran"
+                ],
+                "summary": "Update an existing category translation",
+                "description": "",
+                "operationId": "category-trans.update",
+                "requestBody": {
+                    "description": "Category translation object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoryTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category translation not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CategoryTran"
+                ],
+                "summary": "Deletes a category translation",
+                "description": "",
+                "operationId": "category-trans.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category translation id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category translation not found"
                     }
                 }
             }
@@ -116,12 +358,133 @@
                         "description": "Invalid status value"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Extra"
+                ],
+                "summary": "Create a new extra",
+                "operationId": "extras.store",
+                "requestBody": {
+                    "description": "Extra data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Extra"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Extra created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/extras/{id}": {
+            "get": {
+                "tags": [
+                    "Extra"
+                ],
+                "summary": "Find extra by ID",
+                "description": "Returns a single extra",
+                "operationId": "extras.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of extra to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid extra ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Extra"
+                ],
+                "summary": "Update an existing extra",
+                "description": "",
+                "operationId": "extras.update",
+                "requestBody": {
+                    "description": "Extra object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Extra"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Extra"
+                ],
+                "summary": "Deletes an extra",
+                "description": "",
+                "operationId": "extras.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Extra id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra not found"
+                    }
+                }
             }
         },
         "/api/extra-groups": {
             "get": {
                 "tags": [
-                    "ExtraGorup"
+                    "ExtraGroup"
                 ],
                 "summary": "Finds all Extra groups",
                 "description": "Multiple status values can be provided with comma separated string",
@@ -149,6 +512,127 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ExtraGroup"
+                ],
+                "summary": "Create a new extra group",
+                "operationId": "extra-groups.store",
+                "requestBody": {
+                    "description": "Extra group data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraGroup"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Extra group created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/extra-groups/{id}": {
+            "get": {
+                "tags": [
+                    "ExtraGroup"
+                ],
+                "summary": "Find extra group by ID",
+                "description": "Returns a single extra group",
+                "operationId": "extra-groups.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of extra group to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid extra group ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra group not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ExtraGroup"
+                ],
+                "summary": "Update an existing extra group",
+                "description": "",
+                "operationId": "extra-groups.update",
+                "requestBody": {
+                    "description": "Extra group object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraGroup"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra group not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ExtraGroup"
+                ],
+                "summary": "Deletes an extra group",
+                "description": "",
+                "operationId": "extra-groups.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Extra group id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra group not found"
                     }
                 }
             }
@@ -186,6 +670,127 @@
                         "description": "Invalid status value"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "ExtraGroupExtraPivot"
+                ],
+                "summary": "Create a new extra group pivot",
+                "operationId": "extra-group-extra-pivots.store",
+                "requestBody": {
+                    "description": "Extra group pivot data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraGroupExtraPivot"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Extra group pivot created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/extra-group-extra-pivots/{id}": {
+            "get": {
+                "tags": [
+                    "ExtraGroupExtraPivot"
+                ],
+                "summary": "Find extra group pivot by ID",
+                "description": "Returns a single extra group pivot",
+                "operationId": "extra-group-extra-pivots.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of extra group pivot to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid extra group pivot ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra group pivot not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ExtraGroupExtraPivot"
+                ],
+                "summary": "Update an existing extra group pivot",
+                "description": "",
+                "operationId": "extra-group-extra-pivots.update",
+                "requestBody": {
+                    "description": "Extra group pivot object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraGroupExtraPivot"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra group pivot not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ExtraGroupExtraPivot"
+                ],
+                "summary": "Deletes an extra group pivot",
+                "description": "",
+                "operationId": "extra-group-extra-pivots.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Extra group pivot id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra group pivot not found"
+                    }
+                }
             }
         },
         "/api/extra-trans": {
@@ -219,6 +824,127 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ExtraTran"
+                ],
+                "summary": "Create a new extra translation",
+                "operationId": "extra-trans.store",
+                "requestBody": {
+                    "description": "Extra translation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Extra translation created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/extra-trans/{id}": {
+            "get": {
+                "tags": [
+                    "ExtraTran"
+                ],
+                "summary": "Find extra translation by ID",
+                "description": "Returns a single extra translation",
+                "operationId": "extra-trans.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of extra translation to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid extra translation ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra translation not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ExtraTran"
+                ],
+                "summary": "Update an existing extra translation",
+                "description": "",
+                "operationId": "extra-trans.update",
+                "requestBody": {
+                    "description": "Extra translation object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra translation not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ExtraTran"
+                ],
+                "summary": "Deletes an extra translation",
+                "description": "",
+                "operationId": "extra-trans.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Extra translation id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Extra translation not found"
                     }
                 }
             }
@@ -494,6 +1220,127 @@
                         "description": "Invalid status value"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "HotelUser"
+                ],
+                "summary": "Create a new hotel user",
+                "operationId": "hotel-users.store",
+                "requestBody": {
+                    "description": "Hotel user data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HotelUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hotel user created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/hotel-users/{id}": {
+            "get": {
+                "tags": [
+                    "HotelUser"
+                ],
+                "summary": "Find hotel user by ID",
+                "description": "Returns a single hotel user",
+                "operationId": "hotel-users.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of hotel user to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid hotel user ID supplied"
+                    },
+                    "404": {
+                        "description": "Hotel user not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "HotelUser"
+                ],
+                "summary": "Update an existing hotel user",
+                "description": "",
+                "operationId": "hotel-users.update",
+                "requestBody": {
+                    "description": "Hotel user object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HotelUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Hotel user not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "HotelUser"
+                ],
+                "summary": "Deletes a hotel user",
+                "description": "",
+                "operationId": "hotel-users.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Hotel user id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Hotel user not found"
+                    }
+                }
             }
         },
         "/api/items": {
@@ -606,6 +1453,69 @@
                         "description": "Item not found"
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Update an existing item",
+                "description": "",
+                "operationId": "items.update",
+                "requestBody": {
+                    "description": "Item object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Deletes an item",
+                "description": "",
+                "operationId": "items.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Item id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    }
+                }
             }
         },
         "/api/item-trans": {
@@ -639,6 +1549,127 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ItemTran"
+                ],
+                "summary": "Create a new item translation",
+                "operationId": "item-trans.store",
+                "requestBody": {
+                    "description": "Item translation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ItemTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item translation created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/item-trans/{id}": {
+            "get": {
+                "tags": [
+                    "ItemTran"
+                ],
+                "summary": "Find item translation by ID",
+                "description": "Returns a single item translation",
+                "operationId": "item-trans.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of item translation to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid item translation ID supplied"
+                    },
+                    "404": {
+                        "description": "Item translation not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ItemTran"
+                ],
+                "summary": "Update an existing item translation",
+                "description": "",
+                "operationId": "item-trans.update",
+                "requestBody": {
+                    "description": "Item translation object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ItemTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item translation not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ItemTran"
+                ],
+                "summary": "Deletes an item translation",
+                "description": "",
+                "operationId": "item-trans.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Item translation id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item translation not found"
                     }
                 }
             }
@@ -676,6 +1707,127 @@
                         "description": "Invalid status value"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "ItemType"
+                ],
+                "summary": "Create a new item type",
+                "operationId": "item-types.store",
+                "requestBody": {
+                    "description": "Item type data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ItemType"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item type created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/item-types/{id}": {
+            "get": {
+                "tags": [
+                    "ItemType"
+                ],
+                "summary": "Find item type by ID",
+                "description": "Returns a single item type",
+                "operationId": "item-types.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of item type to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid item type ID supplied"
+                    },
+                    "404": {
+                        "description": "Item type not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ItemType"
+                ],
+                "summary": "Update an existing item type",
+                "description": "",
+                "operationId": "item-types.update",
+                "requestBody": {
+                    "description": "Item type object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ItemType"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item type not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ItemType"
+                ],
+                "summary": "Deletes an item type",
+                "description": "",
+                "operationId": "item-types.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Item type id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item type not found"
+                    }
+                }
             }
         },
         "/api/item-type-trans": {
@@ -709,6 +1861,127 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ItemTypeTran"
+                ],
+                "summary": "Create a new item type translation",
+                "operationId": "item-types-trans.store",
+                "requestBody": {
+                    "description": "Item type translation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ItemTypeTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Item type translation created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/item-type-trans/{id}": {
+            "get": {
+                "tags": [
+                    "ItemTypeTran"
+                ],
+                "summary": "Find item type translation by ID",
+                "description": "Returns a single item type translation",
+                "operationId": "item-types-trans.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of item type translation to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid item type translation ID supplied"
+                    },
+                    "404": {
+                        "description": "Item type translation not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ItemTypeTran"
+                ],
+                "summary": "Update an existing item type translation",
+                "description": "",
+                "operationId": "item-types-trans.update",
+                "requestBody": {
+                    "description": "Item type translation object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ItemTypeTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item type translation not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ItemTypeTran"
+                ],
+                "summary": "Deletes an item type translation",
+                "description": "",
+                "operationId": "item-types-trans.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Item type translation id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Item type translation not found"
                     }
                 }
             }
@@ -746,25 +2019,50 @@
                         "description": "Invalid status value"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Language"
+                ],
+                "summary": "Create a new language",
+                "operationId": "languages.store",
+                "requestBody": {
+                    "description": "Language data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Language"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Language created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
             }
         },
-        "/api/main-categories/{id}": {
+        "/api/languages/{id}": {
             "get": {
                 "tags": [
-                    "MainCategory"
+                    "Language"
                 ],
-                "summary": "Finds a main category by its ID along with its subcategories",
-                "description": "Returns a single main category with its subcategories",
-                "operationId": "main-categories.show",
+                "summary": "Find language by ID",
+                "description": "Returns a single language",
+                "operationId": "languages.show",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the main category to return",
+                        "description": "ID of language to return",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -772,8 +2070,74 @@
                     "200": {
                         "description": "successful operation"
                     },
+                    "400": {
+                        "description": "Invalid language ID supplied"
+                    },
                     "404": {
-                        "description": "MainCategory not found"
+                        "description": "Language not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Language"
+                ],
+                "summary": "Update an existing language",
+                "description": "",
+                "operationId": "languages.update",
+                "requestBody": {
+                    "description": "Language object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Language"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Language not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Language"
+                ],
+                "summary": "Deletes a language",
+                "description": "",
+                "operationId": "languages.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Language id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Language not found"
                     }
                 }
             }
@@ -809,6 +2173,125 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Create a new main category",
+                "operationId": "main-categories.store",
+                "requestBody": {
+                    "description": "Main category data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MainCategory"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Main category created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/main-categories/{id}": {
+            "get": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Finds a main category by its ID along with its subcategories",
+                "description": "Returns a single main category with its subcategories",
+                "operationId": "main-categories.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the main category to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "404": {
+                        "description": "MainCategory not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Update an existing main category",
+                "description": "",
+                "operationId": "main-categories.update",
+                "requestBody": {
+                    "description": "Main category object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MainCategory"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Main category not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Deletes a main category",
+                "description": "",
+                "operationId": "main-categories.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Main category id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Main category not found"
                     }
                 }
             }
@@ -879,6 +2362,127 @@
                     },
                     "400": {
                         "description": "Invalid status value"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "MainCategoryTran"
+                ],
+                "summary": "Create a new main category translation",
+                "operationId": "main-category-trans.store",
+                "requestBody": {
+                    "description": "Main category translation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MainCategoryTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Main category translation created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/main-category-trans/{id}": {
+            "get": {
+                "tags": [
+                    "MainCategoryTran"
+                ],
+                "summary": "Find main category translation by ID",
+                "description": "Returns a single main category translation",
+                "operationId": "main-category-trans.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of main category translation to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid main category translation ID supplied"
+                    },
+                    "404": {
+                        "description": "Main category translation not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "MainCategoryTran"
+                ],
+                "summary": "Update an existing main category translation",
+                "description": "",
+                "operationId": "main-category-trans.update",
+                "requestBody": {
+                    "description": "Main category translation object that needs to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MainCategoryTran"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Main category translation not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "MainCategoryTran"
+                ],
+                "summary": "Deletes a main category translation",
+                "description": "",
+                "operationId": "main-category-trans.destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Main category translation id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Main category translation not found"
                     }
                 }
             }
@@ -1049,6 +2653,145 @@
     },
     "components": {
         "schemas": {
+            "Category": {
+                "required": [
+                    "name_en",
+                    "name_me",
+                    "main_cat_id"
+                ],
+                "properties": {
+                    "name_en": {
+                        "description": "The English name of the category",
+                        "type": "string"
+                    },
+                    "name_me": {
+                        "description": "The Montenegrin name of the category",
+                        "type": "string"
+                    },
+                    "main_cat_id": {
+                        "description": "The ID of the main category",
+                        "type": "integer"
+                    },
+                    "image": {
+                        "description": "The image of the category",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "CategoryTran": {
+                "required": [
+                    "category_id",
+                    "lang_id",
+                    "name"
+                ],
+                "properties": {
+                    "category_id": {
+                        "description": "The ID of the category",
+                        "type": "integer"
+                    },
+                    "lang_id": {
+                        "description": "The ID of the language",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the category in the specified language",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Extra": {
+                "required": [
+                    "hotel_id",
+                    "image"
+                ],
+                "properties": {
+                    "hotel_id": {
+                        "description": "The ID of the hotel",
+                        "type": "integer"
+                    },
+                    "image": {
+                        "description": "The image of the extra",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "ExtraGroup": {
+                "required": [
+                    "hotel_id",
+                    "name"
+                ],
+                "properties": {
+                    "hotel_id": {
+                        "description": "The ID of the hotel",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the extra group",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ExtraGroupExtraPivot": {
+                "required": [
+                    "extra_group_id",
+                    "extra_id",
+                    "price",
+                    "quantity",
+                    "unit"
+                ],
+                "properties": {
+                    "extra_group_id": {
+                        "description": "The ID of the extra group",
+                        "type": "integer"
+                    },
+                    "extra_id": {
+                        "description": "The ID of the extra",
+                        "type": "integer"
+                    },
+                    "price": {
+                        "description": "The price of the extra in the group",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "quantity": {
+                        "description": "The quantity of the extra in the group",
+                        "type": "integer"
+                    },
+                    "unit": {
+                        "description": "The unit of the extra in the group",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ExtraTran": {
+                "required": [
+                    "extra_id",
+                    "lang_id",
+                    "name"
+                ],
+                "properties": {
+                    "extra_id": {
+                        "description": "The ID of the extra",
+                        "type": "integer"
+                    },
+                    "lang_id": {
+                        "description": "The ID of the language",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the extra in the specified language",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "Hotel": {
                 "required": [
                     "name",
@@ -1062,6 +2805,173 @@
                     "his_id": {
                         "description": "The HIS ID of the hotel",
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "HotelUser": {
+                "required": [
+                    "user_id",
+                    "hotel_id"
+                ],
+                "properties": {
+                    "user_id": {
+                        "description": "The ID of the user",
+                        "type": "integer"
+                    },
+                    "hotel_id": {
+                        "description": "The ID of the hotel",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Item": {
+                "required": [
+                    "category_id",
+                    "extra_group_id",
+                    "code"
+                ],
+                "properties": {
+                    "category_id": {
+                        "description": "The ID of the category",
+                        "type": "integer"
+                    },
+                    "extra_group_id": {
+                        "description": "The ID of the extra group",
+                        "type": "integer"
+                    },
+                    "code": {
+                        "description": "The code of the item",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ItemTran": {
+                "required": [
+                    "item_id",
+                    "lang_id",
+                    "name",
+                    "description"
+                ],
+                "properties": {
+                    "item_id": {
+                        "description": "The ID of the item",
+                        "type": "integer"
+                    },
+                    "lang_id": {
+                        "description": "The ID of the language",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the item in the specified language",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The description of the item in the specified language",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ItemType": {
+                "required": [
+                    "item_id",
+                    "quantity",
+                    "unit",
+                    "price"
+                ],
+                "properties": {
+                    "item_id": {
+                        "description": "The ID of the item",
+                        "type": "integer"
+                    },
+                    "quantity": {
+                        "description": "The quantity of the item type",
+                        "type": "integer"
+                    },
+                    "unit": {
+                        "description": "The unit of the item type",
+                        "type": "string"
+                    },
+                    "price": {
+                        "description": "The price of the item type",
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            },
+            "ItemTypeTran": {
+                "required": [
+                    "item_type_id",
+                    "lang_id",
+                    "name"
+                ],
+                "properties": {
+                    "item_type_id": {
+                        "description": "The ID of the item type",
+                        "type": "integer"
+                    },
+                    "lang_id": {
+                        "description": "The ID of the language",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the item type in the specified language",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Language": {
+                "required": [
+                    "name",
+                    "code"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the language",
+                        "type": "string"
+                    },
+                    "code": {
+                        "description": "The code of the language",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MainCategory": {
+                "required": [
+                    "hotel_id"
+                ],
+                "properties": {
+                    "hotel_id": {
+                        "description": "The ID of the hotel",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "MainCategoryTran": {
+                "required": [
+                    "main_cat_id",
+                    "lang_id",
+                    "name"
+                ],
+                "properties": {
+                    "main_cat_id": {
+                        "description": "The ID of the main category",
+                        "type": "integer"
+                    },
+                    "lang_id": {
+                        "description": "The ID of the language",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the main category in the specified language",
+                        "type": "string"
                     }
                 },
                 "type": "object"

@@ -94,10 +94,28 @@ class MainCategoryTranController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/main-category-trans",
+     *     tags={"MainCategoryTran"},
+     *     summary="Create a new main category translation",
+     *     operationId="main-category-trans.store",
+     *     @OA\RequestBody(
+     *         description="Main category translation data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/MainCategoryTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Main category translation created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -118,10 +136,32 @@ class MainCategoryTranController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/main-category-trans/{id}",
+     *     tags={"MainCategoryTran"},
+     *     summary="Find main category translation by ID",
+     *     description="Returns a single main category translation",
+     *     operationId="main-category-trans.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of main category translation to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid main category translation ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Main category translation not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -134,11 +174,37 @@ class MainCategoryTranController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/main-category-trans/{id}",
+     *     tags={"MainCategoryTran"},
+     *     summary="Update an existing main category translation",
+     *     description="",
+     *     operationId="main-category-trans.update",
+     *     @OA\RequestBody(
+     *         description="Main category translation object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/MainCategoryTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Main category translation not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -160,10 +226,32 @@ class MainCategoryTranController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/main-category-trans/{id}",
+     *     tags={"MainCategoryTran"},
+     *     summary="Deletes a main category translation",
+     *     description="",
+     *     operationId="main-category-trans.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Main category translation id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Main category translation not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

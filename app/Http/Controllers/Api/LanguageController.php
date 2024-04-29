@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class LanguageController extends Controller
 {
-    /**  
+    /**
      *        @OA\Get(
      *     path="/api/languages",
      *     tags={"Language"},
@@ -24,7 +24,7 @@ class LanguageController extends Controller
      *         @OA\Schema(
      *             default="active",
      *             type="string",
-     *             enum={"active", "inactive"} 
+     *             enum={"active", "inactive"}
      *         )
      *     ),
      *     @OA\Response(
@@ -44,10 +44,28 @@ class LanguageController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/languages",
+     *     tags={"Language"},
+     *     summary="Create a new language",
+     *     operationId="languages.store",
+     *     @OA\RequestBody(
+     *         description="Language data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Language")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Language created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -64,10 +82,32 @@ class LanguageController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/languages/{id}",
+     *     tags={"Language"},
+     *     summary="Find language by ID",
+     *     description="Returns a single language",
+     *     operationId="languages.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of language to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid language ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Language not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -80,11 +120,37 @@ class LanguageController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *     path="/api/languages/{id}",
+     *     tags={"Language"},
+     *     summary="Update an existing language",
+     *     description="",
+     *     operationId="languages.update",
+     *     @OA\RequestBody(
+     *         description="Language object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Language")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Language not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -102,10 +168,32 @@ class LanguageController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/languages/{id}",
+     *     tags={"Language"},
+     *     summary="Deletes a language",
+     *     description="",
+     *     operationId="languages.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Language id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Language not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

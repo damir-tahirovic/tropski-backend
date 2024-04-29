@@ -49,10 +49,28 @@ class ExtraController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/extras",
+     *     tags={"Extra"},
+     *     summary="Create a new extra",
+     *     operationId="extras.store",
+     *     @OA\RequestBody(
+     *         description="Extra data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Extra")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Extra created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -87,7 +105,8 @@ class ExtraController extends Controller
                 'lang_id' => '1',
                 'name' => $request->input('name_me'),
             ]);
-            return response()->json(['extra' => $extra,
+            return response()->json([
+                'extra' => $extra,
                 'extraTran1' => $extraTran1,
                 'extraTran2' => $extraTran2], '201');
         } catch (Exception $e) {
@@ -96,10 +115,32 @@ class ExtraController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/extras/{id}",
+     *     tags={"Extra"},
+     *     summary="Find extra by ID",
+     *     description="Returns a single extra",
+     *     operationId="extras.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of extra to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid extra ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -113,11 +154,37 @@ class ExtraController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/extras/{id}",
+     *     tags={"Extra"},
+     *     summary="Update an existing extra",
+     *     description="",
+     *     operationId="extras.update",
+     *     @OA\RequestBody(
+     *         description="Extra object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Extra")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -141,10 +208,32 @@ class ExtraController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/extras/{id}",
+     *     tags={"Extra"},
+     *     summary="Deletes an extra",
+     *     description="",
+     *     operationId="extras.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Extra id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

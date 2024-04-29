@@ -12,7 +12,7 @@ class ExtraGroupController extends Controller
     /**
      * @OA\Get(
      *     path="/api/extra-groups",
-     *     tags={"ExtraGorup"},
+     *     tags={"ExtraGroup"},
      *     summary="Finds all Extra groups",
      *     description="Multiple status values can be provided with comma separated string",
      *     operationId="extra-groups.index",
@@ -25,7 +25,7 @@ class ExtraGroupController extends Controller
      *         @OA\Schema(
      *             default="active",
      *             type="string",
-     *             enum={"active", "inactive"} 
+     *             enum={"active", "inactive"}
      *         )
      *     ),
      *     @OA\Response(
@@ -45,10 +45,28 @@ class ExtraGroupController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/extra-groups",
+     *     tags={"ExtraGroup"},
+     *     summary="Create a new extra group",
+     *     operationId="extra-groups.store",
+     *     @OA\RequestBody(
+     *         description="Extra group data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ExtraGroup")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Extra group created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -66,10 +84,32 @@ class ExtraGroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/extra-groups/{id}",
+     *     tags={"ExtraGroup"},
+     *     summary="Find extra group by ID",
+     *     description="Returns a single extra group",
+     *     operationId="extra-groups.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of extra group to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid extra group ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra group not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -82,11 +122,37 @@ class ExtraGroupController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *     path="/api/extra-groups/{id}",
+     *     tags={"ExtraGroup"},
+     *     summary="Update an existing extra group",
+     *     description="",
+     *     operationId="extra-groups.update",
+     *     @OA\RequestBody(
+     *         description="Extra group object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ExtraGroup")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra group not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -105,10 +171,32 @@ class ExtraGroupController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/api/extra-groups/{id}",
+     *     tags={"ExtraGroup"},
+     *     summary="Deletes an extra group",
+     *     description="",
+     *     operationId="extra-groups.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Extra group id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Extra group not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

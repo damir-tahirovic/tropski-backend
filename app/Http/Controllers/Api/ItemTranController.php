@@ -48,10 +48,28 @@ class ItemTranController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *     path="/api/item-trans",
+     *     tags={"ItemTran"},
+     *     summary="Create a new item translation",
+     *     operationId="item-trans.store",
+     *     @OA\RequestBody(
+     *         description="Item translation data",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ItemTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Item translation created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -72,23 +90,76 @@ class ItemTranController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Get(
+     *     path="/api/item-trans/{id}",
+     *     tags={"ItemTran"},
+     *     summary="Find item translation by ID",
+     *     description="Returns a single item translation",
+     *     operationId="item-trans.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of item translation to return",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid item translation ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item translation not found"
+     *     )
+     * )
      */
     public
     function show($id)
     {
-        //
+        try {
+            $itemTran = ItemTran::findOrFail($id);
+            return response()->json(['itemTran' => $itemTran]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @OA\Put(
+     *     path="/api/item-trans/{id}",
+     *     tags={"ItemTran"},
+     *     summary="Update an existing item translation",
+     *     description="",
+     *     operationId="item-trans.update",
+     *     @OA\RequestBody(
+     *         description="Item translation object that needs to be updated",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/ItemTran")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item translation not found"
+     *     ),
+     *     @OA\Response(
+     *         response=405,
+     *         description="Validation exception"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -110,10 +181,32 @@ class ItemTranController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
+     * @OA\Delete(
+     *     path="/api/item-trans/{id}",
+     *     tags={"ItemTran"},
+     *     summary="Deletes an item translation",
+     *     description="",
+     *     operationId="item-trans.destroy",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Item translation id to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Item translation not found"
+     *     )
+     * )
      */
     public
     function destroy($id)

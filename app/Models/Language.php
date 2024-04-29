@@ -5,6 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Language",
+ *     required={"name", "code"},
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="The name of the language"
+ *     ),
+ *     @OA\Property(
+ *         property="code",
+ *         type="string",
+ *         description="The code of the language"
+ *     )
+ * )
+ */
+
 class Language extends Model
 {
     use HasFactory;

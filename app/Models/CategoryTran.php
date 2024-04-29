@@ -5,9 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class CategoryTran extends Model
 {
     use HasFactory;
+
+    /**
+     * @OA\Schema(
+     *     schema="CategoryTran",
+     *     required={"category_id", "lang_id", "name"},
+     *     @OA\Property(
+     *         property="category_id",
+     *         type="integer",
+     *         description="The ID of the category"
+     *     ),
+     *     @OA\Property(
+     *         property="lang_id",
+     *         type="integer",
+     *         description="The ID of the language"
+     *     ),
+     *     @OA\Property(
+     *         property="name",
+     *         type="string",
+     *         description="The name of the category in the specified language"
+     *     )
+     * )
+     */
 
     protected $fillable = [
         'name',

@@ -7,6 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @OA\Schema(
+ *     schema="Item",
+ *     required={"category_id", "extra_group_id", "code"},
+ *     @OA\Property(
+ *         property="category_id",
+ *         type="integer",
+ *         description="The ID of the category"
+ *     ),
+ *     @OA\Property(
+ *         property="extra_group_id",
+ *         type="integer",
+ *         description="The ID of the extra group"
+ *     ),
+ *     @OA\Property(
+ *         property="code",
+ *         type="string",
+ *         description="The code of the item"
+ *     )
+ * )
+ */
+
 class Item extends Model implements HasMedia
 {
     use HasFactory;
