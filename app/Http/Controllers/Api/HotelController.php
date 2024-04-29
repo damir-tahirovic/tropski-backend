@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
+use Exception;
 use Illuminate\Http\Request;
 
 
@@ -69,12 +70,16 @@ class HotelController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            "name" => "required|max:255",
-            "his_id" => "required"
-        ]);
-        $hotel = Hotel::create($validated);
-        return response()->json(['data' => $hotel], '201');
+        try {
+            $validated = $request->validate([
+                "name" => "required|max:255",
+                "description" => "nullable",
+            ]);
+            $hotel = Hotel::create($request->all());
+            return response()->json(['hotel' => $hotel], '201');
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
@@ -113,7 +118,7 @@ class HotelController extends Controller
         try {
             $hotel = Hotel::findOrFail($id);
             return response()->json($hotel);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -164,7 +169,7 @@ class HotelController extends Controller
             ]);
             $hotel->update($validated);
             return response()->json(["data" => $hotel]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -206,7 +211,7 @@ class HotelController extends Controller
             $hotel = Hotel::findOrFail($id);
             $hotel->delete();
             return response()->json(["data" => $hotel]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }

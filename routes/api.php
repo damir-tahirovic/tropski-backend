@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ExtraGroupExtraPivotController;
 use App\Http\Controllers\Api\ExtraTranController;
+use App\Http\Controllers\Api\HotelUserController;
 use App\Http\Controllers\Api\ItemTranController;
 use App\Http\Controllers\Api\ItemTypeTranController;
 use App\Http\Controllers\Api\OrderPlaceController;
@@ -30,12 +31,14 @@ use App\Http\Controllers\Api\ItemTypeController;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 
-Route::post('/auth/register', [UserController::class, 'createUser'])->name('create-user');
-Route::post('/auth/login', [UserController::class, 'loginUser'])->name('login-user');
+Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
+Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
+
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 
 //Rute za MainCategory
@@ -57,7 +60,7 @@ Route::get('categories/{id}', [CategoryController::class, 'show'])->name('catego
 Route::put('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
-Route::get('categories-all', [CategoryController::class, 'categoriesWithSubcategories'])->name('categories.categoriesWithSubcategories');
+//Route::get('categories-all', [CategoryController::class, 'categoriesWithSubcategories'])->name('categories.categoriesWithSubcategories');
 
 
 //Rute za Hotel
@@ -175,3 +178,12 @@ Route::post('order-places', [OrderPlaceController::class, 'store'])->name('order
 Route::get('order-places/{id}', [OrderPlaceController::class, 'show'])->name('order-places.show');
 Route::put('order-places/{id}', [OrderPlaceController::class, 'update'])->name('order-places.update');
 Route::delete('order-places/{id}', [OrderPlaceController::class, 'destroy'])->name('order-places.destroy');
+
+
+//Rute za HotelUser
+
+Route::get('hotel-users', [HotelUserController::class, 'index'])->name('hotel-users.index');
+Route::post('hotel-users', [HotelUserController::class, 'store'])->name('hotel-users.store');
+Route::get('hotel-users/{id}', [HotelUserController::class, 'show'])->name('hotel-users.show');
+Route::put('hotel-users/{id}', [HotelUserController::class, 'update'])->name('hotel-users.update');
+Route::delete('hotel-users/{id}', [HotelUserController::class, 'destroy'])->name('hotel-users.destroy');

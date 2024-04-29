@@ -14,46 +14,6 @@ use Illuminate\Support\Facades\Log;
 class CategoryController extends Controller
 {
 
-    /**
-     * @OA\Get(
-     *     path="/api/categories-all",
-     *     tags={"Category"},
-     *     summary="Finds all categories with its subcategories",
-     *     description="Multiple status values can be provided with comma separated string",
-     *     operationId="categories.categoriesWithSubcategories",
-     *     @OA\Parameter(
-     *         name="status",
-     *         in="query",
-     *         description="Status values that needed to be considered for filter",
-     *         required=true,
-     *         explode=true,
-     *         @OA\Schema(
-     *             default="active",
-     *             type="string",
-     *             enum={"active", "inactive"}
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Invalid status value"
-     *     )
-     * )
-     */
-    public function categoriesWithSubcategories()
-    {
-        $categories = Category::whereNull('category_id')->get();
-
-        $categoriesWithSubcategories = $categories->map(function ($category) {
-            return $this->getCategoryWithSubcategories($category);
-        });
-
-        return response()->json(['categories' => $categoriesWithSubcategories]);
-    }
-
     public function getCategoryWithSubcategories($category)
     {
         $subcategories = $category->subcategories;
@@ -72,7 +32,7 @@ class CategoryController extends Controller
      * @OA\Get(
      *     path="/api/categories",
      *     tags={"Category"},
-     *     summary="Finds all categories",
+     *     summary="Finds all categories with its subcategories",
      *     description="Multiple status values can be provided with comma separated string",
      *     operationId="categories.index",
      *     @OA\Parameter(
@@ -99,8 +59,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return response()->json(['categories' => $categories]);
+        $categories = Category::whereNull('category_id')->get();
+
+        $categoriesWithSubcategories = $categories->map(function ($category) {
+            return $this->getCategoryWithSubcategories($category);
+        });
+
+        return response()->json(['categories' => $categoriesWithSubcategories]);
     }
 
 

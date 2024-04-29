@@ -13,47 +13,12 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/categories-all": {
-            "get": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Finds all categories with its subcategories",
-                "description": "Multiple status values can be provided with comma separated string",
-                "operationId": "categories.categoriesWithSubcategories",
-                "parameters": [
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Status values that needed to be considered for filter",
-                        "required": true,
-                        "explode": true,
-                        "schema": {
-                            "type": "string",
-                            "default": "active",
-                            "enum": [
-                                "active",
-                                "inactive"
-                            ]
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation"
-                    },
-                    "400": {
-                        "description": "Invalid status value"
-                    }
-                }
-            }
-        },
         "/api/categories": {
             "get": {
                 "tags": [
                     "Category"
                 ],
-                "summary": "Finds all categories",
+                "summary": "Finds all categories with its subcategories",
                 "description": "Multiple status values can be provided with comma separated string",
                 "operationId": "categories.index",
                 "parameters": [
@@ -426,6 +391,41 @@
                 }
             }
         },
+        "/api/hotel-users": {
+            "get": {
+                "tags": [
+                    "HotelUser"
+                ],
+                "summary": "Finds all hotel users",
+                "description": "Multiple status values can be provided with comma separated string",
+                "operationId": "hotel-users.index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that needed to be considered for filter",
+                        "required": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "active",
+                            "enum": [
+                                "active",
+                                "inactive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
         "/api/items": {
             "get": {
                 "tags": [
@@ -678,6 +678,36 @@
                 }
             }
         },
+        "/api/main-categories/{id}": {
+            "get": {
+                "tags": [
+                    "MainCategory"
+                ],
+                "summary": "Finds a main category by its ID along with its subcategories",
+                "description": "Returns a single main category with its subcategories",
+                "operationId": "main-categories.show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the main category to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "404": {
+                        "description": "MainCategory not found"
+                    }
+                }
+            }
+        },
         "/api/main-categories": {
             "get": {
                 "tags": [
@@ -709,36 +739,6 @@
                     },
                     "400": {
                         "description": "Invalid status value"
-                    }
-                }
-            }
-        },
-        "/api/main-categories/{id}": {
-            "get": {
-                "tags": [
-                    "MainCategory"
-                ],
-                "summary": "Finds a main category by its ID along with its subcategories",
-                "description": "Returns a single main category with its subcategories",
-                "operationId": "main-categories.show",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the main category to return",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation"
-                    },
-                    "404": {
-                        "description": "MainCategory not found"
                     }
                 }
             }

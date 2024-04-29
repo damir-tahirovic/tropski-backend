@@ -28,6 +28,7 @@ class Hotel extends Model
     protected $fillable = [
         "name",
         "his_id",
+        "description",
     ];
 
     public function hotelUsers()

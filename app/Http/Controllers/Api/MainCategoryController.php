@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Hotel;
 use App\Models\MainCategory;
+use App\Models\MainCategoryTran;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -32,6 +35,88 @@ class MainCategoryController extends Controller
         return $mainCategory;
     }
 
+    public function store(Request $request)
+    {
+        try {
+            $hotel = Hotel::findOrFail($request->input('hotel_id'));
+            $hotel_id = $hotel->id;
+            $name_en = $request->input('name_en');
+            $name_me = $request->input('name_me');
+
+            $mainCategory = MainCategory::create([
+                'hotel_id' => $hotel_id,
+            ]);
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $mainCategory->addMedia($image)->toMediaCollection();
+                $mainCategory->getMedia();
+            }
+
+            $mainCategoryTran1 = MainCategoryTran::create([
+                'main_cat_id' => $mainCategory->id,
+                'name' => $name_en,
+                'lang_id' => '2'
+            ]);
+            $mainCategoryTran2 = MainCategoryTran::create([
+                'main_cat_id' => $mainCategory->id,
+                'name' => $name_me,
+                'lang_id' => '1'
+            ]);
+
+            return response()->json(['mainCategory' => $mainCategory,
+                'mainCategoryTran1' => $mainCategoryTran1,
+                'mainCategoryTran2' => $mainCategoryTran2], '201');
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), '417');
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/main-categories/{id}",
+     *     tags={"MainCategory"},
+     *     summary="Finds a main category by its ID along with its subcategories",
+     *     description="Returns a single main category with its subcategories",
+     *     operationId="main-categories.show",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the main category to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="MainCategory not found"
+     *     )
+     * )
+     */
+    public function show($id)
+    {
+        $mainCategory = MainCategory::findOrFail($id);
+
+        // Get all categories with subcategories
+        $categoriesWithSubcategoriesResponse = $this->categoryController->index();
+        $categoriesWithSubcategories = $categoriesWithSubcategoriesResponse->getData()->categories;
+
+        // Filter categories to remove duplicates
+        $filteredCategories = collect($categoriesWithSubcategories)->filter(function ($category) use ($mainCategory) {
+            return $category->main_cat_id === $mainCategory->id;
+        });
+
+        $mainCategory->categories = $filteredCategories;
+        $mainCategory->getMedia();
+
+        return response()->json(['main_category' => $mainCategory]);
+    }
 
     /**
      * @OA\Get(
@@ -68,7 +153,7 @@ class MainCategoryController extends Controller
 
         $mainCategoriesWithCategories = $mainCategories->map(function ($mainCategory) {
             // Dohvati sve kategorije sa podkategorijama
-            $categoriesWithSubcategoriesResponse = $this->categoryController->categoriesWithSubcategories();
+            $categoriesWithSubcategoriesResponse = $this->categoryController->index();
             $categoriesWithSubcategories = $categoriesWithSubcategoriesResponse->getData()->categories;
 
             // Filtriraj kategorije da se uklone duplikati
@@ -85,127 +170,12 @@ class MainCategoryController extends Controller
         return response()->json(['main_categories' => $mainCategoriesWithCategories]);
     }
 
-//    public function mainCategoriesWithNestedCategories()
-//    {
-//        // Get all main categories with their media
-//        $mainCategories = MainCategory::with('media')->get();
-//
-//        // For each main category, load its categories and their nested subcategories
-//        $mainCategories->each(function ($mainCategory) {
-//            $mainCategory->load(['categories' => function ($query) {
-//                $query->whereNull('category_id')->with('allSubcategories');
-//            }]);
-//        });
-//
-//        return response()->json(['main_categories' => $mainCategories]);
-//    }
-
-
-//    /**
-//     * @OA\Get(
-//     *     path="/api/main-categories",
-//     *     tags={"MainCategory"},
-//     *     summary="Finds all main categories",
-//     *     description="Multiple status values can be provided with comma separated string",
-//     *     operationId="main-categories.index",
-//     *     @OA\Parameter(
-//     *         name="status",
-//     *         in="query",
-//     *         description="Status values that needed to be considered for filter",
-//     *         required=true,
-//     *         explode=true,
-//     *         @OA\Schema(
-//     *             default="active",
-//     *             type="string",
-//     *             enum={"active", "inactive"}
-//     *         )
-//     *     ),
-//     *     @OA\Response(
-//     *         response=200,
-//     *         description="successful operation"
-//     *     ),
-//     *     @OA\Response(
-//     *         response=400,
-//     *         description="Invalid status value"
-//     *     )
-//     * )
-//     */
-//    public function index()
-//    {
-//        $mainCategories = MainCategory::with('media')->get();
-//        return response()->json(['mainCategories' => $mainCategories]);
-//    }
-
-
-    public function store(Request $request)
-    {
-        try {
-            $hotel = Hotel::findOrFail($request->input('hotel_id'));
-            $validated = $request->validate([
-                'image' => 'required'
-
-            ]);
-            $mainCategory = MainCategory::create($request->all());
-            $mainCategory->addMediaFromRequest('image')->toMediaCollection();
-            $mainCategory->getMedia();
-            return response()->json(['mainCategories' => $mainCategory], '201');
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage());
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/main-categories/{id}",
-     *     tags={"MainCategory"},
-     *     summary="Finds a main category by its ID along with its subcategories",
-     *     description="Returns a single main category with its subcategories",
-     *     operationId="main-categories.show",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID of the main category to return",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="MainCategory not found"
-     *     )
-     * )
-     */
-    public function show($id)
-    {
-        $mainCategory = MainCategory::findOrFail($id);
-
-        // Get all categories with subcategories
-        $categoriesWithSubcategoriesResponse = $this->categoryController->categoriesWithSubcategories();
-        $categoriesWithSubcategories = $categoriesWithSubcategoriesResponse->getData()->categories;
-
-        // Filter categories to remove duplicates
-        $filteredCategories = collect($categoriesWithSubcategories)->filter(function ($category) use ($mainCategory) {
-            return $category->main_cat_id === $mainCategory->id;
-        });
-
-        $mainCategory->categories = $filteredCategories;
-        $mainCategory->getMedia();
-
-        return response()->json(['main_category' => $mainCategory]);
-    }
-
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -224,7 +194,7 @@ class MainCategoryController extends Controller
             $mainCategory->addMediaFromRequest('image')->toMediaCollection();
             $mainCategory->getMedia();
             return response()->json(['mainCategories' => $mainCategory], '200');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -232,8 +202,8 @@ class MainCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy($id)
     {
@@ -241,7 +211,7 @@ class MainCategoryController extends Controller
             $mainCategory = MainCategory::findOrFail($id);
             $mainCategory->delete();
             return response()->json(['mainCategories' => $mainCategory]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }

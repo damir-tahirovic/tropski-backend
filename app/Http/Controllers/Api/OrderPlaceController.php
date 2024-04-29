@@ -12,35 +12,27 @@ use Illuminate\Http\Response;
 
 class OrderPlaceController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/order-places",
-     *     tags={"OrderPlace"},
-     *     summary="Finds all order places",
-     *     description="Multiple status values can be provided with comma separated string",
-     *     operationId="order-places.index",
-     *     @OA\Parameter(
-     *         name="status",
-     *         in="query",
-     *         description="Status values that needed to be considered for filter",
-     *         required=true,
-     *         explode=true,
-     *         @OA\Schema(
-     *             default="active",
-     *             type="string",
-     *             enum={"active", "inactive"}
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation"
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Invalid status value"
-     *     )
-     * )
-     */
+
+//    /**
+//     * @OA\Get(
+//     *     path="/api/order-places",
+//     *     tags={"OrderPlace"},
+//     *     summary="Get all order places",
+//     *     operationId="order-places.index",
+//     *     @OA\Response(
+//     *         response=200,
+//     *         description="successful operation",
+//     *         @OA\JsonContent(
+//     *             type="array",
+//     *             @OA\Items(ref="#/components/schemas/OrderPlace")
+//     *         )
+//     *     ),
+//     *     @OA\Response(
+//     *         response=400,
+//     *         description="Invalid request"
+//     *     )
+//     * )
+//     */
     public function index()
     {
         $orderPlaces = OrderPlace::all();
