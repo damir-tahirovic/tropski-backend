@@ -98,7 +98,7 @@ class CategoryController extends Controller
     {
         try {
             $validated = $request->validate([
-                'image' => 'required',
+//              'image' => 'required',
                 'main_cat_id' => 'required',
                 'name_me' => 'required|max:255',
                 'name_en' => 'required|max:255'

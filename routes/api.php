@@ -34,9 +34,10 @@ use App\Http\Controllers\Api\ItemTypeController;
 */
 
 
+//Rute za UserController
+
 Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
 Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
-
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

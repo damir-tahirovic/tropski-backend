@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('his_id')->nullable();
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

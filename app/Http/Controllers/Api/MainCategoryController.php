@@ -67,7 +67,7 @@ class MainCategoryController extends Controller
 
             $validated = $request->validate([
                 'hotel_id' => 'required',
-                'image' => 'required',
+//                'image' => 'required',
                 'name_en' => 'required',
                 'name_me' => 'required'
             ]);

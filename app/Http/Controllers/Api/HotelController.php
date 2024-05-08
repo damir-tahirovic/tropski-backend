@@ -43,6 +43,7 @@ class HotelController extends Controller
     public function allHotelsWithMainCategories()
     {
         $hotels = Hotel::with('mainCategories')->get();
+        $hotels->load('media');
         return response()->json($hotels);
     }
 
@@ -121,6 +122,7 @@ class HotelController extends Controller
     public function index()
     {
         $hotels = Hotel::all();
+        $hotels->load('media');
         return response()->json($hotels);
     }
 
@@ -154,6 +156,12 @@ class HotelController extends Controller
                 "description" => "nullable",
             ]);
             $hotel = Hotel::create($request->all());
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->getMedia();
+            }
             return response()->json(['hotel' => $hotel], '201');
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -195,6 +203,7 @@ class HotelController extends Controller
     {
         try {
             $hotel = Hotel::findOrFail($id);
+            $hotel->getMedia();
             return response()->json($hotel);
         } catch (Exception $e) {
             return response()->json($e->getMessage());

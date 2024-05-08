@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('lang_id');
             $table->unsignedBigInteger('main_cat_id');
             $table->foreign('lang_id')->references('id')->on('languages');
-            $table->foreign('main_cat_id')->references('id')->on('main_categories');
+            $table->foreign('main_cat_id')->references('id')->on('main_categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

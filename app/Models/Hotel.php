@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @OA\Schema(
@@ -21,14 +23,19 @@ use Illuminate\Database\Eloquent\Model;
  *     )
  * )
  */
-class Hotel extends Model
+class Hotel extends Model implements HasMedia
 {
     use HasFactory;
+
+    use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $fillable = [
         "name",
         "his_id",
         "description",
+        "color",
     ];
 
     public function hotelUsers()
