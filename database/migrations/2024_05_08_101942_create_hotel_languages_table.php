@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('hotel_languages', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->unsignedBigInteger('extra_group_id')->nullable();
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
-
+            $table->unsignedBigInteger('hotel_id');
+            $table->unsignedBigInteger('lang_id');
+            $table->foreign('hotel_id')->references('id')->on('hotels');
+            $table->foreign('lang_id')->references('id')->on('languages');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('hotel_languages');
     }
 };

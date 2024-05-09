@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
+use App\Models\HotelLanguage;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -151,20 +152,36 @@ class HotelController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = json_decode($request->getContent(), true);
+
             $validated = $request->validate([
                 "name" => "required|max:255",
                 "description" => "nullable",
+                'color' => 'nullable',
+                'langs.*.lang_id' => 'required|integer'
             ]);
-            $hotel = Hotel::create($request->all());
+            $hotel = Hotel::create([
+                "name" => $data['name'],
+                "description" => $data['description'],
+                'color' => $data['color']
+            ]);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $hotel->addMedia($image)->toMediaCollection();
                 $hotel->getMedia();
             }
+
+            foreach ($data['langs'] as $lang) {
+                HotelLanguage::create([
+                    'hotel_id' => $hotel->id,
+                    'lang_id' => $lang['lang_id']
+                ]);
+            }
+
             return response()->json(['hotel' => $hotel], '201');
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), '400');
         }
     }
 

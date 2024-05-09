@@ -108,6 +108,7 @@ Route::delete('languages/{id}', [LanguageController::class, 'destroy'])->name('l
 //Rute za Item
 
 Route::get('items', [ItemController::class, 'index'])->name('items.index');
+Route::post('items/with-one-option', [ItemController::class, 'storeWithOneOption'])->name('items.store-with-one-option');
 Route::post('items', [ItemController::class, 'store'])->name('items.store');
 Route::get('items/{id}', [ItemController::class, 'show'])->name('items.show');
 Route::put('items/{id}', [ItemController::class, 'update'])->name('items.update');
@@ -138,6 +139,7 @@ Route::delete('category-trans/{id}', [CategoryTranController::class, 'destroy'])
 
 Route::get('item-types', [ItemTypeController::class, 'index'])->name('item-types.index');
 Route::post('item-types', [ItemTypeController::class, 'store'])->name('item-types.store');
+Route::post('item-types-with-latest-item', [ItemTypeController::class, 'storeWithLatestItem'])->name('item-types.store-with-latest-item');
 Route::get('item-types/{id}', [ItemTypeController::class, 'show'])->name('item-types.show');
 Route::put('item-types/{id}', [ItemTypeController::class, 'update'])->name('item-types.update');
 Route::delete('item-types/{id}', [ItemTypeController::class, 'destroy'])->name('item-types.destroy');

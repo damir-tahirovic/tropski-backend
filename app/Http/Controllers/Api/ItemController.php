@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\ExtraGroup;
 use App\Models\Item;
 use App\Models\ItemTran;
+use App\Models\ItemType;
+use App\Models\ItemTypeTran;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -92,45 +94,41 @@ class ItemController extends Controller
      *     )
      * )
      */
+
     public function store(Request $request)
     {
         try {
+            $data = json_decode($request->getContent(), true);
+
             $validated = $request->validate([
-                'image' => 'required',
                 'category_id' => 'required',
-                'extra_group_id' => 'required',
                 'code' => 'required',
-                'name_en' => 'required|max:255',
-                'name_me' => 'required|max:255',
-                'description_en' => 'nullable',
-                'description_me' => 'nullable'
+                'description' => 'nullable'
             ]);
             $category = Category::findOrFail($request->input('category_id'));
-            $extraGroup = ExtraGroup::findOrFail($request->input('extra_group_id'));
             $item = Item::create($request->all());
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $item->addMedia($image)->toMediaCollection();
                 $item->getMedia();
             }
-            //Prevod za engleski jezik
-            $itemTran1 = ItemTran::create([
-                'item_id' => $item->id,
-                'name' => $validated['name_en'],
-                'description' => $validated['description_en'],
-                'lang_id' => '2'
-            ]);
 
-            //Prevod za crnogorski jezik
-            $itemTran2 = ItemTran::create([
-                'item_id' => $item->id,
-                'name' => $validated['name_me'],
-                'description' => $validated['description_me'],
-                'lang_id' => '1'
-            ]);
-            return response()->json(['items' => $item,
-                'itemTran1' => $itemTran1,
-                'itemTran2' => $itemTran2], 201);
+            foreach ($data['trans'] as $trans){
+                ItemTran::create([
+                    'item_id' => $item->id,
+                    'lang_id' => $trans['lang_id'],
+                    'name' => $trans['name'],
+                    'description' => $trans['description'],
+                ]);
+            }
+
+            $itemTypeController = new ItemTypeController();
+
+            foreach ($data['types'] as $types){
+                $itemTypeController->indirectStore($types, $item->id);
+            }
+
+            return response()->json(['items' => $item], 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }

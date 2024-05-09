@@ -75,12 +75,12 @@ class ExtraController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = json_decode($request->getContent(), true);
+
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
                 'hotel_id' => 'required',
-                'image' => 'required',
-                'name_en' => 'required|max:255',
-                'name_me' => 'required|max:255',
+//                'image' => 'required',
             ]);
 
             $extra = Extra::create([
@@ -92,23 +92,16 @@ class ExtraController extends Controller
                 $extra->getMedia();
             }
 
-            //Prevod za engleski jezik
-            $extraTran1 = ExtraTran::create([
-                'extra_id' => $extra->id,
-                'lang_id' => '2',
-                'name' => $request->input('name_en'),
-            ]);
+            foreach ($data['trans'] as $trans){
+                ExtraTran::create([
+                    'extra_id' => $extra->id,
+                    'lang_id' => $trans['lang_id'],
+                    'name' => $trans['name'],
+                ]);
+            }
 
-            //Prevod za crnogorski jezik
-            $extraTran2 = ExtraTran::create([
-                'extra_id' => $extra->id,
-                'lang_id' => '1',
-                'name' => $request->input('name_me'),
-            ]);
             return response()->json([
-                'extra' => $extra,
-                'extraTran1' => $extraTran1,
-                'extraTran2' => $extraTran2], '201');
+                'extra' => $extra], '201');
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }

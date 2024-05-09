@@ -97,11 +97,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = json_decode($request->getContent(), true);
             $validated = $request->validate([
 //              'image' => 'required',
                 'main_cat_id' => 'required',
-                'name_me' => 'required|max:255',
-                'name_en' => 'required|max:255'
             ]);
             $category_id = $request->input('category_id');
             if ($category_id !== null) {
@@ -114,28 +113,21 @@ class CategoryController extends Controller
                 $category = Category::create($request->all());
             }
 
-            //Prevod za engleski jezik
-            $categoryTran1 = CategoryTran::create([
-                'category_id' => $category->id,
-                'name' => $validated['name_en'],
-                'lang_id' => '2'
-            ]);
-
-            //Prevod za crnogorski jezik
-            $categoryTran2 = CategoryTran::create([
-                'category_id' => $category->id,
-                'name' => $validated['name_me'],
-                'lang_id' => '1'
-            ]);
-
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $category->addMedia($image)->toMediaCollection();
                 $category->getMedia();
             }
-            return response()->json(['category' => $category,
-                'categoryTran1' => $categoryTran1,
-                'categoryTran2' => $categoryTran2,], 201);
+
+            foreach ($data['trans'] as $trans){
+                CategoryTran::create([
+                    'category_id' => $category->id,
+                    'lang_id' => $trans['lang_id'],
+                    'name' => $trans['name']
+                ]);
+            }
+
+            return response()->json(['category' => $category], 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }

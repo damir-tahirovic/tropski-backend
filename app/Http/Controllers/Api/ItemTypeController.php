@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\ItemType;
 use App\Models\Item;
+use Illuminate\Support\Facades\Validator;
 
 class ItemTypeController extends Controller
 {
@@ -78,16 +79,75 @@ class ItemTypeController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = json_decode($request->getContent(), true);
+
             $validated = $request->validate([
                 'item_id' => 'required',
                 'quantity' => 'required',
                 'unit' => 'required|max:255',
-                'price' => 'required|max:255',
+                'price' => 'required|max:255'
+            ]);
+
+            $itemType = ItemType::create($validated);
+
+            foreach ($data['trans'] as $trans){
+                ItemTypeTran::create([
+                    'item_type_id' => $itemType->id,
+                    'name' => $trans['name'],
+                    'lang_id' => $trans['lang_id']
+                ]);
+
+            }
+
+            return response()->json(['itemTypes' => $itemType], 201);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
+
+    public function indirectStore(array $data, $itemId)
+    {
+        try {
+            $validatedData = Validator::make($data, [
+                'quantity' => 'required',
+                'unit' => 'required|max:255',
+                'price' => 'required|max:255'
+            ])->validate();
+
+            $validatedData['item_id'] = $itemId;
+
+            $itemType = ItemType::create($validatedData);
+
+            foreach ($data['trans'] as $trans) {
+                ItemTypeTran::create([
+                    'item_type_id' => $itemType->id,
+                    'name' => $trans['name'],
+                    'lang_id' => $trans['lang_id']
+                ]);
+            }
+
+            return $itemType;
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
+
+    public function storeWithLatestItem(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'quantity' => 'required',
+                'unit' => 'required|max:255',
+                'price' => 'required',
                 'name_en' => 'required',
                 'name_me' => 'required'
             ]);
 
-            $itemType = ItemType::create($validated);
+            $item = Item::latest()->first();
+            $itemType = ItemType::create(['item_id' => $item->id,
+                $validated]);
 
             //Prevod za engleski jezik
             $itemTypeTran1 = ItemTypeTran::create([
@@ -110,6 +170,7 @@ class ItemTypeController extends Controller
             return response()->json($e->getMessage(), 400);
         }
     }
+
 
     /**
      * @OA\Get(

@@ -64,12 +64,11 @@ class MainCategoryController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = json_decode($request->getContent(), true);
 
             $validated = $request->validate([
                 'hotel_id' => 'required',
 //                'image' => 'required',
-                'name_en' => 'required',
-                'name_me' => 'required'
             ]);
 
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
@@ -84,23 +83,15 @@ class MainCategoryController extends Controller
                 $mainCategory->getMedia();
             }
 
-            //Prevod za engleski jezik
-            $mainCategoryTran1 = MainCategoryTran::create([
-                'main_cat_id' => $mainCategory->id,
-                'name' => $validated['name_en'],
-                'lang_id' => '2'
-            ]);
+            foreach ($data['trans'] as $trans){
+                MainCategoryTran::create([
+                    'main_cat_id' => $mainCategory->id,
+                    'lang_id' => $trans['lang_id'],
+                    'name' => $trans['name'],
+                ]);
+            }
 
-            //Prevod za crnogorski jezik
-            $mainCategoryTran2 = MainCategoryTran::create([
-                'main_cat_id' => $mainCategory->id,
-                'name' => $validated['name_me'],
-                'lang_id' => '1'
-            ]);
-
-            return response()->json(['mainCategory' => $mainCategory,
-                'mainCategoryTran1' => $mainCategoryTran1,
-                'mainCategoryTran2' => $mainCategoryTran2], '201');
+            return response()->json(['mainCategory' => $mainCategory], '201');
         } catch (Exception $e) {
             return response()->json($e->getMessage(), '400');
         }
@@ -298,6 +289,5 @@ class MainCategoryController extends Controller
             return response()->json($e->getMessage());
         }
     }
-
 
 }
