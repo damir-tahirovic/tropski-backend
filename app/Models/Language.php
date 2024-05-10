@@ -54,4 +54,10 @@ class Language extends Model
     {
         return $this->hasMany(ExtraTran::class);
     }
+
+    public function hotelLanguages()
+    {
+        return $this->hasMany(HotelLanguage::class);
+    }
+
 }

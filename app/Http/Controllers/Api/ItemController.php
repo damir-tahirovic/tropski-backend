@@ -113,19 +113,41 @@ class ItemController extends Controller
                 $item->getMedia();
             }
 
-            foreach ($data['trans'] as $trans){
-                ItemTran::create([
+            if (count($data['types']) == 1) {
+                $itemType = ItemType::create([
                     'item_id' => $item->id,
-                    'lang_id' => $trans['lang_id'],
-                    'name' => $trans['name'],
-                    'description' => $trans['description'],
+                    'quantity' => $data['types'][0]['quantity'],
+                    'unit' => $data['types'][0]['quantity'],
+                    'price' => $data['types'][0]['quantity'],
                 ]);
-            }
+                foreach ($data['trans'] as $tran) {
+                    ItemTran::create([
+                        'item_id' => $item->id,
+                        'lang_id' => $tran['lang_id'],
+                        'name' => $tran['name'],
+                        'description' => $tran['description'],
+                    ]);
 
-            $itemTypeController = new ItemTypeController();
+                    ItemTypeTran::create([
+                        'item_type_id' => $itemType->id,
+                        'name' => $tran['name'],
+                        'lang_id' => $tran['lang_id']
+                    ]);
 
-            foreach ($data['types'] as $types){
-                $itemTypeController->indirectStore($types, $item->id);
+                }
+            } else {
+                foreach ($data['trans'] as $tran) {
+                    ItemTran::create([
+                        'item_id' => $item->id,
+                        'lang_id' => $tran['lang_id'],
+                        'name' => $tran['name'],
+                        'description' => $tran['description'],
+                    ]);
+                }
+                $itemTypeController = new ItemTypeController();
+                foreach ($data['types'] as $type) {
+                    $itemTypeController->indirectStore($type, $item->id);
+                }
             }
 
             return response()->json(['items' => $item], 201);

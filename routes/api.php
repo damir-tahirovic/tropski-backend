@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ExtraGroupExtraPivotController;
 use App\Http\Controllers\Api\ExtraTranController;
+use App\Http\Controllers\Api\HotelLanguageController;
 use App\Http\Controllers\Api\HotelUserController;
 use App\Http\Controllers\Api\ItemTranController;
 use App\Http\Controllers\Api\ItemTypeTranController;
@@ -76,6 +77,7 @@ Route::delete('hotels/{id}', [HotelController::class, 'destroy'])->name('hotels.
 
 Route::get('hotels-main-categories', [HotelController::class, 'allHotelsWithMainCategories'])->name('hotels.allHotelsWithMainCategories');
 Route::get('hotels-main-categories/{id}', [HotelController::class, 'hotelsWithMainCategories'])->name('hotels.hotelsWithMainCategories');
+Route::get('hotels-languages', [HotelController::class, 'allHotelsWithLanguages'])->name('hotels.allHotelsWithLanguages');
 
 
 //Rute za Extra
@@ -215,4 +217,13 @@ Route::post('role-hotel-users', [RoleHotelUserController::class, 'store'])->name
 Route::get('role-hotel-users/{id}', [RoleHotelUserController::class, 'show'])->name('role-hotel-users.show');
 Route::put('role-hotel-users/{id}', [RoleHotelUserController::class, 'update'])->name('role-hotel-users.update');
 Route::delete('role-hotel-users/{id}', [RoleHotelUserController::class, 'destroy'])->name('role-hotel-users.destroy');
+
+
+//Rute za HotelLanguages
+
+Route::get('hotel-languages', [HotelLanguageController::class, 'index'])->name('role-hotel-languages.index');
+Route::post('hotel-languages', [HotelLanguageController::class, 'store'])->name('role-hotel-languages.store');
+Route::get('hotel-languages/{id}', [HotelLanguageController::class, 'show'])->name('role-hotel-languages.show');
+Route::put('hotel-languages/{id}', [HotelLanguageController::class, 'update'])->name('role-hotel-languages.update');
+Route::delete('hotel-languages/{id}', [HotelLanguageController::class, 'destroy'])->name('role-hotel-languages.destroy');
 

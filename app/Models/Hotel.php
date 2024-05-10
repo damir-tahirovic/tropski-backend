@@ -68,5 +68,21 @@ class Hotel extends Model implements HasMedia
         return $this->hasMany(ExtraGroup::class);
     }
 
+    public function hotelLanguages()
+    {
+        return $this->hasMany(HotelLanguage::class);
+    }
+
+    public function languages()
+    {
+        return $this->hasManyThrough(
+            Language::class,
+            HotelLanguage::class,
+            'hotel_id',
+            'id',
+            'id',
+            'lang_id'
+        );
+    }
 
 }

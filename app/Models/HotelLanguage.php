@@ -21,7 +21,7 @@ class HotelLanguage extends Model
 
     public function language()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'lang_id');
     }
 
 }

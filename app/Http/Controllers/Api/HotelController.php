@@ -122,7 +122,19 @@ class HotelController extends Controller
 
     public function index()
     {
-        $hotels = Hotel::all();
+        try {
+            $hotels = Hotel::all();
+            $hotels->load('media');
+            return response()->json($hotels);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
+    public
+    function allHotelsWithLanguages()
+    {
+        $hotels = Hotel::with('languages')->get();
         $hotels->load('media');
         return response()->json($hotels);
     }
@@ -149,16 +161,20 @@ class HotelController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         try {
             $data = json_decode($request->getContent(), true);
+
+            if ($data['langs'] == null) {
+                return response()->json(['langs' => 'At least one language is required'], '400');
+            }
 
             $validated = $request->validate([
                 "name" => "required|max:255",
                 "description" => "nullable",
                 'color' => 'nullable',
-                'langs.*.lang_id' => 'required|integer'
             ]);
             $hotel = Hotel::create([
                 "name" => $data['name'],
@@ -216,7 +232,8 @@ class HotelController extends Controller
      *     )
      * )
      */
-    public function show($id)
+    public
+    function show($id)
     {
         try {
             $hotel = Hotel::findOrFail($id);
@@ -263,7 +280,8 @@ class HotelController extends Controller
      *     )
      * )
      */
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
         try {
             $hotel = Hotel::findOrFail($id);
@@ -309,7 +327,8 @@ class HotelController extends Controller
      *     )
      * )
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         try {
             $hotel = Hotel::findOrFail($id);
