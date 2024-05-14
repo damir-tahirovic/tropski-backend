@@ -35,7 +35,13 @@ class Hotel extends Model implements HasMedia
         "name",
         "his_id",
         "description",
-        "color",
+        "primary_color",
+        "primary_color_light",
+        "primary_color_dark",
+        "secondary_color",
+        "secondary_color_light",
+        "secondary_color_dark",
+        "banner_text",
     ];
 
     public function hotelUsers()

@@ -174,16 +174,42 @@ class HotelController extends Controller
             $validated = $request->validate([
                 "name" => "required|max:255",
                 "description" => "nullable",
-                'color' => 'nullable',
+                "primary_color" => "required",
+                "primary_color_light" => "required",
+                "primary_color_dark" => "required",
+                "secondary_color" => "required",
+                "secondary_color_light" => "required",
+                "secondary_color_dark" => "required",
+                "image" => "required",
+                "banner_image" => "required",
+                "logo" => "required",
             ]);
+
             $hotel = Hotel::create([
-                "name" => $data['name'],
+                "name" => $validated['name'],
                 "description" => $data['description'],
-                'color' => $data['color']
+                "primary_color" => $validated['primary_color'],
+                "primary_color_light" => $validated['primary_color_light'],
+                "primary_color_dark" => $validated['primary_color_dark'],
+                "secondary_color" => $validated['secondary_color'],
+                "secondary_color_light" => $validated['secondary_color_light'],
+                "secondary_color_dark" => $validated['secondary_color_dark'],
+                "banner_text" => $data['banner_text'] ,
+                "his_id" => $data['his_id']
             ]);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
+                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->getMedia();
+            }
+            if ($request->hasFile('banner_image')) {
+                $image = $request->file('banner_image');
+                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->getMedia();
+            }
+            if ($request->hasFile('logo')) {
+                $image = $request->file('logo');
                 $hotel->addMedia($image)->toMediaCollection();
                 $hotel->getMedia();
             }

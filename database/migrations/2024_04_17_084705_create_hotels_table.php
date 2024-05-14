@@ -17,7 +17,13 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('his_id')->nullable();
-            $table->string('color')->nullable();
+            $table->string('banner_text')->nullable();
+            $table->string('primary_color');
+            $table->string('primary_color_light');
+            $table->string('primary_color_dark');
+            $table->string('secondary_color');
+            $table->string('secondary_color_light');
+            $table->string('secondary_color_dark');
             $table->timestamps();
         });
     }
