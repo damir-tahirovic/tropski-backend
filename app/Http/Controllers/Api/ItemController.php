@@ -51,6 +51,19 @@ class ItemController extends Controller
         return response()->json(['items' => $items]);
     }
 
+
+    public function itemsByCategory($categoryId)
+    {
+        try {
+            $category = Category::findOrFail($categoryId);
+            $category->load('media');
+            $category->load('items.media');
+            return response()->json(["category" => $category]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
     /**
      * @OA\Post(
      *     path="/api/items",

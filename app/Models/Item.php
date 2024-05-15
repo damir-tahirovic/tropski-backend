@@ -61,8 +61,4 @@ class Item extends Model implements HasMedia
         return $this->hasMany(ItemType::class);
     }
 
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
 }

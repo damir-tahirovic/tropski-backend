@@ -78,23 +78,17 @@ class UserController extends Controller
         }
     }
 
+    public
+    function index()
+    {
+        try {
+            $users = User::all();
+            return response()->json(['users' => $users], 200);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 //    /**

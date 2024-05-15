@@ -46,27 +46,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::whereNull('category_id')->get();
+        try {
+            $categories = Category::with('media')->get();
 
-        $categoriesWithSubcategories = $categories->map(function ($category) {
-            return $this->getCategoryWithSubcategories($category);
-        });
+            return response()->json(['categories' => $categories]);
 
-        return response()->json(['categories' => $categoriesWithSubcategories]);
-    }
-
-    public function getCategoryWithSubcategories($category)
-    {
-        $subcategories = $category->subcategories;
-
-        if ($subcategories !== null && $subcategories->isNotEmpty()) {
-            $category->subcategories = $subcategories->map(function ($subcategory) {
-
-                return $this->getCategoryWithSubcategories($subcategory);
-            });
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
         }
-        $category->getMedia();
-        return $category;
     }
 
     /**
@@ -98,20 +85,14 @@ class CategoryController extends Controller
     {
         try {
             $data = json_decode($request->getContent(), true);
+
             $validated = $request->validate([
-//              'image' => 'required',
-                'main_cat_id' => 'required',
+                //'image' => 'required',
+                'main_cat_id' => 'required'
             ]);
-            $category_id = $request->input('category_id');
-            if ($category_id !== null) {
-                $parentCategory = Category::findOrFail($category_id);
-                $main_cat_id = $parentCategory->main_cat_id;
-                $requestData = $request->all();
-                $requestData['main_cat_id'] = $main_cat_id;
-                $category = Category::create($requestData);
-            } else {
-                $category = Category::create($request->all());
-            }
+
+            MainCategory::findOrFail($request->input('main_cat_id'));
+            $category = Category::create($validated);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -119,15 +100,16 @@ class CategoryController extends Controller
                 $category->getMedia();
             }
 
-            foreach ($data['trans'] as $trans){
+            foreach ($data['trans'] as $tran) {
                 CategoryTran::create([
                     'category_id' => $category->id,
-                    'lang_id' => $trans['lang_id'],
-                    'name' => $trans['name']
+                    'name' => $tran['name'],
+                    'lang_id' => $tran['lang_id']
                 ]);
             }
 
             return response()->json(['category' => $category], 201);
+
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }
@@ -165,8 +147,8 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::findOrFail($id);
-            $categoryWithSubcategories = $this->getCategoryWithSubcategories($category);
-            return response()->json(['category' => $categoryWithSubcategories]);
+            $category->getMedia();
+            return response()->json(['category' => $category]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

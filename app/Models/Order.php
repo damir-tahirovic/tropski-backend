@@ -32,7 +32,7 @@ class Order extends Model
         return $this->belongsTo(OrderPlace::class);
     }
 
-    public function orderItems()
+    public function orderItemTypes()
     {
         return $this->hasMany(OrderItem::class);
     }

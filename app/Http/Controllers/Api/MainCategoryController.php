@@ -17,25 +17,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class MainCategoryController extends Controller
 {
 
-    protected $categoryController;
-
-    public function __construct(CategoryController $categoryController)
-    {
-        $this->categoryController = $categoryController;
-    }
-
-//    public function getMainCategoryWithCategories($mainCategory)
-//    {
-//        $categories = $mainCategory->categories;
-//
-//        if ($categories !== null && $categories->isNotEmpty()) {
-//            $mainCategory->categories = $categories->map(function ($category) {
-//                return $this->categoryController->getCategoryWithSubcategories($category);
-//            });
-//        }
-//        return $mainCategory;
-//    }
-
     /**
      * @OA\Post(
      *     path="/api/main-categories",
@@ -83,7 +64,7 @@ class MainCategoryController extends Controller
                 $mainCategory->getMedia();
             }
 
-            foreach ($data['trans'] as $trans){
+            foreach ($data['trans'] as $trans) {
                 MainCategoryTran::create([
                     'main_cat_id' => $mainCategory->id,
                     'lang_id' => $trans['lang_id'],
@@ -126,21 +107,13 @@ class MainCategoryController extends Controller
      */
     public function show($id)
     {
-        $mainCategory = MainCategory::findOrFail($id);
-
-        // Get all categories with subcategories
-        $categoriesWithSubcategoriesResponse = $this->categoryController->index();
-        $categoriesWithSubcategories = $categoriesWithSubcategoriesResponse->getData()->categories;
-
-        // Filter categories to remove duplicates
-        $filteredCategories = collect($categoriesWithSubcategories)->filter(function ($category) use ($mainCategory) {
-            return $category->main_cat_id === $mainCategory->id;
-        });
-
-        $mainCategory->categories = $filteredCategories;
-        $mainCategory->getMedia();
-
-        return response()->json(['main_category' => $mainCategory]);
+        try {
+            $mainCategory = MainCategory::with('categories.media')->findOrFail($id);
+            $mainCategory->getMedia();
+            return response()->json(['mainCategory' => $mainCategory]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
@@ -174,25 +147,12 @@ class MainCategoryController extends Controller
      */
     public function index()
     {
-        $mainCategories = MainCategory::all();
-
-        $mainCategoriesWithCategories = $mainCategories->map(function ($mainCategory) {
-            // Dohvati sve kategorije sa podkategorijama
-            $categoriesWithSubcategoriesResponse = $this->categoryController->index();
-            $categoriesWithSubcategories = $categoriesWithSubcategoriesResponse->getData()->categories;
-
-            // Filtriraj kategorije da se uklone duplikati
-            $filteredCategories = collect($categoriesWithSubcategories)->filter(function ($category) use ($mainCategory) {
-                return $category->main_cat_id === $mainCategory->id;
-            });
-
-            $mainCategory->categories = $filteredCategories;
-            $mainCategory->getMedia();
-
-            return $mainCategory;
-        });
-
-        return response()->json(['main_categories' => $mainCategoriesWithCategories]);
+        try {
+            $mainCategories = MainCategory::with('media')->with('categories')->get();
+            return response()->json(['mainCategories' => $mainCategories]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**

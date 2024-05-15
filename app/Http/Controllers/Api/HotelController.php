@@ -165,10 +165,10 @@ class HotelController extends Controller
     function store(Request $request)
     {
         try {
-            $data = json_decode($request->getContent(), true);
+            $data = $request->all();
 
-            if ($data['langs'] == null) {
-                return response()->json(['langs' => 'At least one language is required'], '400');
+            if (!isset($data['langs'])) {
+                return response()->json(['langs' => 'At least one language is required'], 400);
             }
 
             $validated = $request->validate([

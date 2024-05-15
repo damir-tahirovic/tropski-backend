@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\ItemTypeController;
 
 Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
 Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
+Route::get('users', [UserController::class, 'index'])->name('users.index');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -115,6 +116,8 @@ Route::post('items', [ItemController::class, 'store'])->name('items.store');
 Route::get('items/{id}', [ItemController::class, 'show'])->name('items.show');
 Route::put('items/{id}', [ItemController::class, 'update'])->name('items.update');
 Route::delete('items/{id}', [ItemController::class, 'destroy'])->name('items.destroy');
+
+Route::get('items-by-category/{id}', [ItemController::class, 'itemsByCategory'])->name('items.items-by-category');
 
 
 //Rute za MainCategoryTran

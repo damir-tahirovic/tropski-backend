@@ -160,9 +160,9 @@ class RoleController extends Controller
             $role = Role::findOrFail($id);
             $validated = $request->validate([
                 'name' => 'required|max:255',
-                'description' => 'required'
+                'description' => 'nullable'
             ]);
-            $role = Role::update($validated);
+            $role->update($validated);
             return response()->json(['role' => $role], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);

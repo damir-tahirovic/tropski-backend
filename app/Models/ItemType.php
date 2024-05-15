@@ -53,4 +53,9 @@ class ItemType extends Model
     {
         return $this->hasMany(ItemTypeTran::class);
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
