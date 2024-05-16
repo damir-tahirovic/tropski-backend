@@ -130,8 +130,8 @@ class ItemController extends Controller
                 $itemType = ItemType::create([
                     'item_id' => $item->id,
                     'quantity' => $data['types'][0]['quantity'],
-                    'unit' => $data['types'][0]['quantity'],
-                    'price' => $data['types'][0]['quantity'],
+                    'unit' => $data['types'][0]['unit'],
+                    'price' => $data['types'][0]['price'],
                 ]);
                 foreach ($data['trans'] as $tran) {
                     ItemTran::create([

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Category;
 use App\Models\Language;
+use Illuminate\Support\Facades\DB;
 
 class CategoryTranController extends Controller
 {
@@ -87,6 +88,20 @@ class CategoryTranController extends Controller
             $lang = Language::findOrFail($request->input('lang_id'));
             $categoryTran = CategoryTran::create($request->all());
             return response()->json(['categoryTrans' => $categoryTran], '201');
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+    public function categoryNamesWithLanguages()
+    {
+        try {
+            $result = DB::table('categories as c')
+                ->join('category_trans as ct', 'ct.category_id', '=', 'c.id')
+                ->join('languages as l', 'ct.lang_id', '=', 'l.id')
+                ->select('l.code', 'c.id as category_id', 'ct.name as category_name')
+                ->get();
+            return response()->json($result);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

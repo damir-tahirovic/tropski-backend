@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\HotelLanguageController;
 use App\Http\Controllers\Api\HotelUserController;
 use App\Http\Controllers\Api\ItemTranController;
 use App\Http\Controllers\Api\ItemTypeTranController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderPlaceController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RoleHotelUserController;
@@ -139,6 +140,8 @@ Route::get('category-trans/{id}', [CategoryTranController::class, 'show'])->name
 Route::put('category-trans/{id}', [CategoryTranController::class, 'update'])->name('category-trans.update');
 Route::delete('category-trans/{id}', [CategoryTranController::class, 'destroy'])->name('category-trans.destroy');
 
+Route::get('category-trans-languages', [CategoryTranController::class, 'categoryNamesWithLanguages'])->name('category-trans.categoryNamesWithLanguages');
+
 
 //Rute za ItemType
 
@@ -193,6 +196,15 @@ Route::post('order-places', [OrderPlaceController::class, 'store'])->name('order
 Route::get('order-places/{id}', [OrderPlaceController::class, 'show'])->name('order-places.show');
 Route::put('order-places/{id}', [OrderPlaceController::class, 'update'])->name('order-places.update');
 Route::delete('order-places/{id}', [OrderPlaceController::class, 'destroy'])->name('order-places.destroy');
+
+
+//Rute za Order
+
+Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
+Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::put('orders/{id}', [OrderController::class, 'update'])->name('orders.update');
+Route::delete('orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
 
 //Rute za HotelUser

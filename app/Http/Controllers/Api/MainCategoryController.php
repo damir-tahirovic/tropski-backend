@@ -110,7 +110,7 @@ class MainCategoryController extends Controller
         try {
             $mainCategory = MainCategory::with('categories.media')->findOrFail($id);
             $mainCategory->getMedia();
-            return response()->json(['mainCategory' => $mainCategory]);
+            return response()->json(['main_category' => $mainCategory]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
@@ -149,7 +149,7 @@ class MainCategoryController extends Controller
     {
         try {
             $mainCategories = MainCategory::with('media')->with('categories')->get();
-            return response()->json(['mainCategories' => $mainCategories]);
+            return response()->json(['main_categories' => $mainCategories]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
