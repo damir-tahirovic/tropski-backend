@@ -30,6 +30,8 @@ class Role extends Model
         "description"
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function roleHotelUsers()
     {
         return $this->hasMany(RoleHotelUser::class);

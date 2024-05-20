@@ -37,6 +37,8 @@ class ExtraTran extends Model
         'lang_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function language()
     {
         return $this->belongsTo(Language::class);

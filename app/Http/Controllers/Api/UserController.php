@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\HotelUser;
+use App\Models\RoleHotelUser;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -24,7 +26,9 @@ class UserController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'username' => 'required|unique:users',
-                'password' => 'required'
+                'password' => 'required',
+                'role_id' => 'required',
+                'hotel_id' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -34,6 +38,17 @@ class UserController extends Controller
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
+
+            $hotelUser = HotelUser::create([
+                'hotel_id' => $request->input('hotel_id'),
+                'user_id' => $user->id
+            ]);
+
+            $roleHotelUser = RoleHotelUser::create([
+                'role_id' => $request->input('role_id'),
+                'hotel_user_id' => $hotelUser->id
+            ]);
+
             return response()->json([
                 'message' => 'User created successfully',
                 'token' => $user->createToken('API TOKEN')->plainTextToken
@@ -69,10 +84,21 @@ class UserController extends Controller
             $user = Auth::user();
             return response()->json([
                 'message' => 'User login successfully',
-                'token' => $user->createToken('API TOKEN')->plainTextToken
+                'token' => $user->createToken('API TOKEN')->plainTextToken,
+                'roles' => $user->roles()
             ], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()],);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()],);
+        }
+    }
+
+    public function logoutUser()
+    {
+        try {
+            Auth::user()->tokens()->delete();
+            return response()->json(['message' => 'User logout successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()],);
         }

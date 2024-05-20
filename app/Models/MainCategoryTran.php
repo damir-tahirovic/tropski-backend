@@ -37,6 +37,8 @@ class MainCategoryTran extends Model
         'main_cat_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function mainCategories()
     {
         return $this->belongsTo(MainCategory::class);

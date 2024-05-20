@@ -35,6 +35,8 @@ class Extra extends Model implements HasMedia
         'hotel_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);

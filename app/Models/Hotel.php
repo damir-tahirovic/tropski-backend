@@ -44,6 +44,8 @@ class Hotel extends Model implements HasMedia
         "banner_text",
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function hotelUsers()
     {
         return $this->hasMany(HotelUser::class);

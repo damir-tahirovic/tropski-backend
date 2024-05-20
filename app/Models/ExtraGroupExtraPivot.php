@@ -49,6 +49,8 @@ class ExtraGroupExtraPivot extends Model
         'extra_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function extra()
     {
         return $this->belongsTo(Extra::class);

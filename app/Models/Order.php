@@ -17,6 +17,8 @@ class Order extends Model
         'user_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

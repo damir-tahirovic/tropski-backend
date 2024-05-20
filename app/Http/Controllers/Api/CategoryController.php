@@ -47,7 +47,8 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $categories = Category::with('media')->get();
+            $categories = Category::with('media')->with('items')->get();
+
 
             return response()->json(['categories' => $categories]);
 

@@ -37,6 +37,8 @@ class ItemTypeTran extends Model
         'item_type_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function language()
     {
         return $this->belongsTo(Language::class, 'lang_id');

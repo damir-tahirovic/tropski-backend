@@ -40,4 +40,10 @@ class HotelUser extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function roleHotelUsers()
+    {
+        return $this->hasMany(RoleHotelUser::class);
+    }
+
+
 }

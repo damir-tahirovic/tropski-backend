@@ -45,6 +45,8 @@ class Category extends Model implements HasMedia
         'category_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function categoryTrans()
     {
         return $this->hasMany(CategoryTran::class);

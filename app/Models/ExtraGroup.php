@@ -30,6 +30,8 @@ class ExtraGroup extends Model
         'hotel_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);

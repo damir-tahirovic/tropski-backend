@@ -48,6 +48,8 @@ class OrderPlace extends Model
         'main_cat_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function orders()
     {
         return $this->hasMany(Order::class);

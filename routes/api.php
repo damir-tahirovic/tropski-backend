@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\ItemTypeController;
 
 Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
 Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout-user');
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

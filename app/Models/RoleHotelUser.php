@@ -31,12 +31,14 @@ class RoleHotelUser extends Model
         'role_id'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
-    public function hotel_user()
+    public function hotelUser()
     {
         return $this->belongsTo(HotelUser::class, 'hotel_user_id', 'id');
     }

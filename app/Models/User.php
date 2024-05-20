@@ -6,7 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+
 //use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -29,9 +31,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password'
-    ];
+    protected $hidden = ['created_at', 'updated_at', 'password'];
 
     // /**
     //  * The attributes that should be cast.
@@ -51,4 +51,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function roles()
+    {
+        $roles = DB::table('users')
+            ->join('hotel_users', 'users.id', '=', 'hotel_users.user_id')
+            ->join('role_hotel_users', 'role_hotel_users.hotel_user_id', '=', 'hotel_users.id')
+            ->join('roles', 'roles.id', '=', 'role_hotel_users.role_id')
+            ->select('roles.id', 'roles.name')
+            ->where('users.id', $this->id)
+            ->get();
+        return $roles;
+    }
+
 }
