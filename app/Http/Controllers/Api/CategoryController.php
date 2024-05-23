@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CategoryTran;
+use App\Models\Language;
 use App\Models\MainCategory;
 use Exception;
 use Illuminate\Http\Request;
@@ -191,31 +192,48 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $data = json_decode($request->getContent(), true);
+
             $validated = $request->validate([
-                'image' => 'required',
+//                'image' => 'required',
                 'main_cat_id' => 'required'
             ]);
             $category = Category::findOrFail($id);
-            $category_id = $request->input('category_id');
-
-            if ($category_id !== null) {
-                $parentCategory = Category::findOrFail($category_id);
-                $main_cat_id = $parentCategory->main_cat_id;
-                $requestData = $request->all();
-                $requestData['main_cat_id'] = $main_cat_id;
-                $category->update($requestData);
-            } else {
-                $category->update($request->all());
-            }
 
             Media::where('model_id', $id)
                 ->where('model_type', Category::class)
                 ->delete();
-            $category->addMediaFromRequest('image')->toMediaCollection();
+
+            $category->update($validated);
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $category->addMedia($image)->toMediaCollection();
+                $category->getMedia();
+            }
+
+            foreach ($data['trans'] as $tran) {
+                $language = Language::where('code', $tran['lang_code'])->first();
+                $categoryTran = CategoryTran::where('category_id', $category->id)->where('lang_id', $language->id)->first();
+                if ($categoryTran) {
+                    $categoryTran->update([
+                        'category_id' => $category->id,
+                        'name' => $tran['name'],
+                        'lang_id' => $language->id
+                    ]);
+                } else {
+                    CategoryTran::create([
+                        'category_id' => $category->id,
+                        'name' => $tran['name'],
+                        'lang_id' => $language->id
+                    ]);
+                }
+            }
+
             $category->getMedia();
-            return response()->json(['data' => $category]);
+            return response()->json(['category' => $category]);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 
