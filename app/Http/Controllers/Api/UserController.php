@@ -38,7 +38,6 @@ class UserController extends Controller
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
-
             $hotelUser = HotelUser::create([
                 'hotel_id' => $request->input('hotel_id'),
                 'user_id' => $user->id
@@ -48,14 +47,15 @@ class UserController extends Controller
                 'role_id' => $request->input('role_id'),
                 'hotel_user_id' => $hotelUser->id
             ]);
-
+            $token = $user->createToken('API TOKEN')->plainTextToken;
             return response()->json([
                 'message' => 'User created successfully',
-                'token' => $user->createToken('API TOKEN')->plainTextToken
+                'user' => $user,
+                'token' => $token
             ], 201);
             return response()->json(['success' => $success], 201);
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()],);
+            return response()->json(['error' => $e->getMessage()], 400);
 
         }
     }
@@ -78,13 +78,14 @@ class UserController extends Controller
             }
 
             if (!Auth::attempt($request->all())) {
-                return response()->json(['error' => 'Unauthorized'], 401);
+                return response()->json(['error' => "Username or password incorrect." ], 401);
             }
 
             $user = Auth::user();
+            $token = $user->createToken('API TOKEN')->plainTextToken;
             return response()->json([
                 'message' => 'User login successfully',
-                'token' => $user->createToken('API TOKEN')->plainTextToken,
+                'token' => $token,
                 'roles' => $user->roles()
             ], 200);
         } catch (Exception $e) {
@@ -94,11 +95,30 @@ class UserController extends Controller
         }
     }
 
-    public function logoutUser()
+//    public function logoutUser()
+//    {
+//        try {
+//            Auth::user()->tokens()->delete();
+//            return response()->json(['message' => 'User logout successfully'], 200);
+//        } catch (Exception $e) {
+//            return response()->json(['error' => $e->getMessage()],);
+//        }
+//    }
+
+    public function logoutUser(Request $request)
     {
         try {
-            Auth::user()->tokens()->delete();
-            return response()->json(['message' => 'User logout successfully'], 200);
+            if (Auth::check()) {
+                $user = $request->user();
+                if ($user) {
+                    $user->tokens()->delete();
+                    return response()->json(['message' => 'User logout successfully'], 200);
+                } else {
+                    return response()->json(['error' => 'No user is currently logged in'], 401);
+                }
+            } else {
+                return response()->json(['error' => 'No user is currently logged in'], 401);
+            }
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()],);
         }

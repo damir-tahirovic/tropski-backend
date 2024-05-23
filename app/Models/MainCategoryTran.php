@@ -48,4 +48,10 @@ class MainCategoryTran extends Model
     {
         return $this->belongsTo(Language::class, 'lang_id');
     }
+
+    public function languagesCode()
+    {
+        return $this->languages->code;
+    }
+
 }

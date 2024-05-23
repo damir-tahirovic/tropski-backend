@@ -40,11 +40,15 @@ use App\Http\Controllers\Api\ItemTypeController;
 
 Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
 Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
-Route::post('/logout', [UserController::class, 'logout'])->name('logout-user');
+Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user');
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user');
+    Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
 });
 
 
@@ -85,7 +89,7 @@ Route::get('hotels-languages', [HotelController::class, 'allHotelsWithLanguages'
 
 //Rute za Extra
 
-Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
+
 Route::post('extras', [ExtraController::class, 'store'])->name('extras.store');
 Route::get('extras/{id}', [ExtraController::class, 'show'])->name('extras.show');
 Route::put('extras/{id}', [ExtraController::class, 'update'])->name('extras.update');
@@ -237,9 +241,11 @@ Route::delete('role-hotel-users/{id}', [RoleHotelUserController::class, 'destroy
 
 //Rute za HotelLanguages
 
-Route::get('hotel-languages', [HotelLanguageController::class, 'index'])->name('role-hotel-languages.index');
-Route::post('hotel-languages', [HotelLanguageController::class, 'store'])->name('role-hotel-languages.store');
-Route::get('hotel-languages/{id}', [HotelLanguageController::class, 'show'])->name('role-hotel-languages.show');
-Route::put('hotel-languages/{id}', [HotelLanguageController::class, 'update'])->name('role-hotel-languages.update');
-Route::delete('hotel-languages/{id}', [HotelLanguageController::class, 'destroy'])->name('role-hotel-languages.destroy');
+Route::get('hotel-languages', [HotelLanguageController::class, 'index'])->name('hotel-languages.index');
+Route::post('hotel-languages', [HotelLanguageController::class, 'store'])->name('hotel-languages.store');
+Route::get('hotel-languages/{id}', [HotelLanguageController::class, 'show'])->name('hotel-languages.show');
+Route::put('hotel-languages/{id}', [HotelLanguageController::class, 'update'])->name('hotel-languages.update');
+Route::delete('hotel-languages/{id}', [HotelLanguageController::class, 'destroy'])->name('hotel-languages.destroy');
+
+Route::get('hotels-languages-by-hotel/{id}', [HotelLanguageController::class, 'showByHotelId'])->name('hotel-languages.show-by-hotel-id');
 

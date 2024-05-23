@@ -167,7 +167,7 @@ class MainCategoryTranController extends Controller
     {
         try {
             $mainCategoryTrans = MainCategoryTran::findOrFail($id);
-            return response()->json(['mainCategoryTrans' => $mainCategoryTrans]);
+            return response()->json(['mainCategoryTrans' => $mainCategoryTrans,]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

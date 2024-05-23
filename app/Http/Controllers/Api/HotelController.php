@@ -180,9 +180,9 @@ class HotelController extends Controller
                 "secondary_color" => "required",
                 "secondary_color_light" => "required",
                 "secondary_color_dark" => "required",
-                "image" => "required",
-                "banner_image" => "required",
-                "logo" => "required",
+//                "image" => "required",
+//                "banner_image" => "required",
+//                "logo" => "required",
             ]);
 
             $hotel = Hotel::create([
@@ -195,7 +195,7 @@ class HotelController extends Controller
                 "secondary_color_light" => $validated['secondary_color_light'],
                 "secondary_color_dark" => $validated['secondary_color_dark'],
                 "banner_text" => $data['banner_text'] ,
-                "his_id" => $data['his_id']
+                "his_id" => 1
             ]);
 
             if ($request->hasFile('image')) {

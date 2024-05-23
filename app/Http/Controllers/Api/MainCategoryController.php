@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Extra;
 use App\Models\Hotel;
+use App\Models\Language;
 use App\Models\MainCategory;
 use App\Models\MainCategoryTran;
 use Exception;
@@ -65,9 +66,10 @@ class MainCategoryController extends Controller
             }
 
             foreach ($data['trans'] as $trans) {
+                $lang_id  = Language::where('code', $trans['lang_code'])->first()->id;
                 MainCategoryTran::create([
                     'main_cat_id' => $mainCategory->id,
-                    'lang_id' => $trans['lang_id'],
+                    'lang_id' => $lang_id,
                     'name' => $trans['name'],
                 ]);
             }
@@ -112,6 +114,10 @@ class MainCategoryController extends Controller
                 'categories.media',
                 'categories.items.media',
                 'categories.items.itemTypes',
+                'categories.categoryTrans',
+                'categories.categoryTrans.languages',
+                'mainCategoryTrans',
+                'mainCategoryTrans.languages',
             ])->findOrFail($id);
             return response()->json(['main_category' => $mainCategory]);
         } catch (Exception $e) {
@@ -155,10 +161,14 @@ class MainCategoryController extends Controller
                 'categories.media',
                 'categories.items.media',
                 'categories.items.itemTypes',
+                'categories.categoryTrans',
+                'categories.categoryTrans.languages',
+                'mainCategoryTrans',
+                'mainCategoryTrans.languages',
             ])->get();
             return response()->json(['main_categories' => $mainCategories]);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 

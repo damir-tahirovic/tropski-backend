@@ -45,8 +45,8 @@ class CategoryTran extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function language()
+    public function languages()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'lang_id');
     }
 }

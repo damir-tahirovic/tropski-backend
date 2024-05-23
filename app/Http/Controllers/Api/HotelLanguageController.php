@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hotel;
 use App\Models\HotelLanguage;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class HotelLanguageController extends Controller
 {
@@ -56,6 +58,21 @@ class HotelLanguageController extends Controller
     {
         try {
             $hotelLanguage = HotelLanguage::findOrFail($id);
+            return response()->json(['hotelLanguage' => $hotelLanguage]);
+        } catch (Exception $e) {
+            return response()->json([$e->getMessage()]);
+        }
+    }
+
+    public function showByHotelId($id)
+    {
+        try {
+            $hotel = Hotel::findOrFail($id);
+            $hotelLanguage = DB::table('hotel_languages as hl')
+                ->join('languages as l', 'l.id', '=', 'hl.lang_id')
+                ->select('hl.id', 'hl.hotel_id', 'hl.lang_id', 'l.code')
+                ->where('hl.hotel_id', $hotel->id)
+                ->get();
             return response()->json(['hotelLanguage' => $hotelLanguage]);
         } catch (Exception $e) {
             return response()->json([$e->getMessage()]);
