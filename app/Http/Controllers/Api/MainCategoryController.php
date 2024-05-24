@@ -46,11 +46,12 @@ class MainCategoryController extends Controller
     public function store(Request $request)
     {
         try {
+
             $data = json_decode($request->getContent(), true);
 
             $validated = $request->validate([
                 'hotel_id' => 'required',
-//                'image' => 'required',
+                'image' => 'required',
             ]);
 
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
@@ -64,16 +65,16 @@ class MainCategoryController extends Controller
                 $mainCategory->addMedia($image)->toMediaCollection();
                 $mainCategory->getMedia();
             }
-
-            foreach ($data['trans'] as $trans) {
-                $lang_id  = Language::where('code', $trans['lang_code'])->first()->id;
-                MainCategoryTran::create([
-                    'main_cat_id' => $mainCategory->id,
-                    'lang_id' => $lang_id,
-                    'name' => $trans['name'],
-                ]);
+            if (isset($data['trans'])) {
+                foreach ($data['trans'] as $tran) {
+                    $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
+                    MainCategoryTran::create([
+                        'main_cat_id' => $mainCategory->id,
+                        'lang_id' => $lang_id,
+                        'name' => $tran['name'],
+                    ]);
+                }
             }
-
             return response()->json(['mainCategory' => $mainCategory], '201');
         } catch (Exception $e) {
             return response()->json($e->getMessage(), '400');
@@ -157,7 +158,7 @@ class MainCategoryController extends Controller
     public function index()
     {
         try {
-            $mainCategories = MainCategory::with(['media',
+            $mainCategories = MainCategory::with([
                 'categories.media',
                 'categories.items.media',
                 'categories.items.itemTypes',
@@ -165,6 +166,7 @@ class MainCategoryController extends Controller
                 'categories.categoryTrans.languages',
                 'mainCategoryTrans',
                 'mainCategoryTrans.languages',
+                'media'
             ])->get();
             return response()->json(['main_categories' => $mainCategories]);
         } catch (Exception $e) {

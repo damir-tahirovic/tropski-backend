@@ -35,7 +35,6 @@ use App\Http\Controllers\Api\ItemTypeController;
 |
 */
 
-
 //Rute za UserController
 
 Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
@@ -43,12 +42,13 @@ Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
 Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user');
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 
+Route::get('users/{id}', [UserController::class, 'userRole'])->name('users.user-role');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
     Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user');
-    Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
 });
 
 
@@ -89,11 +89,15 @@ Route::get('hotels-languages', [HotelController::class, 'allHotelsWithLanguages'
 
 //Rute za Extra
 
-
+Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
 Route::post('extras', [ExtraController::class, 'store'])->name('extras.store');
 Route::get('extras/{id}', [ExtraController::class, 'show'])->name('extras.show');
 Route::put('extras/{id}', [ExtraController::class, 'update'])->name('extras.update');
 Route::delete('extras/{id}', [ExtraController::class, 'destroy'])->name('extras.destroy');
+
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('extras', ExtraController::class);
+});
 
 
 //Rute za ExtraGroup

@@ -103,10 +103,11 @@ class CategoryController extends Controller
             }
 
             foreach ($data['trans'] as $tran) {
+                $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                 CategoryTran::create([
                     'category_id' => $category->id,
                     'name' => $tran['name'],
-                    'lang_id' => $tran['lang_id']
+                    'lang_id' => $lang_id
                 ]);
             }
 

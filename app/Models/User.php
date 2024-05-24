@@ -56,10 +56,10 @@ class User extends Authenticatable
     {
         $roles = DB::table('users')
             ->join('hotel_users', 'users.id', '=', 'hotel_users.user_id')
-            ->join('role_hotel_users', 'role_hotel_users.hotel_user_id', '=', 'hotel_users.id')
-            ->join('roles', 'roles.id', '=', 'role_hotel_users.role_id')
-            ->select('roles.id', 'roles.name')
-            ->where('users.id', $this->id)
+            ->join('role_hotel_users', 'hotel_users.id', '=', 'role_hotel_users.hotel_user_id')
+            ->join('roles', 'role_hotel_users.role_id', '=', 'roles.id')
+            ->where('users.id', "=", $this->id)
+            ->select('roles.name')
             ->get();
         return $roles;
     }

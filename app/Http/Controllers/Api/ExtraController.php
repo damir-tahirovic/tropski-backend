@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Extra;
 use App\Models\ExtraTran;
 use App\Models\Hotel;
+use App\Models\Language;
+use App\Policies\ExtraPolicy;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -44,6 +46,7 @@ class ExtraController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Extra::class);
         $extra = Extra::with('media')->get();
         return response()->json(['data' => $extra]);
     }
@@ -75,6 +78,7 @@ class ExtraController extends Controller
     public function store(Request $request)
     {
         try {
+            $this->authorize('create', Extra::class);
             $data = json_decode($request->getContent(), true);
 
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
@@ -92,11 +96,12 @@ class ExtraController extends Controller
                 $extra->getMedia();
             }
 
-            foreach ($data['trans'] as $trans){
+            foreach ($data['trans'] as $tran){
+                $langId = Language::where('code', $tran['lang_code'])->first()->id;
                 ExtraTran::create([
                     'extra_id' => $extra->id,
-                    'lang_id' => $trans['lang_id'],
-                    'name' => $trans['name'],
+                    'lang_id' => $langId,
+                    'name' => $tran['name'],
                 ]);
             }
 

@@ -8,6 +8,7 @@ use App\Models\RoleHotelUser;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +79,7 @@ class UserController extends Controller
             }
 
             if (!Auth::attempt($request->all())) {
-                return response()->json(['error' => "Username or password incorrect." ], 401);
+                return response()->json(['error' => "Username or password incorrect."], 401);
             }
 
             $user = Auth::user();
@@ -134,6 +135,17 @@ class UserController extends Controller
             return response()->json($e->getMessage());
         }
 
+    }
+
+    public function userRole($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $data = $user->roles();
+            return response()->json(['roles' => $data], 200);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
 
