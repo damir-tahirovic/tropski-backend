@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Extra;
+use App\Models\ExtraGroup;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class ExtraPolicy
+class ExtraGroupPolicy
 {
     use HandlesAuthorization;
 
@@ -19,24 +19,19 @@ class ExtraPolicy
      */
     public function viewAny(User $user)
     {
-        foreach ($user->roles as $role) {
-            if (in_array($role->name, ['Admin', 'Manager', 'User'])) {
-                return true;
-            }
-        }
-        return false;
+        return in_array($user->roles->name, ['Admin', 'Manager', 'User']);
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Extra $extra
+     * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function view(User $user, Extra $extra)
+    public function view(User $user, ExtraGroup $extraGroup)
     {
-        return in_array($user->roles->name, ['Admin']);
+        return in_array($user->roles->name, ['Admin', 'Manager', 'User']);
     }
 
     /**
@@ -54,22 +49,22 @@ class ExtraPolicy
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Extra $extra
+     * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function update(User $user, Extra $extra)
+    public function update(User $user, ExtraGroup $extraGroup)
     {
-        return in_array($user->roles->name, ['Admin']);
+        return in_array($user->roles->name, ['Admin', 'Manager']);
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Extra $extra
+     * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function delete(User $user, Extra $extra)
+    public function delete(User $user, ExtraGroup $extraGroup)
     {
         return in_array($user->roles->name, ['Admin']);
     }
@@ -78,10 +73,10 @@ class ExtraPolicy
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param Extra $extra
+     * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function restore(User $user, Extra $extra)
+    public function restore(User $user, ExtraGroup $extraGroup)
     {
         return in_array($user->roles->name, ['Admin']);
     }
@@ -90,10 +85,10 @@ class ExtraPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param Extra $extra
+     * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function forceDelete(User $user, Extra $extra)
+    public function forceDelete(User $user, ExtraGroup $extraGroup)
     {
         return in_array($user->roles->name, ['Admin']);
     }

@@ -38,6 +38,10 @@ class UserController extends Controller
 
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
+            $role = DB::table('roles')->where('id', $request->input('role_id'))->first();
+            if ($role->name == 'Admin') {
+                $input['superadmin'] = 1;
+            }
             $user = User::create($input);
             $hotelUser = HotelUser::create([
                 'hotel_id' => $request->input('hotel_id'),

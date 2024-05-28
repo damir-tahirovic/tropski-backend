@@ -86,10 +86,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = json_decode($request->getContent(), true);
+            $trans = json_decode($request->input('trans'), true);
 
             $validated = $request->validate([
-                //'image' => 'required',
+                'image' => 'required',
                 'main_cat_id' => 'required'
             ]);
 
@@ -102,7 +102,7 @@ class CategoryController extends Controller
                 $category->getMedia();
             }
 
-            foreach ($data['trans'] as $tran) {
+            foreach ($trans as $tran) {
                 $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                 CategoryTran::create([
                     'category_id' => $category->id,

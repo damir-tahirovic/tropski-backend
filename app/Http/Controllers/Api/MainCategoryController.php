@@ -47,7 +47,7 @@ class MainCategoryController extends Controller
     {
         try {
 
-            $data = json_decode($request->getContent(), true);
+//            $data = json_decode($request->getContent(), true);
 
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -65,8 +65,10 @@ class MainCategoryController extends Controller
                 $mainCategory->addMedia($image)->toMediaCollection();
                 $mainCategory->getMedia();
             }
-            if (isset($data['trans'])) {
-                foreach ($data['trans'] as $tran) {
+
+            $trans = json_decode($request->input('trans'), true);
+            if (isset($trans)) {
+                foreach ($trans as $tran) {
                     $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                     MainCategoryTran::create([
                         'main_cat_id' => $mainCategory->id,
@@ -74,6 +76,8 @@ class MainCategoryController extends Controller
                         'name' => $tran['name'],
                     ]);
                 }
+            } else {
+                return response()->json('417');
             }
             return response()->json(['mainCategory' => $mainCategory], '201');
         } catch (Exception $e) {

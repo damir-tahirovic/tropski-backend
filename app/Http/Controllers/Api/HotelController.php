@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\HotelLanguage;
+use App\Models\Language;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -166,42 +167,25 @@ class HotelController extends Controller
     {
         try {
 
-            $langs = $request->input('languages');
-
-            if (!isset($langs) || empty($langs)) {
-                return response()->json(['languages' => 'At least one language is required'], 421);
-            }
+            $langs = json_decode($request->input('languages'), true);
 
             $validated = $request->validate([
                 "name" => "required|max:255",
                 "description" => "nullable",
-                'colors' => 'required',
-                "image" => "required",
-                "banner_image" => "required",
-                "logo" => "required"
+                "primary_color" => "required",
+                "primary_color_light" => "required",
+                "primary_color_dark" => "required",
+                "secondary_color" => "required",
+                "secondary_color_light" => "required",
+                "secondary_color_dark" => "required",
+                "banner_text" => "nullable",
+                "image" => "nullable",
+                "banner_image" => "nullable",
+                "logo" => "nullable",
+                'languages' => 'required'
             ]);
 
-
-            $primaryColor = $request->input('colors.primary_color');
-            $primaryColorLight = $request->input('colors.primary_color_light');
-            $primaryColorDark = $request->input('colors.primary_color_dark');
-            $secondaryColor = $request->input('colors.secondary_color');
-            $secondaryColorLight = $request->input('colors.secondary_color_light');
-            $secondaryColorDark = $request->input('colors.secondary_color_dark');
-
-            $hotel = Hotel::create([
-                "name" => $request->input('name'),
-                "description" => $request->input('description'),
-                "primary_color" => $primaryColor,
-                "primary_color_light" => $primaryColorLight,
-                "primary_color_dark" => $primaryColorDark,
-                "secondary_color" => $secondaryColor,
-                "secondary_color_light" => $secondaryColorLight,
-                "secondary_color_dark" => $secondaryColorDark,
-//                "banner_text" => $request->input('banner_text'),
-                "his_id" => 1
-            ]);
-
+            $hotel = Hotel::create($validated);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -219,10 +203,12 @@ class HotelController extends Controller
                 $hotel->getMedia();
             }
 
+
             foreach ($langs as $lang) {
+                $lang_id = Language::where('code', $lang['code'])->first()->id;
                 HotelLanguage::create([
                     'hotel_id' => $hotel->id,
-                    'lang_id' => $lang['id']
+                    'lang_id' => $lang_id
                 ]);
             }
 

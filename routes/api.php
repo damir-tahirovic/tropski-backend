@@ -89,14 +89,12 @@ Route::get('hotels-languages', [HotelController::class, 'allHotelsWithLanguages'
 
 //Rute za Extra
 
-Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
-Route::post('extras', [ExtraController::class, 'store'])->name('extras.store');
-Route::get('extras/{id}', [ExtraController::class, 'show'])->name('extras.show');
-Route::put('extras/{id}', [ExtraController::class, 'update'])->name('extras.update');
-Route::delete('extras/{id}', [ExtraController::class, 'destroy'])->name('extras.destroy');
-
 Route::middleware('auth:api')->group(function () {
-    Route::apiResource('extras', ExtraController::class);
+    Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
+    Route::post('extras', [ExtraController::class, 'store'])->name('extras.store');
+    Route::get('extras/{id}', [ExtraController::class, 'show'])->name('extras.show');
+    Route::put('extras/{id}', [ExtraController::class, 'update'])->name('extras.update');
+    Route::delete('extras/{id}', [ExtraController::class, 'destroy'])->name('extras.destroy');
 });
 
 
