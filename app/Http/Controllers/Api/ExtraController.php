@@ -46,9 +46,17 @@ class ExtraController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', Extra::class);
-        $extra = Extra::with('media')->get();
-        return response()->json(['data' => $extra]);
+        try {
+            $this->authorize('viewAny', Extra::class);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 401);
+        }
+        try {
+            $extra = Extra::with('media')->get();
+            return response()->json(['data' => $extra]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -79,12 +87,16 @@ class ExtraController extends Controller
     {
         try {
             $this->authorize('create', Extra::class);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 401);
+        }
+        try {
             $data = json_decode($request->getContent(), true);
 
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
                 'hotel_id' => 'required',
-//                'image' => 'required',
+                'image' => 'nullable',
             ]);
 
             $extra = Extra::create([
@@ -96,7 +108,7 @@ class ExtraController extends Controller
                 $extra->getMedia();
             }
 
-            foreach ($data['trans'] as $tran){
+            foreach ($data['trans'] as $tran) {
                 $langId = Language::where('code', $tran['lang_code'])->first()->id;
                 ExtraTran::create([
                     'extra_id' => $extra->id,
@@ -143,11 +155,16 @@ class ExtraController extends Controller
     public function show($id)
     {
         try {
+            $this->authorize('view', Extra::class);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 401);
+        }
+        try {
             $extra = Extra::findOrFail($id);
             $extra->getMedia();
             return response()->json(['data' => $extra]);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 
@@ -187,6 +204,11 @@ class ExtraController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $this->authorize('update', Extra::class);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 401);
+        }
+        try {
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $extra = Extra::findOrFail($id);
             $validated = $request->validate([
@@ -199,9 +221,9 @@ class ExtraController extends Controller
                 ->delete();
             $extra->addMediaFromRequest('image')->toMediaCollection();
             $extra->getMedia();
-            return response()->json(['data' => $extra], '200');
+            return response()->json(['data' => $extra], 200);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 
@@ -236,11 +258,16 @@ class ExtraController extends Controller
     public function destroy($id)
     {
         try {
+            $this->authorize('forceDelete', Extra::class);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 401);
+        }
+        try {
             $extra = Extra::findOrFail($id);
             $extra->delete();
             return response()->json(['data' => $extra]);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 }

@@ -19,7 +19,12 @@ class ExtraGroupPolicy
      */
     public function viewAny(User $user)
     {
-        return in_array($user->roles->name, ['Admin', 'Manager', 'User']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin', 'Manager'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -29,9 +34,14 @@ class ExtraGroupPolicy
      * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function view(User $user, ExtraGroup $extraGroup)
+    public function view(User $user)
     {
-        return in_array($user->roles->name, ['Admin', 'Manager', 'User']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin', 'Manager'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -42,7 +52,12 @@ class ExtraGroupPolicy
      */
     public function create(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -52,9 +67,14 @@ class ExtraGroupPolicy
      * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function update(User $user, ExtraGroup $extraGroup)
+    public function update(User $user)
     {
-        return in_array($user->roles->name, ['Admin', 'Manager']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin', 'Manager'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -64,9 +84,14 @@ class ExtraGroupPolicy
      * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function delete(User $user, ExtraGroup $extraGroup)
+    public function delete(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -76,9 +101,14 @@ class ExtraGroupPolicy
      * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function restore(User $user, ExtraGroup $extraGroup)
+    public function restore(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -88,8 +118,13 @@ class ExtraGroupPolicy
      * @param ExtraGroup $extraGroup
      * @return Response|bool
      */
-    public function forceDelete(User $user, ExtraGroup $extraGroup)
+    public function forceDelete(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 }

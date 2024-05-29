@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ExtraGroup;
 use App\Models\Hotel;
+use Exception;
 use Illuminate\Http\Request;
 
 class ExtraGroupController extends Controller
@@ -40,8 +41,13 @@ class ExtraGroupController extends Controller
      */
     public function index()
     {
-        $extraGroup = ExtraGroup::all();
-        return response()->json(['data' => $extraGroup]);
+        try {
+            $this->authorize('viewAny', ExtraGroup::class);
+            $extraGroup = ExtraGroup::all();
+            return response()->json(['extra_groups' => $extraGroup]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
@@ -71,6 +77,7 @@ class ExtraGroupController extends Controller
     public function store(Request $request)
     {
         try {
+            $this->authorize('create', ExtraGroup::class);
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -78,7 +85,7 @@ class ExtraGroupController extends Controller
             ]);
             $extraGroup = ExtraGroup::create($request->all());
             return response()->json(['data' => $extraGroup], '201');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -116,7 +123,7 @@ class ExtraGroupController extends Controller
         try {
             $extraGroup = ExtraGroup::findOrFail($id);
             return response()->json(['data' => $extraGroup]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -165,7 +172,7 @@ class ExtraGroupController extends Controller
             ]);
             $extraGroup->update($validated);
             return response()->json(['data' => $extraGroup], '200');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
@@ -204,7 +211,7 @@ class ExtraGroupController extends Controller
             $extraGroup = ExtraGroup::findOrFail($id);
             $extraGroup->delete();
             return response()->json(['extraGroups' => $extraGroup]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }

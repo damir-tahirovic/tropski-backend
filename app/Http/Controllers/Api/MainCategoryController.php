@@ -115,10 +115,15 @@ class MainCategoryController extends Controller
     public function show($id)
     {
         try {
-            $mainCategory = MainCategory::with(['media',
+            $mainCategory = MainCategory::with([
+                'media',
                 'categories.media',
                 'categories.items.media',
+                'categories.items.itemTrans',
+                'categories.items.itemTrans.languages',
                 'categories.items.itemTypes',
+                'categories.items.itemTypes.itemTypeTrans',
+                'categories.items.itemTypes.itemTypeTrans.languages',
                 'categories.categoryTrans',
                 'categories.categoryTrans.languages',
                 'mainCategoryTrans',
@@ -163,14 +168,18 @@ class MainCategoryController extends Controller
     {
         try {
             $mainCategories = MainCategory::with([
+                'media',
                 'categories.media',
                 'categories.items.media',
+                'categories.items.itemTrans',
+                'categories.items.itemTrans.languages',
                 'categories.items.itemTypes',
+                'categories.items.itemTypes.itemTypeTrans',
+                'categories.items.itemTypes.itemTypeTrans.languages',
                 'categories.categoryTrans',
                 'categories.categoryTrans.languages',
                 'mainCategoryTrans',
                 'mainCategoryTrans.languages',
-                'media'
             ])->get();
             return response()->json(['main_categories' => $mainCategories]);
         } catch (Exception $e) {
@@ -262,6 +271,23 @@ class MainCategoryController extends Controller
      *     )
      * )
      */
+
+    public function mainCategoryWithCategories($id)
+    {
+        try {
+            $mainCategory = MainCategory::with(['media',
+                'mainCategoryTrans',
+                'mainCategoryTrans.languages',
+                'categories.media',
+                'categories.categoryTrans',
+                'categories.categoryTrans.languages',
+            ])->findOrFail($id);
+            return response()->json(['main_category' => $mainCategory]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
     public function destroy($id)
     {
         try {

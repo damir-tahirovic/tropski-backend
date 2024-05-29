@@ -47,10 +47,12 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with('media')->get();
+        $items = Item::with(['media',
+            'itemTrans',
+            'itemTypes',
+            'itemTypes.itemTypeTrans'])->get();
         return response()->json(['items' => $items]);
     }
-
 
     public function itemsByCategory($categoryId)
     {
@@ -200,7 +202,10 @@ class ItemController extends Controller
     {
         try {
             $item = Item::findOrFail($id);
-            $item->getMedia();
+            $item = Item::with(['media',
+                'itemTrans',
+                'itemTypes',
+                'itemTypes.itemTypeTrans'])->get();
             return response()->json(['item' => $item]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());

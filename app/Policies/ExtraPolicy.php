@@ -19,8 +19,8 @@ class ExtraPolicy
      */
     public function viewAny(User $user)
     {
-        foreach ($user->roles as $role) {
-            if (in_array($role->name, ['Admin', 'Manager', 'User'])) {
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin', 'Manager'])) {
                 return true;
             }
         }
@@ -34,9 +34,14 @@ class ExtraPolicy
      * @param Extra $extra
      * @return Response|bool
      */
-    public function view(User $user, Extra $extra)
+    public function view(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin', 'Manager'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -47,7 +52,12 @@ class ExtraPolicy
      */
     public function create(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -57,9 +67,14 @@ class ExtraPolicy
      * @param Extra $extra
      * @return Response|bool
      */
-    public function update(User $user, Extra $extra)
+    public function update(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin', 'Manager'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -69,9 +84,14 @@ class ExtraPolicy
      * @param Extra $extra
      * @return Response|bool
      */
-    public function delete(User $user, Extra $extra)
+    public function delete(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -83,7 +103,12 @@ class ExtraPolicy
      */
     public function restore(User $user, Extra $extra)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -93,8 +118,13 @@ class ExtraPolicy
      * @param Extra $extra
      * @return Response|bool
      */
-    public function forceDelete(User $user, Extra $extra)
+    public function forceDelete(User $user)
     {
-        return in_array($user->roles->name, ['Admin']);
+        foreach ($user->roles() as $role) {
+            if (in_array($role->name, ['Admin'])) {
+                return true;
+            }
+        }
+        return false;
     }
 }

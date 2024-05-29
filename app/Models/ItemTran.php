@@ -51,7 +51,7 @@ class ItemTran extends Model
 
     public function languages()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'lang_id');
     }
 
 

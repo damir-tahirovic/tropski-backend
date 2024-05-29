@@ -60,6 +60,8 @@ Route::get('main-categories/{id}', [MainCategoryController::class, 'show'])->nam
 Route::put('main-categories/{id}', [MainCategoryController::class, 'update'])->name('main-categories.update');
 Route::delete('main-categories/{id}', [MainCategoryController::class, 'destroy'])->name('main-categories.delete');
 
+Route::get('main-category-categories/{id}', [MainCategoryController::class, 'mainCategoryWithCategories'])->name('main-categories.mainCategoryWithCategories');
+
 //Route::get('main-categories-all', [MainCategoryController::class, 'mainCategoriesWithCategories'])->name('main-categories.mainCategoriesWithCategories');
 
 
@@ -99,13 +101,13 @@ Route::middleware('auth:api')->group(function () {
 
 
 //Rute za ExtraGroup
-
-Route::get('extra-groups', [ExtraGroupController::class, 'index'])->name('extra-groups.index');
-Route::post('extra-groups', [ExtraGroupController::class, 'store'])->name('extra-groups.store');
-Route::get('extra-groups/{id}', [ExtraGroupController::class, 'show'])->name('extra-groups.show');
-Route::put('extra-groups/{id}', [ExtraGroupController::class, 'update'])->name('extra-groups.update');
-Route::delete('extra-groups/{id}', [ExtraGroupController::class, 'destroy'])->name('extra-groups.destroy');
-
+Route::middleware('auth:api')->group(function () {
+    Route::get('extra-groups', [ExtraGroupController::class, 'index'])->name('extra-groups.index');
+    Route::post('extra-groups', [ExtraGroupController::class, 'store'])->name('extra-groups.store');
+    Route::get('extra-groups/{id}', [ExtraGroupController::class, 'show'])->name('extra-groups.show');
+    Route::put('extra-groups/{id}', [ExtraGroupController::class, 'update'])->name('extra-groups.update');
+    Route::delete('extra-groups/{id}', [ExtraGroupController::class, 'destroy'])->name('extra-groups.destroy');
+});
 
 //Rute za Language
 
