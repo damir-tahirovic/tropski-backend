@@ -45,9 +45,12 @@ class MainCategoryController extends Controller
 
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', MainCategory::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
-
-//            $data = json_decode($request->getContent(), true);
 
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -114,6 +117,11 @@ class MainCategoryController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', MainCategory::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategory = MainCategory::with([
                 'media',
@@ -166,6 +174,11 @@ class MainCategoryController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', MainCategory::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategories = MainCategory::with([
                 'media',
@@ -223,25 +236,49 @@ class MainCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        //        try {
+//            $this->authorize('update', MainCategory::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
+//        $all = $request->all();
+//        return response()->json($all);
         try {
-            $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $mainCategory = MainCategory::findOrFail($id);
             $validated = $request->validate([
-                'hotel_id' => 'required',
-                'image' => 'required'
+                'image' => 'nullable'
             ]);
-            Media::where('model_id', $id)
-                ->where('model_type', MainCategory::class)
-                ->delete();
-            $mainCategory->update($validated);
-            $mainCategory->addMediaFromRequest('image')->toMediaCollection();
-            $mainCategory->getMedia();
-            return response()->json(['mainCategories' => $mainCategory], '200');
+            if ($request->hasFile('image')) {
+                Media::where('model_id', $id)
+                    ->where('model_type', MainCategory::class)
+                    ->delete();
+                $image = $request->file('image');
+                $mainCategory->addMedia($image)->toMediaCollection();
+            }
+
+            $trans = json_decode($request->input('trans'), true);
+            if (is_array($trans)) {
+                foreach ($trans as $tran) {
+                    $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
+                    $mainCategoryTrans = MainCategoryTran::where('main_cat_id', $id)
+                        ->where('lang_id', $lang_id)
+                        ->first();
+
+                    $mainCategoryTrans->update([
+                        'name' => $tran['name']
+                    ]);
+                }
+            }
+
+            $mainCategory = MainCategory::with(['media',
+                'mainCategoryTrans',
+                'mainCategoryTrans.languages'])->findOrFail($id);
+            return response()->json(['main_categories' => $mainCategory], '200');
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
     }
+
 
     /**
      * @OA\Delete(
@@ -274,6 +311,11 @@ class MainCategoryController extends Controller
 
     public function mainCategoryWithCategories($id)
     {
+        //        try {
+//            $this->authorize('viewAny', MainCategory::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategory = MainCategory::with(['media',
                 'mainCategoryTrans',
@@ -290,6 +332,11 @@ class MainCategoryController extends Controller
 
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', MainCategory::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategory = MainCategory::findOrFail($id);
             $mainCategory->delete();

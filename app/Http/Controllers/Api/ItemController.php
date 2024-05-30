@@ -47,15 +47,30 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with(['media',
-            'itemTrans',
-            'itemTypes',
-            'itemTypes.itemTypeTrans'])->get();
-        return response()->json(['items' => $items]);
+//        try {
+//            $this->authorize('view', Item::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
+        try {
+            $items = Item::with(['media',
+                'itemTrans',
+                'itemTypes',
+                'itemTypes.itemTypeTrans'])->get();
+            return response()->json(['items' => $items]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+
     }
 
     public function itemsByCategory($categoryId)
     {
+//        try {
+//            $this->authorize('viewAny', Item::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $category = Category::findOrFail($categoryId);
             $category->load('media');
@@ -112,13 +127,19 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
+//        try {
+//            $this->authorize('create', Item::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
-            $data = json_decode($request->getContent(), true);
 
             $validated = $request->validate([
                 'category_id' => 'required',
                 'code' => 'required',
-                'description' => 'nullable'
+                'description' => 'nullable',
+                'item_types' => 'required',
+                'item_trans' => 'required',
             ]);
             $category = Category::findOrFail($request->input('category_id'));
             $item = Item::create($request->all());
@@ -127,6 +148,8 @@ class ItemController extends Controller
                 $item->addMedia($image)->toMediaCollection();
                 $item->getMedia();
             }
+
+            $data = json_decode($request->input(), true);
 
             if (count($data['types']) == 1) {
                 $itemType = ItemType::create([
@@ -200,12 +223,20 @@ class ItemController extends Controller
      */
     public function show($id)
     {
+//        try {
+//            $this->authorize('viewAny', Item::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
-            $item = Item::findOrFail($id);
-            $item = Item::with(['media',
+            $item = Item::with([
+                'media',
                 'itemTrans',
+                'itemTrans.languages',
                 'itemTypes',
-                'itemTypes.itemTypeTrans'])->get();
+                'itemTypes.itemTypeTrans',
+                'itemTypes.itemTypeTrans.languages'
+                ])->findOrFail($id);
             return response()->json(['item' => $item]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -247,6 +278,11 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        try {
+//            $this->authorize('update', Item::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validated = $request->validate([
                 'image' => 'required',
@@ -298,6 +334,11 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
+//        try {
+//            $this->authorize('forceDelete', Item::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $item = Item::findOrFail($id);
             $item->delete();

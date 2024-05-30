@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LanguageController extends Controller
 {
     /**
-     *        @OA\Get(
+     * @OA\Get(
      *     path="/api/languages",
      *     tags={"Language"},
      *     summary="Finds all languages",
@@ -39,8 +39,17 @@ class LanguageController extends Controller
      */
     public function index()
     {
-        $language = Language::all();
-        return response()->json(['languages' => $language]);
+//        try {
+//            $this->authorize('view', Language::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
+        try {
+            $language = Language::all();
+            return response()->json(['languages' => $language]);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -69,6 +78,11 @@ class LanguageController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', Language::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validated = $request->validate([
                 'name' => 'required|max:255',
@@ -111,6 +125,11 @@ class LanguageController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', Language::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $language = Language::findOrFail($id);
             return response()->json(['languages' => $language]);
@@ -154,6 +173,11 @@ class LanguageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', Language::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validated = $request->validate([
                 'name' => 'required|max:255',
@@ -197,6 +221,11 @@ class LanguageController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', Language::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $languages = Language::findOrFail($id);
             $languages->delete();

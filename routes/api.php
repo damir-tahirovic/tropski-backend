@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //Rute za MainCategory
 
+//Route::middleware('auth:api')->group(function () {
 Route::get('main-categories', [MainCategoryController::class, 'index'])->name('main-categories.index');
 Route::post('main-categories', [MainCategoryController::class, 'store'])->name('main-categories.store');
 Route::get('main-categories/{id}', [MainCategoryController::class, 'show'])->name('main-categories.show');
@@ -63,18 +64,19 @@ Route::delete('main-categories/{id}', [MainCategoryController::class, 'destroy']
 Route::get('main-category-categories/{id}', [MainCategoryController::class, 'mainCategoryWithCategories'])->name('main-categories.mainCategoryWithCategories');
 
 //Route::get('main-categories-all', [MainCategoryController::class, 'mainCategoriesWithCategories'])->name('main-categories.mainCategoriesWithCategories');
-
+//});
 
 //Rute za Category
 
-Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
-Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
-Route::put('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
-Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+//Route::middleware('auth:api')->group(function () {
+    Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+    Route::put('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 //Route::get('categories-all', [CategoryController::class, 'categoriesWithSubcategories'])->name('categories.categoriesWithSubcategories');
-
+//});
 
 //Rute za Hotel
 
@@ -91,16 +93,17 @@ Route::get('hotels-languages', [HotelController::class, 'allHotelsWithLanguages'
 
 //Rute za Extra
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
-    Route::post('extras', [ExtraController::class, 'store'])->name('extras.store');
-    Route::get('extras/{id}', [ExtraController::class, 'show'])->name('extras.show');
-    Route::put('extras/{id}', [ExtraController::class, 'update'])->name('extras.update');
-    Route::delete('extras/{id}', [ExtraController::class, 'destroy'])->name('extras.destroy');
-});
+//Route::middleware('auth:api')->group(function () {
+Route::get('extras', [ExtraController::class, 'index'])->name('extras.index');
+Route::post('extras', [ExtraController::class, 'store'])->name('extras.store');
+Route::get('extras/{id}', [ExtraController::class, 'show'])->name('extras.show');
+Route::put('extras/{id}', [ExtraController::class, 'update'])->name('extras.update');
+Route::delete('extras/{id}', [ExtraController::class, 'destroy'])->name('extras.destroy');
+//});
 
 
 //Rute za ExtraGroup
+
 Route::middleware('auth:api')->group(function () {
     Route::get('extra-groups', [ExtraGroupController::class, 'index'])->name('extra-groups.index');
     Route::post('extra-groups', [ExtraGroupController::class, 'store'])->name('extra-groups.store');
@@ -111,15 +114,17 @@ Route::middleware('auth:api')->group(function () {
 
 //Rute za Language
 
+//Route::middleware('auth:api')->group(function () {
 Route::get('languages', [LanguageController::class, 'index'])->name('languages.index');
 Route::post('languages', [LanguageController::class, 'store'])->name('languages.store');
 Route::get('languages/{id}', [LanguageController::class, 'show'])->name('languages.show');
 Route::put('languages/{id}', [LanguageController::class, 'update'])->name('languages.update');
 Route::delete('languages/{id}', [LanguageController::class, 'destroy'])->name('languages.destroy');
-
+//});
 
 //Rute za Item
 
+//Route::middleware('auth:api')->group(function () {
 Route::get('items', [ItemController::class, 'index'])->name('items.index');
 Route::post('items/with-one-option', [ItemController::class, 'storeWithOneOption'])->name('items.store-with-one-option');
 Route::post('items', [ItemController::class, 'store'])->name('items.store');
@@ -128,6 +133,7 @@ Route::put('items/{id}', [ItemController::class, 'update'])->name('items.update'
 Route::delete('items/{id}', [ItemController::class, 'destroy'])->name('items.destroy');
 
 Route::get('items-by-category/{id}', [ItemController::class, 'itemsByCategory'])->name('items.items-by-category');
+//});
 
 
 //Rute za MainCategoryTran

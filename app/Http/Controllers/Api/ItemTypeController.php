@@ -44,6 +44,11 @@ class ItemTypeController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $itemTypes = ItemType::all();
             return response()->json(['itemTypes' => $itemTypes]);
@@ -78,6 +83,11 @@ class ItemTypeController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $data = json_decode($request->getContent(), true);
 
@@ -90,7 +100,7 @@ class ItemTypeController extends Controller
 
             $itemType = ItemType::create($validated);
 
-            foreach ($data['trans'] as $trans){
+            foreach ($data['trans'] as $trans) {
                 ItemTypeTran::create([
                     'item_type_id' => $itemType->id,
                     'name' => $trans['name'],
@@ -108,6 +118,11 @@ class ItemTypeController extends Controller
 
     public function indirectStore(array $data, $itemId)
     {
+        //        try {
+//            $this->authorize('create', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validatedData = Validator::make($data, [
                 'quantity' => 'required',
@@ -136,6 +151,11 @@ class ItemTypeController extends Controller
 
     public function storeWithLatestItem(Request $request)
     {
+        //        try {
+//            $this->authorize('create', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validated = $request->validate([
                 'quantity' => 'required',
@@ -202,6 +222,11 @@ class ItemTypeController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $itemType = ItemType::findOrFail($id);
             return response()->json(['itemType' => $itemType]);
@@ -245,6 +270,11 @@ class ItemTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('uodate', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validated = $request->validate([
                 'item_id' => 'required',
@@ -291,6 +321,11 @@ class ItemTypeController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', ItemType::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $itemType = ItemType::findOrFail($id);
             $itemType->delete();

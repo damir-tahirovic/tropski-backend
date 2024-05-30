@@ -47,6 +47,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', Category::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $categories = Category::with('media')->with('items')->get();
 
@@ -85,6 +90,11 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', Category::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $trans = json_decode($request->input('trans'), true);
 
@@ -148,6 +158,11 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', Category::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $category = Category::findOrFail($id);
             $category->getMedia();
@@ -192,6 +207,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', Category::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $data = json_decode($request->getContent(), true);
 
@@ -268,6 +288,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', Category::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $category = Category::findOrFail($id);
             $category->delete();
