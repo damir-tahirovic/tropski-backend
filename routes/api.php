@@ -162,10 +162,11 @@ Route::get('category-trans-languages', [CategoryTranController::class, 'category
 
 Route::get('item-types', [ItemTypeController::class, 'index'])->name('item-types.index');
 Route::post('item-types', [ItemTypeController::class, 'store'])->name('item-types.store');
-Route::post('item-types-with-latest-item', [ItemTypeController::class, 'storeWithLatestItem'])->name('item-types.store-with-latest-item');
 Route::get('item-types/{id}', [ItemTypeController::class, 'show'])->name('item-types.show');
 Route::put('item-types/{id}', [ItemTypeController::class, 'update'])->name('item-types.update');
 Route::delete('item-types/{id}', [ItemTypeController::class, 'destroy'])->name('item-types.destroy');
+
+//Route::post('item-types-with-latest-item', [ItemTypeController::class, 'storeWithLatestItem'])->name('item-types.store-with-latest-item');
 
 
 //Rute za ItemTypeTran

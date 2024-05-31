@@ -91,6 +91,7 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'User login successfully',
                 'token' => $token,
+                'username' => $user->username,
                 'roles' => $user->roles()
             ], 200);
         } catch (Exception $e) {

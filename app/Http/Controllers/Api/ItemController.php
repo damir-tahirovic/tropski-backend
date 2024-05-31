@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemTran;
 use App\Models\ItemType;
 use App\Models\ItemTypeTran;
+use App\Models\Language;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -137,9 +138,15 @@ class ItemController extends Controller
             $validated = $request->validate([
                 'category_id' => 'required',
                 'code' => 'required',
-                'description' => 'nullable',
-                'item_types' => 'required',
-                'item_trans' => 'required',
+                'types' => 'required',
+                'trans' => 'required',
+                'trans.*.description' => 'required',
+                'trans.*.name' => 'required',
+                'types.*.price' => 'required',
+                'types.*.quantity' => 'required',
+                'types.*.unit' => 'required',
+                'image' => 'required',
+                'extra_group_id' => 'nullable',
             ]);
             $category = Category::findOrFail($request->input('category_id'));
             $item = Item::create($request->all());
@@ -149,19 +156,21 @@ class ItemController extends Controller
                 $item->getMedia();
             }
 
-            $data = json_decode($request->input(), true);
+            $types = json_decode($request->input('types'), true);
+            $trans = json_decode($request->input('trans'), true);
 
-            if (count($data['types']) == 1) {
+            if (count($types) == 1) {
                 $itemType = ItemType::create([
                     'item_id' => $item->id,
-                    'quantity' => $data['types'][0]['quantity'],
-                    'unit' => $data['types'][0]['unit'],
-                    'price' => $data['types'][0]['price'],
+                    'quantity' => $types[0]['quantity'],
+                    'unit' => $types[0]['unit'],
+                    'price' => $types[0]['price'],
                 ]);
-                foreach ($data['trans'] as $tran) {
+                foreach ($trans as $tran) {
+                    $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                     ItemTran::create([
                         'item_id' => $item->id,
-                        'lang_id' => $tran['lang_id'],
+                        'lang_id' => $lang_id,
                         'name' => $tran['name'],
                         'description' => $tran['description'],
                     ]);
@@ -169,23 +178,26 @@ class ItemController extends Controller
                     ItemTypeTran::create([
                         'item_type_id' => $itemType->id,
                         'name' => $tran['name'],
-                        'lang_id' => $tran['lang_id']
+                        'lang_id' => $lang_id
                     ]);
 
                 }
-            } else {
-                foreach ($data['trans'] as $tran) {
+            } else if (count($types) > 1) {
+                foreach ($trans as $tran) {
+                    $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                     ItemTran::create([
                         'item_id' => $item->id,
-                        'lang_id' => $tran['lang_id'],
+                        'lang_id' =>$lang_id,
                         'name' => $tran['name'],
                         'description' => $tran['description'],
                     ]);
                 }
                 $itemTypeController = new ItemTypeController();
-                foreach ($data['types'] as $type) {
+                foreach ($types as $type) {
                     $itemTypeController->indirectStore($type, $item->id);
                 }
+            }else{
+                return response()->json(['error' => 'Types are required'], 400);
             }
 
             return response()->json(['items' => $item], 201);
@@ -236,7 +248,7 @@ class ItemController extends Controller
                 'itemTypes',
                 'itemTypes.itemTypeTrans',
                 'itemTypes.itemTypeTrans.languages'
-                ])->findOrFail($id);
+            ])->findOrFail($id);
             return response()->json(['item' => $item]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -287,12 +299,11 @@ class ItemController extends Controller
             $validated = $request->validate([
                 'image' => 'required',
                 'category_id' => 'required',
-                'extra_group_id' => 'required',
+                'extra_group_id' => 'nullable',
                 'code' => 'required'
             ]);
             $item = Item::findOrFail($id);
             $category = Category::findOrFail($request->input('category_id'));
-            $extraGroup = ExtraGroup::findOrFail($request->input('extra_group_id'));
             Media::where('model_id', $id)
                 ->where('model_type', Item::class)
                 ->delete();

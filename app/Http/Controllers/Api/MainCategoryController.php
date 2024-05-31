@@ -268,6 +268,8 @@ class MainCategoryController extends Controller
                         'name' => $tran['name']
                     ]);
                 }
+            }else{
+                return response()->json('417');
             }
 
             $mainCategory = MainCategory::with(['media',

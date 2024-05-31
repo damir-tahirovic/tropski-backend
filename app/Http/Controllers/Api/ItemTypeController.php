@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ItemTypeTran;
+use App\Models\Language;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -89,7 +90,7 @@ class ItemTypeController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $data = json_decode($request->getContent(), true);
+            $trans = json_decode($request->input('trans'), true);
 
             $validated = $request->validate([
                 'item_id' => 'required',
@@ -100,11 +101,11 @@ class ItemTypeController extends Controller
 
             $itemType = ItemType::create($validated);
 
-            foreach ($data['trans'] as $trans) {
+            foreach ($trans as $tran) {
                 ItemTypeTran::create([
                     'item_type_id' => $itemType->id,
-                    'name' => $trans['name'],
-                    'lang_id' => $trans['lang_id']
+                    'name' => $tran['name'],
+                    'lang_id' => $tran['lang_id']
                 ]);
 
             }
@@ -116,7 +117,7 @@ class ItemTypeController extends Controller
     }
 
 
-    public function indirectStore(array $data, $itemId)
+    public function indirectStore(array $type, $itemId)
     {
         //        try {
 //            $this->authorize('create', ItemType::class);
@@ -124,7 +125,7 @@ class ItemTypeController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $validatedData = Validator::make($data, [
+            $validatedData = Validator::make($type, [
                 'quantity' => 'required',
                 'unit' => 'required|max:255',
                 'price' => 'required|max:255'
@@ -134,11 +135,12 @@ class ItemTypeController extends Controller
 
             $itemType = ItemType::create($validatedData);
 
-            foreach ($data['trans'] as $trans) {
+            foreach ($type['trans'] as $tran) {
+                $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                 ItemTypeTran::create([
                     'item_type_id' => $itemType->id,
-                    'name' => $trans['name'],
-                    'lang_id' => $trans['lang_id']
+                    'name' => $tran['name'],
+                    'lang_id' => $lang_id
                 ]);
             }
 
@@ -149,47 +151,47 @@ class ItemTypeController extends Controller
     }
 
 
-    public function storeWithLatestItem(Request $request)
-    {
-        //        try {
-//            $this->authorize('create', ItemType::class);
+//    public function storeWithLatestItem(Request $request)
+//    {
+//        //        try {
+////            $this->authorize('create', ItemType::class);
+////        } catch (Exception $e) {
+////            return response()->json($e->getMessage(), 401);
+////        }
+//        try {
+//            $validated = $request->validate([
+//                'quantity' => 'required',
+//                'unit' => 'required|max:255',
+//                'price' => 'required',
+//                'name_en' => 'required',
+//                'name_me' => 'required'
+//            ]);
+//
+//            $item = Item::latest()->first();
+//            $itemType = ItemType::create(['item_id' => $item->id,
+//                $validated]);
+//
+//            //Prevod za engleski jezik
+//            $itemTypeTran1 = ItemTypeTran::create([
+//                'item_type_id' => $itemType->id,
+//                'name' => $validated['name_en'],
+//                'lang_id' => '2'
+//            ]);
+//
+//            //Prevod za crnogorski jezik
+//            $itemTypeTran2 = ItemTypeTran::create([
+//                'item_type_id' => $itemType->id,
+//                'name' => $validated['name_me'],
+//                'lang_id' => '1'
+//            ]);
+//
+//            return response()->json(['itemTypes' => $itemType,
+//                'itemTypeTran1' => $itemTypeTran1,
+//                'itemTypeTran2' => $itemTypeTran2], 201);
 //        } catch (Exception $e) {
-//            return response()->json($e->getMessage(), 401);
+//            return response()->json($e->getMessage(), 400);
 //        }
-        try {
-            $validated = $request->validate([
-                'quantity' => 'required',
-                'unit' => 'required|max:255',
-                'price' => 'required',
-                'name_en' => 'required',
-                'name_me' => 'required'
-            ]);
-
-            $item = Item::latest()->first();
-            $itemType = ItemType::create(['item_id' => $item->id,
-                $validated]);
-
-            //Prevod za engleski jezik
-            $itemTypeTran1 = ItemTypeTran::create([
-                'item_type_id' => $itemType->id,
-                'name' => $validated['name_en'],
-                'lang_id' => '2'
-            ]);
-
-            //Prevod za crnogorski jezik
-            $itemTypeTran2 = ItemTypeTran::create([
-                'item_type_id' => $itemType->id,
-                'name' => $validated['name_me'],
-                'lang_id' => '1'
-            ]);
-
-            return response()->json(['itemTypes' => $itemType,
-                'itemTypeTran1' => $itemTypeTran1,
-                'itemTypeTran2' => $itemTypeTran2], 201);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 400);
-        }
-    }
+//    }
 
 
     /**
@@ -228,7 +230,11 @@ class ItemTypeController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $itemType = ItemType::findOrFail($id);
+            $itemType = ItemType::with([
+                'item',
+                'itemTypeTrans',
+                'itemTypeTrans.languages'
+            ])->findOrFail($id);
             return response()->json(['itemType' => $itemType]);
         } catch (Exception $e) {
             return response()->json([$e->getMessage()]);
@@ -281,11 +287,19 @@ class ItemTypeController extends Controller
                 'quantity' => 'required',
                 'price' => 'required',
                 'unit' => 'required',
+                'trans' => 'required'
             ]);
             $item = Item::findOrFail($validated['item_id']);
             $itemType = ItemType::findOrFail($id);
-            $itemType->update($request->all());
-            return response()->json(['itemType' => $itemType]);
+            $itemType->update($validated);
+            $trans = json_decode($request->input('trans'));
+            foreach ($trans as $tran){
+                $itemTypeTran = ItemTypeTran::where('item_type_id', $itemType->id)->where('lang_id', $tran->lang_id)->first();
+                $itemTypeTran->update([
+                    'name' => $tran->name
+                ]);
+            }
+            return response()->json(['item_type' => $itemType]);
         } catch (Exception $e) {
             return response()->json([$e->getMessage()]);
         }
