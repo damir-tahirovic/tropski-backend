@@ -46,11 +46,11 @@ class ExtraController extends Controller
      */
     public function index()
     {
-        try {
-            $this->authorize('viewAny', Extra::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('viewAny', Extra::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $extra = Extra::with('media')->get();
             return response()->json(['data' => $extra]);
@@ -85,11 +85,11 @@ class ExtraController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $this->authorize('create', Extra::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('create', Extra::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $data = json_decode($request->getContent(), true);
 
@@ -154,11 +154,11 @@ class ExtraController extends Controller
      */
     public function show($id)
     {
-        try {
-            $this->authorize('view', Extra::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('view', Extra::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $extra = Extra::findOrFail($id);
             $extra->getMedia();
@@ -203,11 +203,11 @@ class ExtraController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $this->authorize('update', Extra::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('update', Extra::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $extra = Extra::findOrFail($id);
@@ -257,11 +257,11 @@ class ExtraController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $this->authorize('forceDelete', Extra::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('forceDelete', Extra::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $extra = Extra::findOrFail($id);
             $extra->delete();

@@ -43,8 +43,16 @@ class HotelUserController extends Controller
      */
     public function index()
     {
-        $hotelUser = HotelUser::all();
-        return response()->json(['hotelUsers' => $hotelUser]);
+        //        try {
+//            $this->authorize('view', HotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $hotelUser = HotelUser::all();
+            return response()->json(['hotelUsers' => $hotelUser]);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -73,6 +81,10 @@ class HotelUserController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', HotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'user_id' => 'required',
@@ -117,6 +129,10 @@ class HotelUserController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', HotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotelUser = HotelUser::findOrFail($id);
             return response()->json(['hotelUser' => $hotelUser]);
@@ -160,6 +176,10 @@ class HotelUserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', HotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'user_id' => 'required',
@@ -204,6 +224,10 @@ class HotelUserController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', HotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotelUser = HotelUser::findOrFail($id);
             $hotelUser->delete();

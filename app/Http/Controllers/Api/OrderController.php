@@ -19,6 +19,10 @@ class OrderController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', Order::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $orders = Order::all();
             return response()->json(['orders' => $orders]);
@@ -35,6 +39,10 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', Order::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
 
             $data = json_decode($request->getContent(), true);
@@ -81,6 +89,10 @@ class OrderController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', Order::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $order = Order::findOrFail($id);
             return response()->json(['order' => $order]);
@@ -98,7 +110,10 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //        try {
+//            $this->authorize('update', Order::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
     }
 
     /**
@@ -109,6 +124,10 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', Order::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $order = Order::findOrFail($id);
             $order->delete();

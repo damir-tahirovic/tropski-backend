@@ -45,6 +45,11 @@ class MainCategoryTranController extends Controller
      */
     public function mainCategoryNamesWithLanguages()
     {
+        //        try {
+//            $this->authorize('view', MainCategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $result = DB::table('main_categories as mc')
                 ->join('main_category_trans as mct', 'mct.main_cat_id', '=', 'mc.id')
@@ -89,8 +94,17 @@ class MainCategoryTranController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', MainCategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
+        try {
         $mainCategoryTrans = MainCategoryTran::all();
         return response()->json(['mainCategoryTrans' => $mainCategoryTrans]);
+        }catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -119,6 +133,11 @@ class MainCategoryTranController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', MainCategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $validated = $request->validate([
                 'main_cat_id' => 'required',
@@ -165,6 +184,11 @@ class MainCategoryTranController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', MainCategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategoryTrans = MainCategoryTran::findOrFail($id);
             return response()->json(['mainCategoryTrans' => $mainCategoryTrans,]);
@@ -208,6 +232,11 @@ class MainCategoryTranController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', MainCategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategoryTrans = MainCategoryTran::findOrFail($id);
             $validated = $request->validate([
@@ -255,6 +284,11 @@ class MainCategoryTranController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', MainCategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $mainCategoryTrans = MainCategoryTran::findOrFail($id);
             $mainCategoryTrans->delete();

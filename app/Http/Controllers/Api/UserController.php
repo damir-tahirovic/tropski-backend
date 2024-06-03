@@ -24,6 +24,10 @@ class UserController extends Controller
 
     public function createUser(Request $request)
     {
+        //        try {
+//            $this->authorize('create', User::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validator = Validator::make($request->all(), [
                 'username' => 'required|unique:users',
@@ -101,18 +105,12 @@ class UserController extends Controller
         }
     }
 
-//    public function logoutUser()
-//    {
-//        try {
-//            Auth::user()->tokens()->delete();
-//            return response()->json(['message' => 'User logout successfully'], 200);
-//        } catch (Exception $e) {
-//            return response()->json(['error' => $e->getMessage()],);
-//        }
-//    }
-
     public function logoutUser(Request $request)
     {
+        //        try {
+//            $this->authorize('view', User::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             if (Auth::check()) {
                 $user = $request->user();
@@ -133,6 +131,10 @@ class UserController extends Controller
     public
     function index()
     {
+        //        try {
+//            $this->authorize('view', User::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $users = User::all();
             return response()->json(['users' => $users], 200);
@@ -144,6 +146,10 @@ class UserController extends Controller
 
     public function userRole($id)
     {
+        //        try {
+//            $this->authorize('viewAny', User::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $user = User::findOrFail($id);
             $data = $user->roles();
@@ -154,16 +160,6 @@ class UserController extends Controller
     }
 
 
-//    /**
-//     * Display a listing of the resource.
-//     *
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function index()
-//    {
-//        //
-//    }
-//
 //    /**
 //     * Store a newly created resource in storage.
 //     *

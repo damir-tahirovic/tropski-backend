@@ -44,9 +44,17 @@ class HotelController extends Controller
      */
     public function allHotelsWithMainCategories()
     {
-        $hotels = Hotel::with('mainCategories')->get();
-        $hotels->load('media');
-        return response()->json($hotels);
+        //        try {
+//            $this->authorize('view', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $hotels = Hotel::with('mainCategories')->get();
+            $hotels->load('media');
+            return response()->json($hotels);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -81,6 +89,10 @@ class HotelController extends Controller
 
     public function hotelsWithMainCategories($id)
     {
+        //        try {
+//            $this->authorize('view', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotel = Hotel::findOrFail($id);
             $hotel->mainCategories;
@@ -123,6 +135,10 @@ class HotelController extends Controller
 
     public function index()
     {
+        //        try {
+//            $this->authorize('view', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotels = Hotel::all();
             $hotels->load('media');
@@ -135,9 +151,17 @@ class HotelController extends Controller
     public
     function allHotelsWithLanguages()
     {
-        $hotels = Hotel::with('languages')->get();
-        $hotels->load('media');
-        return response()->json($hotels);
+        //        try {
+//            $this->authorize('view', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $hotels = Hotel::with('languages')->get();
+            $hotels->load('media');
+            return response()->json($hotels);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -165,6 +189,10 @@ class HotelController extends Controller
     public
     function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
 
             $langs = json_decode($request->input('languages'), true);
@@ -252,6 +280,10 @@ class HotelController extends Controller
     public
     function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotel = Hotel::findOrFail($id);
             $hotel->getMedia();
@@ -300,6 +332,10 @@ class HotelController extends Controller
     public
     function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotel = Hotel::findOrFail($id);
             $validated = $request->validate([
@@ -347,6 +383,10 @@ class HotelController extends Controller
     public
     function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', Hotel::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotel = Hotel::findOrFail($id);
             $hotel->delete();

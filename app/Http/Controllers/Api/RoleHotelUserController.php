@@ -43,10 +43,17 @@ class RoleHotelUserController extends Controller
      */
     public function index()
     {
-        $roleHotelUsers = RoleHotelUser::all();
-        return response()->json(['roleHotelUsers' => $roleHotelUsers], 200);
+        //        try {
+//            $this->authorize('view', RoleHotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $roleHotelUsers = RoleHotelUser::all();
+            return response()->json(['roleHotelUsers' => $roleHotelUsers], 200);
+        } catch (Exception $e) {
+            return response()->json([$e->getMessage()], 400);
+        }
     }
-
     /**
      * @OA\Post(
      *     path="/api/role-hotel-users",
@@ -73,6 +80,10 @@ class RoleHotelUserController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', RoleHotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'role_id' => 'required',
@@ -118,6 +129,10 @@ class RoleHotelUserController extends Controller
 
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', RoleHotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $roleHotelUser = RoleHotelUser::findOrFail($id);
             return response()->json(['roleHotelUser' => $roleHotelUser], 200);
@@ -161,6 +176,10 @@ class RoleHotelUserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', RoleHotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $roleHoterUser = RoleHotelUser::findOrFail($id);
             $validated = $request->validate([
@@ -207,6 +226,10 @@ class RoleHotelUserController extends Controller
     public
     function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', RoleHotelUser::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $roleHotelUser = RoleHotelUser::findOrFail($id);
             $roleHotelUser->delete();

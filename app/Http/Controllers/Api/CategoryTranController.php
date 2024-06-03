@@ -44,6 +44,11 @@ class CategoryTranController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', CategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//
         try {
             $categoryTrans = CategoryTran::all();
             return response()->json(['categoryTrans' => $categoryTrans]);
@@ -78,12 +83,16 @@ class CategoryTranController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', CategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
         $validated = $request->validate([
             'category_id' => 'required',
             'lang_id' => 'required',
             'name' => 'required|max:255',
         ]);
-        try {
             $category = Category::findOrFail($request->input('category_id'));
             $lang = Language::findOrFail($request->input('lang_id'));
             $categoryTran = CategoryTran::create($request->all());
@@ -137,6 +146,10 @@ class CategoryTranController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', CategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $categoryTran = CategoryTran::findOrFail($id);
             return response()->json(['categoryTrans' => $categoryTran]);
@@ -181,13 +194,17 @@ class CategoryTranController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', CategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
         $categoryTran = CategoryTran::findOrFail($id);
         $validated = $request->validate([
             'category_id' => 'required',
             'lang_id' => 'required',
             'name' => 'required|max:255',
         ]);
-        try {
             $category = Category::findOrFail($request->input('category_id'));
             $lang = Language::findOrFail($request->input('lang_id'));
             $categoryTran->update($request->all());
@@ -227,6 +244,10 @@ class CategoryTranController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', CategoryTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $categoryTran = CategoryTran::findOrFail($id);
             return response()->json(['categoryTrans' => $categoryTran]);

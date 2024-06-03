@@ -41,8 +41,16 @@ class ExtraTranController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', ExtraTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
         $extraTran = ExtraTran::all();
         return response()->json(['extraTran' => $extraTran]);
+        }catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -71,6 +79,10 @@ class ExtraTranController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', ExtraTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'extra_id' => 'required',
@@ -116,6 +128,10 @@ class ExtraTranController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', ExtraTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $extraTran = ExtraTran::findOrFail($id);
             return response()->json(['extraTran' => $extraTran]);
@@ -159,6 +175,10 @@ class ExtraTranController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', ExtraTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $extraTran = ExtraTran::findOrFail($id);
             $validated = $request->validate([
@@ -206,6 +226,10 @@ class ExtraTranController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', ExtraTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $extraTran = ExtraTran::findOrFail($id);
             $extraTran->delete();

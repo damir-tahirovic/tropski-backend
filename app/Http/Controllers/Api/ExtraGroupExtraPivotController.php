@@ -43,8 +43,16 @@ class ExtraGroupExtraPivotController extends Controller
      */
     public function index()
     {
-        $extraGroupExtraPivot = ExtraGroupExtraPivot::all();
-        return response()->json(['extraGroupExtraPivot' => $extraGroupExtraPivot]);
+        //        try {
+//            $this->authorize('view', ExtraGroupExtraPivot::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $extraGroupExtraPivot = ExtraGroupExtraPivot::all();
+            return response()->json(['extraGroupExtraPivot' => $extraGroupExtraPivot]);
+        } catch (Exception $e) {
+            return response()->json([$e->getMessage(), 400]);
+        }
     }
 
     /**
@@ -73,6 +81,10 @@ class ExtraGroupExtraPivotController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', ExtraGroupExtraPivot::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'extra_group_id' => 'required',
@@ -121,6 +133,10 @@ class ExtraGroupExtraPivotController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', ExtraGroupExtraPivot::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $extraGroupExtraPivot = ExtraGroupExtraPivot::findOrFail($id);
             return response()->json(['extraGroupExtraPivot' => $extraGroupExtraPivot]);
@@ -164,6 +180,10 @@ class ExtraGroupExtraPivotController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', ExtraGroupExtraPivot::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'extra_group_id' => 'required',
@@ -212,6 +232,10 @@ class ExtraGroupExtraPivotController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', ExtraGroupExtraPivot::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $extraGroupExtraPivot = ExtraGroupExtraPivot::findOrFail($id);
             $extraGroupExtraPivot->delete();

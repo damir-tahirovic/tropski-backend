@@ -41,8 +41,16 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        return response()->json(['roles' => $roles], 200);
+        //        try {
+//            $this->authorize('view', Role::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $roles = Role::all();
+            return response()->json(['roles' => $roles], 200);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -71,6 +79,10 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', Role::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'name' => 'required|max:255',
@@ -113,6 +125,10 @@ class RoleController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', Role::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $role = Role::findOrFail($id);
             return response()->json($role, 200);
@@ -156,6 +172,10 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', Role::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $role = Role::findOrFail($id);
             $validated = $request->validate([
@@ -199,6 +219,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', Role::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $role = Role::findOrFail($id);
             $role->delete();

@@ -38,7 +38,10 @@ class OrderItemController extends Controller
      */
     public function index()
     {
-        //
+        //        try {
+//            $this->authorize('view', OrderItem::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
     }
 
     /**
@@ -49,7 +52,10 @@ class OrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //        try {
+//            $this->authorize('create', OrderItem::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
     }
 
     /**
@@ -60,7 +66,11 @@ class OrderItemController extends Controller
      */
     public function show($id)
     {
-        //
+        //        try {
+//            $this->authorize('viewAny', OrderItem::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+
     }
 
     /**
@@ -72,7 +82,10 @@ class OrderItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //        try {
+//            $this->authorize('update', OrderItem::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
     }
 
     /**
@@ -83,6 +96,9 @@ class OrderItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //        try {
+//            $this->authorize('forceDelete', OrderItem::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
     }
 }

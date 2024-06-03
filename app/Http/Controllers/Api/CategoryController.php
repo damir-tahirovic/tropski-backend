@@ -99,7 +99,7 @@ class CategoryController extends Controller
             $trans = json_decode($request->input('trans'), true);
 
             $validated = $request->validate([
-                'image' => 'required',
+               // 'image' => 'required',
                 'main_cat_id' => 'required'
             ]);
 

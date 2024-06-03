@@ -43,8 +43,16 @@ class ItemTypeTranController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', ItemTypeTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
         $itemTypeTrans = ItemTypeTran::all();
         return response()->json(['itemTypeTrans' => $itemTypeTrans]);
+        }catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -73,6 +81,10 @@ class ItemTypeTranController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', ItemTypeTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'item_type_id' => 'required',
@@ -118,6 +130,10 @@ class ItemTypeTranController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', ItemTypeTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $itemTypeTran = ItemTypeTran::findOrFail($id);
             return response()->json(['itemTypeTran' => $itemTypeTran]);
@@ -161,6 +177,10 @@ class ItemTypeTranController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', ItemTypeTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $itemTypeTran = ItemTypeTran::findOrFail($id);
             $validated = $request->validate([
@@ -207,6 +227,10 @@ class ItemTypeTranController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', ItemTypeTran::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $itemTypeTran = ItemTypeTran::findOrFail($id);
             $itemTypeTran->delete();

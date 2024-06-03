@@ -35,8 +35,18 @@ class OrderPlaceController extends Controller
 //     */
     public function index()
     {
-        $orderPlaces = OrderPlace::all();
-        return response()->json(['orderPlaces' => $orderPlaces]);
+        //        try {
+//            $this->authorize('view', OrderPlace::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+        try {
+            $orderPlaces = OrderPlace::all();
+            return response()->json(['orderPlaces' => $orderPlaces]);
+
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+
     }
 
     /**
@@ -62,6 +72,10 @@ class OrderPlaceController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', OrderPlace::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -111,6 +125,10 @@ class OrderPlaceController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', OrderPlace::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $orderPlace = OrderPlace::findOrFail($id);
             return response()->json(['orderPlace' => $orderPlace]);
@@ -151,6 +169,10 @@ class OrderPlaceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', OrderPlace::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -195,6 +217,10 @@ class OrderPlaceController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', OrderPlace::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $orderPlace = findOrFail($id);
             $orderPlace->delete();

@@ -19,6 +19,10 @@ class HotelLanguageController extends Controller
      */
     public function index()
     {
+        //        try {
+//            $this->authorize('view', HotelLanguage::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotelLanguages = HotelLanguage::all();
             return response()->json(['hotelLanguages' => $hotelLanguages]);
@@ -36,6 +40,10 @@ class HotelLanguageController extends Controller
      */
     public function store(Request $request)
     {
+        //        try {
+//            $this->authorize('create', HotelLanguage::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -56,6 +64,10 @@ class HotelLanguageController extends Controller
      */
     public function show($id)
     {
+        //        try {
+//            $this->authorize('viewAny', HotelLanguage::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotelLanguage = HotelLanguage::findOrFail($id);
             return response()->json(['hotelLanguage' => $hotelLanguage]);
@@ -66,6 +78,10 @@ class HotelLanguageController extends Controller
 
     public function showByHotelId($id)
     {
+        //        try {
+//            $this->authorize('viewAny', HotelLanguage::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotel = Hotel::findOrFail($id);
             $hotelLanguage = DB::table('hotel_languages as hl')
@@ -88,6 +104,10 @@ class HotelLanguageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //        try {
+//            $this->authorize('update', HotelLanguage::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $validated = $request->validate([
                 'hotel_id' => 'required',
@@ -109,6 +129,10 @@ class HotelLanguageController extends Controller
      */
     public function destroy($id)
     {
+        //        try {
+//            $this->authorize('forceDelete', HotelLanguage::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
         try {
             $hotelLanguage = HotelLanguage::findOrFail($id);
             $hotelLanguage->delete();
