@@ -54,10 +54,16 @@ class ItemController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $items = Item::with(['media',
+            $items = Item::with([
+                'media',
                 'itemTrans',
+                'itemTrans.languages',
+                'extraGroup.extraGroupExtraPivots',
+                'extraGroup.extraGroupExtraPivots.extra',
+                'extraGroup.extraGroupExtraPivots.extra.extraTrans',
                 'itemTypes',
-                'itemTypes.itemTypeTrans'])->get();
+                'itemTypes.itemTypeTrans',
+                'itemTypes.itemTypeTrans.languages'])->get();
             return response()->json(['items' => $items]);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
@@ -145,7 +151,7 @@ class ItemController extends Controller
                 'types.*.price' => 'required',
                 'types.*.quantity' => 'required',
                 'types.*.unit' => 'required',
-                'image' => 'required',
+//                'image' => 'required',
                 'extra_group_id' => 'nullable',
             ]);
             $category = Category::findOrFail($request->input('category_id'));
@@ -187,7 +193,7 @@ class ItemController extends Controller
                     $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                     ItemTran::create([
                         'item_id' => $item->id,
-                        'lang_id' =>$lang_id,
+                        'lang_id' => $lang_id,
                         'name' => $tran['name'],
                         'description' => $tran['description'],
                     ]);
@@ -196,7 +202,7 @@ class ItemController extends Controller
                 foreach ($types as $type) {
                     $itemTypeController->indirectStore($type, $item->id);
                 }
-            }else{
+            } else {
                 return response()->json(['error' => 'Types are required'], 400);
             }
 
@@ -245,9 +251,12 @@ class ItemController extends Controller
                 'media',
                 'itemTrans',
                 'itemTrans.languages',
+//                'extraGroup.extraGroupExtraPivots',
+//                'extraGroup.extraGroupExtraPivots.extra',
+                'extraGroup.extraGroupExtraPivots.extra.extraTrans',
                 'itemTypes',
                 'itemTypes.itemTypeTrans',
-                'itemTypes.itemTypeTrans.languages'
+                'itemTypes.itemTypeTrans.languages',
             ])->findOrFail($id);
             return response()->json(['item' => $item]);
         } catch (Exception $e) {

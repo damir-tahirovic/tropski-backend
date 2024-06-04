@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ItemType;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderItemExtra;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -45,13 +46,12 @@ class OrderController extends Controller
 //            return response()->json($e->getMessage(), 401);
         try {
 
-            $data = json_decode($request->getContent(), true);
-
             $validated = $request->validate([
                 'hotel_id' => 'required',
                 'ordered_from_id' => 'required',
                 'user_id' => 'required',
                 'order_items' => 'required',
+                'total_price' => 'required',
             ]);
 
             $order = Order::create([
@@ -59,18 +59,25 @@ class OrderController extends Controller
                 'ordered_from_id' => $request->input('ordered_from_id'),
                 'order_datetime' => date('Y-m-d H:i:s'),
                 'user_id' => $request->input('user_id'),
-                'total_price' => 0
+                'total_price' => $request->input('total_price'),
             ]);
 
-            foreach ($data['order_items'] as $order_item) {
+            $orderItems = json_decode($request->input('order_items'), true);
+            foreach ($orderItems as $order_item) {
+                $itemType = ItemType::findOrFail($order_item['item_type_id']);
                 $orderItem = OrderItem::create([
                     'order_id' => $order->id,
                     'item_type_id' => $order_item['item_type_id'],
                     'quantity' => $order_item['quantity'],
+                    'special_instructions' => $order_item['special_instructions'] ?? '',
                 ]);
-                $itemType = ItemType::findOrFail($order_item['item_type_id']);
-                $order->total_price += ($order_item['quantity'] * $itemType->price);
-                $order->save();
+                $extras = $order_item['extras'] ?? [];
+                foreach ($extras as $extra) {
+                    $orderItemExtra = OrderItemExtra::create([
+                       'order_item_id' => $orderItem->id,
+                          'extra_id' => $extra['extra_id'],
+                    ]);
+                }
             }
             $order->order_datetime = $order->created_at;
             $order->save();

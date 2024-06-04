@@ -37,7 +37,7 @@ class ExtraGroup extends Model
         return $this->belongsTo(Hotel::class);
     }
 
-    public function extraGroupPivots()
+    public function extraGroupExtraPivots()
     {
         return $this->hasMany(ExtraGroupExtraPivot::class);
     }

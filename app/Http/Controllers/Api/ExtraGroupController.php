@@ -41,11 +41,11 @@ class ExtraGroupController extends Controller
      */
     public function index()
     {
-        try {
-            $this->authorize('view', ExtraGroup::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('view', ExtraGroup::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $extraGroup = ExtraGroup::all();
             return response()->json(['extra_groups' => $extraGroup]);
@@ -80,11 +80,11 @@ class ExtraGroupController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $this->authorize('create', ExtraGroup::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('create', ExtraGroup::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
@@ -128,11 +128,11 @@ class ExtraGroupController extends Controller
      */
     public function show($id)
     {
-        try {
-            $this->authorize('viewAny', ExtraGroup::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('viewAny', ExtraGroup::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $extraGroup = ExtraGroup::findOrFail($id);
             return response()->json(['data' => $extraGroup]);
@@ -176,11 +176,11 @@ class ExtraGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $this->authorize('update', ExtraGroup::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('update', ExtraGroup::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $extraGroup = ExtraGroup::findOrFail($id);
@@ -225,11 +225,11 @@ class ExtraGroupController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $this->authorize('forceDelete', ExtraGroup::class);
-        } catch (Exception $e) {
-            return response()->json($e->getMessage(), 401);
-        }
+//        try {
+//            $this->authorize('forceDelete', ExtraGroup::class);
+//        } catch (Exception $e) {
+//            return response()->json($e->getMessage(), 401);
+//        }
         try {
             $extraGroup = ExtraGroup::findOrFail($id);
             $extraGroup->delete();

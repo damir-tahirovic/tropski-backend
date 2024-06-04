@@ -52,8 +52,11 @@ class ExtraController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $extra = Extra::with('media')->get();
-            return response()->json(['data' => $extra]);
+            $extra = Extra::with([
+                'media',
+                'extraGroupExtraPivots'
+                ])->get();
+            return response()->json(['extras' => $extra]);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }
@@ -160,9 +163,11 @@ class ExtraController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $extra = Extra::findOrFail($id);
-            $extra->getMedia();
-            return response()->json(['data' => $extra]);
+            $extra = Extra::with([
+                'media',
+                'extraGroupExtraPivots'
+            ])->get();
+            return response()->json(['extra' => $extra]);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }

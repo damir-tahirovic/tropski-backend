@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->unsignedBigInteger('item_type_id');
             $table->unsignedBigInteger('order_id');
+            $table->text('special_instructions')->nullable();
             $table->foreign('item_type_id')->references('id')->on('item_types');
             $table->foreign('order_id')->references('id')->on('orders');
             $table->timestamps();
