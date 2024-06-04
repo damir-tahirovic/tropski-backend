@@ -12,7 +12,8 @@ class OrderItem extends Model
     protected $fillable = [
         'quantity',
         'item_type_id',
-        'order_id'
+        'order_id',
+        'special_instructions'
     ];
 
     protected $hidden = ['created_at', 'updated_at'];

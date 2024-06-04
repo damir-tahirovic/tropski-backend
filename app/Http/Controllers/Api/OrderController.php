@@ -62,7 +62,7 @@ class OrderController extends Controller
                 'total_price' => $request->input('total_price'),
             ]);
 
-            $orderItems = json_decode($request->input('order_items'), true);
+            $orderItems = $request->input('order_items');
             foreach ($orderItems as $order_item) {
                 $itemType = ItemType::findOrFail($order_item['item_type_id']);
                 $orderItem = OrderItem::create([
@@ -74,8 +74,8 @@ class OrderController extends Controller
                 $extras = $order_item['extras'] ?? [];
                 foreach ($extras as $extra) {
                     $orderItemExtra = OrderItemExtra::create([
-                       'order_item_id' => $orderItem->id,
-                          'extra_id' => $extra['extra_id'],
+                        'order_item_id' => $orderItem->id,
+                        'extra_id' => $extra['extra_id'],
                     ]);
                 }
             }
