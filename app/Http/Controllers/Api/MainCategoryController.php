@@ -45,7 +45,7 @@ class MainCategoryController extends Controller
 
     public function store(Request $request)
     {
-        //        try {
+//                try {
 //            $this->authorize('create', MainCategory::class);
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
@@ -174,7 +174,7 @@ class MainCategoryController extends Controller
      */
     public function index()
     {
-        //        try {
+//                try {
 //            $this->authorize('view', MainCategory::class);
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
@@ -236,13 +236,12 @@ class MainCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        //        try {
+//                try {
 //            $this->authorize('update', MainCategory::class);
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
 //        }
-//        $all = $request->all();
-//        return response()->json($all);
+
         try {
             $mainCategory = MainCategory::findOrFail($id);
             $validated = $request->validate([

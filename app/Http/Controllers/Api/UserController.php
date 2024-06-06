@@ -92,6 +92,7 @@ class UserController extends Controller
 
             $user = Auth::user();
             $token = $user->createToken('API TOKEN')->plainTextToken;
+
             return response()->json([
                 'message' => 'User login successfully',
                 'token' => $token,
@@ -107,7 +108,7 @@ class UserController extends Controller
 
     public function logoutUser(Request $request)
     {
-        //        try {
+//        try {
 //            $this->authorize('view', User::class);
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
@@ -129,22 +130,106 @@ class UserController extends Controller
     }
 
     public
-    function index()
+    function update(Request $request, $id)
     {
-        //        try {
-//            $this->authorize('view', User::class);
-//        } catch (Exception $e) {
-//            return response()->json($e->getMessage(), 401);
         try {
-            $users = User::all();
+
+            $request->validate([
+                'hotel_id' => 'required',
+                'role_id' => 'required',
+                'username' => 'required|max:255|unique:users,username,' . $id,
+                'password' => 'required',
+            ]);
+
+            $user = User::findOrFail($id);
+            $hotel = Hotel::findOrFail($request->input('hotel_id'));
+            $role = Role::findOrFail($request->input('role_id'));
+            if (!Hash::check($request->input('old_password'), $user->password)) {
+                return response()->json(['message' => 'User with that password does not exist'], 400);
+            }
+
+
+            $user->hotel_id = $request->input('hotel_id');
+            $user->role_id = $request->input('role_id');
+            $user->username = $request->input('username');
+            $user->password = Hash::make($request->input('password'));
+
+            $user->save();
+
+            return response()->json(['message' => 'User updated successfully']);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage(), 400);
+        }
+    }
+
+    public function index()
+    {
+        try {
+            $users = User::with([
+                'hotelUsers.hotel' => function ($query) {
+                    $query->select('id', 'name');
+                },
+            ])->get();
+
+            $users = $users->map(function ($user) {
+                $hotels = $user->hotelUsers->map(function ($hotelUser) {
+                    return [
+                        'hotel_id' => $hotelUser->hotel->id,
+                        'hotel_name' => $hotelUser->hotel->name,
+                    ];
+                });
+
+                unset($user->hotelUsers);
+
+                $user->hotels = $hotels;
+                $user->roles = $user->roles();
+
+                return $user;
+            });
+
             return response()->json(['users' => $users], 200);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
-
     }
 
-    public function userRole($id)
+
+    public function usersByHotel($id)
+    {
+        try {
+            $users = User::whereHas('hotelUsers', function ($query) use ($id) {
+                $query->where('hotel_id', $id);
+            })->with([
+                'hotelUsers.hotel' => function ($query) {
+                    $query->select('id', 'name');
+                },
+            ])->get();
+
+            $users = $users->map(function ($user) {
+                $hotels = $user->hotelUsers->map(function ($hotelUser) {
+                    return [
+                        'hotel_id' => $hotelUser->hotel->id,
+                        'hotel_name' => $hotelUser->hotel->name,
+                    ];
+                });
+
+                unset($user->hotelUsers);
+
+                $user->hotels = $hotels;
+                $user->roles = $user->roles();
+
+                return $user;
+            });
+
+            return response()->json(['users' => $users], 200);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+
+    public
+    function userRole($id)
     {
         //        try {
 //            $this->authorize('viewAny', User::class);

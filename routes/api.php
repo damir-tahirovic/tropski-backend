@@ -43,15 +43,18 @@ Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 
 Route::get('users/{id}', [UserController::class, 'userRole'])->name('users.user-role');
+Route::get('users-hotel/{id}', [UserController::class, 'usersByHotel'])->name('users.users-by-hotel');
+
 //});
 Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
+Route::post('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
     Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user');
 });
-
 
 //Rute za MainCategory
 
@@ -70,11 +73,11 @@ Route::get('main-category-categories/{id}', [MainCategoryController::class, 'mai
 //Rute za Category
 
 //Route::middleware('auth:api')->group(function () {
-    Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
-    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
-    Route::get('categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
-    Route::put('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+Route::get('categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+Route::put('categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 //Route::get('categories-all', [CategoryController::class, 'categoriesWithSubcategories'])->name('categories.categoriesWithSubcategories');
 //});
@@ -107,11 +110,11 @@ Route::delete('extras/{id}', [ExtraController::class, 'destroy'])->name('extras.
 //Rute za ExtraGroup
 
 //Route::middleware('auth:api')->group(function () {
-    Route::get('extra-groups', [ExtraGroupController::class, 'index'])->name('extra-groups.index');
-    Route::post('extra-groups', [ExtraGroupController::class, 'store'])->name('extra-groups.store');
-    Route::get('extra-groups/{id}', [ExtraGroupController::class, 'show'])->name('extra-groups.show');
-    Route::put('extra-groups/{id}', [ExtraGroupController::class, 'update'])->name('extra-groups.update');
-    Route::delete('extra-groups/{id}', [ExtraGroupController::class, 'destroy'])->name('extra-groups.destroy');
+Route::get('extra-groups', [ExtraGroupController::class, 'index'])->name('extra-groups.index');
+Route::post('extra-groups', [ExtraGroupController::class, 'store'])->name('extra-groups.store');
+Route::get('extra-groups/{id}', [ExtraGroupController::class, 'show'])->name('extra-groups.show');
+Route::put('extra-groups/{id}', [ExtraGroupController::class, 'update'])->name('extra-groups.update');
+Route::delete('extra-groups/{id}', [ExtraGroupController::class, 'destroy'])->name('extra-groups.destroy');
 //});
 
 //Rute za Language
