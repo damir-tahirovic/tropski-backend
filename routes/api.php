@@ -225,6 +225,8 @@ Route::post('order-places', [OrderPlaceController::class, 'store'])->name('order
 Route::get('order-places/{id}', [OrderPlaceController::class, 'show'])->name('order-places.show');
 Route::put('order-places/{id}', [OrderPlaceController::class, 'update'])->name('order-places.update');
 Route::delete('order-places/{id}', [OrderPlaceController::class, 'destroy'])->name('order-places.destroy');
+
+Route::get('order-places/{id}/qr-code', [OrderPlaceController::class, 'generateQrCode'])->name('order-places.qr-code');
 //});
 
 //Rute za Order

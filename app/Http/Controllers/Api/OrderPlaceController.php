@@ -9,6 +9,7 @@ use App\Models\OrderPlace;
 use App\Models\Hotel;
 use App\Models\MainCategory;
 use Illuminate\Http\Response;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class OrderPlaceController extends Controller
 {
@@ -90,6 +91,21 @@ class OrderPlaceController extends Controller
         } catch (Exception $e) {
             return response()->json([$e->getMessage()], 400);
         }
+    }
+
+    public function generateQrCode($id)
+    {
+        // Generate a random password
+        $password = bin2hex(random_bytes(10));
+        $url = url("/?order_place_id={$id}&password={$password}");
+
+        // Generate the QR code
+        $qrCode = QrCode::format('png')->size(300)->generate($url);
+
+        // Convert the generated QR code to base64
+        $base64QrCode = base64_encode($qrCode);
+        return response()->json(['qr_code' => $base64QrCode,
+            'url' => $url,]);
     }
 
     /**

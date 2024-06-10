@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hotel;
 use App\Models\HotelUser;
+use App\Models\Role;
 use App\Models\RoleHotelUser;
 use Exception;
 use Illuminate\Http\Request;
@@ -43,9 +45,6 @@ class UserController extends Controller
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $role = DB::table('roles')->where('id', $request->input('role_id'))->first();
-            if ($role->name == 'Admin') {
-                $input['superadmin'] = 1;
-            }
             $user = User::create($input);
             $hotelUser = HotelUser::create([
                 'hotel_id' => $request->input('hotel_id'),
@@ -156,7 +155,7 @@ class UserController extends Controller
 
             $user->save();
 
-            return response()->json(['message' => 'User updated successfully']);
+            return response()->json(['message' => 'User updated successfully'], 200);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }

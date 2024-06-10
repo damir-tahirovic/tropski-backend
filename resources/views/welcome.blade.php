@@ -126,7 +126,28 @@
                         Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                     </div>
                 </div>
+                <div>
+                </div>
             </div>
         </div>
     </body>
 </html>
+
+{{--    <!doctype html>--}}
+{{--<html lang="en">--}}
+{{--<head>--}}
+{{--    <meta charset="UTF-8">--}}
+{{--    <meta name="viewport"--}}
+{{--          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">--}}
+{{--    <meta http-equiv="X-UA-Compatible" content="ie=edge">--}}
+{{--    <title>Document</title>--}}
+{{--</head>--}}
+{{--<body>--}}
+{{--    <div>--}}
+{{--        <?php--}}
+{{--        $password = bin2hex(random_bytes(10));--}}
+{{--        ?>--}}
+{{--        {{SimpleSoftwareIO\QrCode\Facades\QrCode::size(300)->generate('https://www.youtube.com/?v='.$password)}}--}}
+{{--    </div>--}}
+{{--</body>--}}
+{{--</html>--}}
