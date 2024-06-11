@@ -82,7 +82,6 @@ class OrderPlaceController extends Controller
                 'hotel_id' => 'required',
                 'main_cat_id' => 'required',
                 'name' => 'required|max:255',
-                'code' => 'required'
             ]);
             $hotel_id = Hotel::findOrFail($validated['hotel_id']);
             $main_cat_id = MainCategory::findOrFail($validated['main_cat_id']);
@@ -99,11 +98,14 @@ class OrderPlaceController extends Controller
         $password = bin2hex(random_bytes(10));
         $url = url("/?order_place_id={$id}&password={$password}");
 
-        // Generate the QR code
         $qrCode = QrCode::format('png')->size(300)->generate($url);
 
-        // Convert the generated QR code to base64
         $base64QrCode = base64_encode($qrCode);
+
+        $orderPlace = OrderPlace::findOrFail($id);
+
+        $orderPlace->update(['code' => $base64QrCode]);
+
         return response()->json(['qr_code' => $base64QrCode,
             'url' => $url,]);
     }

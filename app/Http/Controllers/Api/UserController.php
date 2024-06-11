@@ -24,6 +24,11 @@ class UserController extends Controller
      * @return User
      */
 
+//    public function __construct()
+//    {
+//        $this->middleware('auth:api');
+//    }
+
     public function createUser(Request $request)
     {
         //        try {
@@ -132,30 +137,60 @@ class UserController extends Controller
     function update(Request $request, $id)
     {
         try {
+            $currentUser = Auth::user();
+            $role = $currentUser->roles();
+            $role = $role[0]->name;
+            if ($currentUser->id != $id) {
+                if($role != 'Admin'){
+                    return response()->json(['message' => 'Unauthorized'], 401);
+                }else{
+                    $userToUpdate = User::findOrFail($id);
+                    $userToUpdateRole = $userToUpdate->roles();
+                    $userToUpdateRole = $userToUpdateRole[0]->name;
+                    if($role == 'Admin' && $userToUpdateRole == 'Admin'){
+                        return response()->json(['message' => 'Unauthorized. You cannot update another Admin'], 401);
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
+        try {
 
             $request->validate([
-                'hotel_id' => 'required',
-                'role_id' => 'required',
                 'username' => 'required|max:255|unique:users,username,' . $id,
                 'password' => 'required',
+                'role_id' => 'required',
+                'hotel_id' => 'required'
             ]);
 
             $user = User::findOrFail($id);
-            $hotel = Hotel::findOrFail($request->input('hotel_id'));
-            $role = Role::findOrFail($request->input('role_id'));
-            if (!Hash::check($request->input('old_password'), $user->password)) {
-                return response()->json(['message' => 'User with that password does not exist'], 400);
+            if ($role != 'Admin') {
+                if (!Hash::check($request->input('old_password'), $user->password)) {
+                    return response()->json(['message' => 'User with that password does not exist',
+                        'role' => $role], 400);
+                }
+                $user->username = $request->input('username');
+                $user->password = Hash::make($request->input('password'));
+                $user->save();
+                return response()->json(['message' => 'User updated successfully'], 200);
             }
 
-
-            $user->hotel_id = $request->input('hotel_id');
-            $user->role_id = $request->input('role_id');
+            $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $user->username = $request->input('username');
             $user->password = Hash::make($request->input('password'));
 
+            $hotelUser = HotelUser::where('user_id', $id)->first();
+            $roleHotelUser = RoleHotelUser::where('hotel_user_id', $hotelUser->id)->first();
+            $roleHotelUser->update(['role_id' => $request->input('role_id')]);
+            $hotelUser->update(['hotel_id' => $request->input('hotel_id')]);
+
+            $roleHotelUser->save();
+            $hotelUser->save();
             $user->save();
 
             return response()->json(['message' => 'User updated successfully'], 200);
+
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 400);
         }
@@ -228,7 +263,7 @@ class UserController extends Controller
 
 
     public
-    function userRole($id)
+    function show($id)
     {
         //        try {
 //            $this->authorize('viewAny', User::class);
@@ -236,8 +271,9 @@ class UserController extends Controller
 //            return response()->json($e->getMessage(), 401);
         try {
             $user = User::findOrFail($id);
-            $data = $user->roles();
-            return response()->json(['roles' => $data], 200);
+            $roles = $user->roles();
+            return response()->json(['user' => $user,
+                'roles' => $roles], 200);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

@@ -37,17 +37,19 @@ use App\Http\Controllers\Api\ItemTypeController;
 
 //Rute za UserController
 
-//Route::middleware('auth:api')->group(function () {
-Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
+Route::middleware('auth:api')->group(function () {
+
 Route::post('/logout', [UserController::class, 'logoutUser'])->name('logout-user');
 Route::get('users', [UserController::class, 'index'])->name('users.index');
+Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
 
-Route::get('users/{id}', [UserController::class, 'userRole'])->name('users.user-role');
+});
+
+Route::get('users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::get('users-hotel/{id}', [UserController::class, 'usersByHotel'])->name('users.users-by-hotel');
-
-//});
+Route::post('/register', [UserController::class, 'createUser'])->name('create-user');
 Route::post('/login', [UserController::class, 'loginUser'])->name('login-user');
-Route::post('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {

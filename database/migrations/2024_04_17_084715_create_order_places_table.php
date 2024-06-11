@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('order_places', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code');
+            $table->text('code')->nullable();
             $table->boolean('reported')->default(false);
             $table->unsignedBigInteger('hotel_id');
             $table->unsignedBigInteger('main_cat_id');
