@@ -164,8 +164,18 @@ class CategoryController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $category = Category::findOrFail($id);
-            $category->getMedia();
+            $category = Category::with([
+                'media',
+                'media',
+                'items.media',
+                'items.itemTrans',
+                'items.itemTrans.languages',
+                'items.itemTypes',
+                'items.itemTypes.itemTypeTrans',
+                'items.itemTypes.itemTypeTrans.languages',
+                'categoryTrans',
+                'categoryTrans.languages',
+            ])->findOrFail($id);
             return response()->json(['category' => $category]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());

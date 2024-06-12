@@ -141,13 +141,13 @@ class UserController extends Controller
             $role = $currentUser->roles();
             $role = $role[0]->name;
             if ($currentUser->id != $id) {
-                if($role != 'Admin'){
+                if ($role != 'Admin') {
                     return response()->json(['message' => 'Unauthorized'], 401);
-                }else{
+                } else {
                     $userToUpdate = User::findOrFail($id);
                     $userToUpdateRole = $userToUpdate->roles();
                     $userToUpdateRole = $userToUpdateRole[0]->name;
-                    if($role == 'Admin' && $userToUpdateRole == 'Admin'){
+                    if ($role == 'Admin' && $userToUpdateRole == 'Admin') {
                         return response()->json(['message' => 'Unauthorized. You cannot update another Admin'], 401);
                     }
                 }
@@ -159,26 +159,29 @@ class UserController extends Controller
 
             $request->validate([
                 'username' => 'required|max:255|unique:users,username,' . $id,
-                'password' => 'required',
                 'role_id' => 'required',
                 'hotel_id' => 'required'
             ]);
 
             $user = User::findOrFail($id);
             if ($role != 'Admin') {
-                if (!Hash::check($request->input('old_password'), $user->password)) {
-                    return response()->json(['message' => 'User with that password does not exist',
-                        'role' => $role], 400);
+                if ($request->has('old_password') && $request->has('password')) {
+                    if (!Hash::check($request->input('old_password'), $user->password)) {
+                        return response()->json(['message' => 'User with that password does not exist',
+                            'role' => $role], 400);
+                    }
+                    $user->password = Hash::make($request->input('password'));
                 }
                 $user->username = $request->input('username');
-                $user->password = Hash::make($request->input('password'));
                 $user->save();
                 return response()->json(['message' => 'User updated successfully'], 200);
             }
 
+            if ($request->has('password')){
+            $user->password = Hash::make($request->input('password'));
+        }
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $user->username = $request->input('username');
-            $user->password = Hash::make($request->input('password'));
 
             $hotelUser = HotelUser::where('user_id', $id)->first();
             $roleHotelUser = RoleHotelUser::where('hotel_user_id', $hotelUser->id)->first();

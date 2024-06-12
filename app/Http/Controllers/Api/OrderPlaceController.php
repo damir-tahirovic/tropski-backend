@@ -94,9 +94,8 @@ class OrderPlaceController extends Controller
 
     public function generateQrCode($id)
     {
-        // Generate a random password
-        $password = bin2hex(random_bytes(10));
-        $url = url("/?order_place_id={$id}&password={$password}");
+        $code = bin2hex(random_bytes(20));
+        $url = url("/?order_place_id={$id}&code={$code}");
 
         $qrCode = QrCode::format('png')->size(300)->generate($url);
 
@@ -107,7 +106,8 @@ class OrderPlaceController extends Controller
         $orderPlace->update(['code' => $base64QrCode]);
 
         return response()->json(['qr_code' => $base64QrCode,
-            'url' => $url,]);
+            'url' => $url,
+            'code' => $code,]);
     }
 
     /**

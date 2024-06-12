@@ -139,21 +139,23 @@ class ItemController extends Controller
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
 //        }
+
         try {
 
             $validated = $request->validate([
                 'category_id' => 'required',
                 'code' => 'required',
+                'extra_group_id' => 'nullable',
                 'types' => 'required',
                 'trans' => 'required',
-                'trans.*.description' => 'required',
+//                'trans.*.description' => 'required',
                 'trans.*.name' => 'required',
                 'types.*.price' => 'required',
                 'types.*.quantity' => 'required',
                 'types.*.unit' => 'required',
 //                'image' => 'required',
-                'extra_group_id' => 'nullable',
             ]);
+
             $category = Category::findOrFail($request->input('category_id'));
             $item = Item::create($request->all());
             if ($request->hasFile('image')) {
@@ -165,6 +167,9 @@ class ItemController extends Controller
             $types = json_decode($request->input('types'), true);
             $trans = json_decode($request->input('trans'), true);
 
+//            $types = $request->input('types');
+//            $trans = $request->input('trans');
+
             if (count($types) == 1) {
                 $itemType = ItemType::create([
                     'item_id' => $item->id,
@@ -172,6 +177,7 @@ class ItemController extends Controller
                     'unit' => $types[0]['unit'],
                     'price' => $types[0]['price'],
                 ]);
+//                return response()->json(['category' => $category], 430);
                 foreach ($trans as $tran) {
                     $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
                     ItemTran::create([

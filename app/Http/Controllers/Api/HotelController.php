@@ -8,6 +8,7 @@ use App\Models\HotelLanguage;
 use App\Models\Language;
 use Exception;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 class HotelController extends Controller
@@ -135,10 +136,11 @@ class HotelController extends Controller
 
     public function index()
     {
-        //        try {
+//        try {
 //            $this->authorize('view', Hotel::class);
 //        } catch (Exception $e) {
-//            return response()->json($e->getMessage(), 401);
+//            return response()->json($e->getMessage(), 409);
+//        }
         try {
             $hotels = Hotel::all();
             $hotels->load('media');
@@ -217,17 +219,17 @@ class HotelController extends Controller
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->addMedia($image)->toMediaCollection('images');
                 $hotel->getMedia();
             }
             if ($request->hasFile('banner_image')) {
                 $image = $request->file('banner_image');
-                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->addMedia($image)->toMediaCollection('banners');
                 $hotel->getMedia();
             }
             if ($request->hasFile('logo')) {
                 $image = $request->file('logo');
-                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->addMedia($image)->toMediaCollection('logos');
                 $hotel->getMedia();
             }
 
@@ -338,14 +340,71 @@ class HotelController extends Controller
 //            return response()->json($e->getMessage(), 401);
         try {
             $hotel = Hotel::findOrFail($id);
+
+            $oldLangs = HotelLanguage::where('hotel_id', $hotel->id)->pluck('lang_id')->toArray();
+
+            $newLangs = collect(json_decode($request->input('languages'), true))->pluck('code')->toArray();
+
             $validated = $request->validate([
                 "name" => "required|max:255",
                 "description" => "nullable",
+                "primary_color" => "required",
+                "primary_color_light" => "required",
+                "primary_color_dark" => "required",
+                "secondary_color" => "required",
+                "secondary_color_light" => "required",
+                "secondary_color_dark" => "required",
+                "banner_text" => "nullable",
+                "image" => "nullable",
+                "banner_image" => "nullable",
+                "logo" => "nullable",
+                'languages' => 'required'
             ]);
+
             $hotel->update($validated);
-            return response()->json(["data" => $hotel]);
+
+            if ($request->hasFile('image')) {
+                $hotel->getMedia('images')->first()->delete();
+                $image = $request->file('image');
+                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->getMedia();
+            }
+            if ($request->hasFile('banner_image')) {
+                $hotel->getMedia('banners')->first()->delete();
+                $image = $request->file('banner_image');
+                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->getMedia();
+            }
+            if ($request->hasFile('logo')) {
+                $hotel->getMedia('logos')->first()->delete();
+                $image = $request->file('logo');
+                $hotel->addMedia($image)->toMediaCollection();
+                $hotel->getMedia();
+            }
+
+            $newLangsIds = Language::whereIn('code', $newLangs)->pluck('id')->toArray();
+
+            foreach ($oldLangs as $oldLangId) {
+                if (!in_array($oldLangId, $newLangsIds)) {
+                    HotelLanguage::where('hotel_id', $hotel->id)
+                        ->where('lang_id', $oldLangId)
+                        ->delete();
+                }
+            }
+
+            foreach ($newLangsIds as $newLangId) {
+                if (!in_array($newLangId, $oldLangs)) {
+                    HotelLanguage::create([
+                        'hotel_id' => $hotel->id,
+                        'lang_id' => $newLangId
+                    ]);
+                }
+            }
+
+
+            return response()->json(['hotel' => $hotel], 200);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 
