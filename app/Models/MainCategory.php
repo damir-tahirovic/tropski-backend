@@ -11,12 +11,17 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @OA\Schema(
  *     schema="MainCategory",
- *     required={"hotel_id"},
+ *     required={"name", "hotel_id"},
  *     @OA\Property(
  *         property="hotel_id",
  *         type="integer",
- *         description="The ID of the hotel"
- *     )
+ *         description="The ID of the hotel that the main category belongs to"
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="The name of the main category"
+ *     ),
  * )
  */
 class MainCategory extends Model implements HasMedia

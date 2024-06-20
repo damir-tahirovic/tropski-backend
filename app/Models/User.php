@@ -58,8 +58,9 @@ class User extends Authenticatable
             ->join('hotel_users', 'users.id', '=', 'hotel_users.user_id')
             ->join('role_hotel_users', 'hotel_users.id', '=', 'role_hotel_users.hotel_user_id')
             ->join('roles', 'role_hotel_users.role_id', '=', 'roles.id')
+            ->join('hotels', 'hotel_users.hotel_id', '=', 'hotels.id')
             ->where('users.id', "=", $this->id)
-            ->select('roles.name', 'roles.id')
+            ->select('roles.name', 'roles.id', 'hotel_users.hotel_id')
             ->get();
         return $roles;
     }

@@ -10,17 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @OA\Schema(
  *     schema="Category",
- *     required={"name_en", "name_me", "main_cat_id"},
- *     @OA\Property(
- *         property="name_en",
- *         type="string",
- *         description="The English name of the category"
- *     ),
- *     @OA\Property(
- *         property="name_me",
- *         type="string",
- *         description="The Montenegrin name of the category"
- *     ),
+ *     required={"trans", "main_cat_id"},
  *     @OA\Property(
  *         property="main_cat_id",
  *         type="integer",

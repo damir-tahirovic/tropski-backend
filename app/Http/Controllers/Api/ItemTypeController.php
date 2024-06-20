@@ -150,50 +150,6 @@ class ItemTypeController extends Controller
         }
     }
 
-
-//    public function storeWithLatestItem(Request $request)
-//    {
-//        //        try {
-////            $this->authorize('create', ItemType::class);
-////        } catch (Exception $e) {
-////            return response()->json($e->getMessage(), 401);
-////        }
-//        try {
-//            $validated = $request->validate([
-//                'quantity' => 'required',
-//                'unit' => 'required|max:255',
-//                'price' => 'required',
-//                'name_en' => 'required',
-//                'name_me' => 'required'
-//            ]);
-//
-//            $item = Item::latest()->first();
-//            $itemType = ItemType::create(['item_id' => $item->id,
-//                $validated]);
-//
-//            //Prevod za engleski jezik
-//            $itemTypeTran1 = ItemTypeTran::create([
-//                'item_type_id' => $itemType->id,
-//                'name' => $validated['name_en'],
-//                'lang_id' => '2'
-//            ]);
-//
-//            //Prevod za crnogorski jezik
-//            $itemTypeTran2 = ItemTypeTran::create([
-//                'item_type_id' => $itemType->id,
-//                'name' => $validated['name_me'],
-//                'lang_id' => '1'
-//            ]);
-//
-//            return response()->json(['itemTypes' => $itemType,
-//                'itemTypeTran1' => $itemTypeTran1,
-//                'itemTypeTran2' => $itemTypeTran2], 201);
-//        } catch (Exception $e) {
-//            return response()->json($e->getMessage(), 400);
-//        }
-//    }
-
-
     /**
      * @OA\Get(
      *     path="/api/item-types/{id}",

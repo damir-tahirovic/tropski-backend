@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExtraGroup;
+use App\Models\ExtraGroupExtraPivot;
 use App\Models\Hotel;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,9 +15,9 @@ class ExtraGroupController extends Controller
      * @OA\Get(
      *     path="/api/extra-groups",
      *     tags={"ExtraGroup"},
-     *     summary="Finds all Extra groups",
+     *     summary="Finds all extra groups",
      *     description="Multiple status values can be provided with comma separated string",
-     *     operationId="extra-groups.index",
+     *     operationId="extraGroups.index",
      *     @OA\Parameter(
      *         name="status",
      *         in="query",
@@ -59,18 +60,36 @@ class ExtraGroupController extends Controller
      *     path="/api/extra-groups",
      *     tags={"ExtraGroup"},
      *     summary="Create a new extra group",
-     *     operationId="extra-groups.store",
+     *     description="Create a new extra group",
+     *     operationId="extraGroups.store",
      *     @OA\RequestBody(
-     *         description="Extra group data",
+     *         description="ExtraGroup object that needs to be added",
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *             @OA\Schema(ref="#/components/schemas/ExtraGroup")
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="hotel_id",
+     *                     description="The ID of the hotel",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="The name of the extra group",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                      property="extras",
+     *                      description="Extras to add to the extra group",
+     *                      type="string"
+     *                  )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
-     *         description="Extra group created successfully"
+     *         response=200,
+     *         description="ExtraGroup created successfully"
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -89,9 +108,20 @@ class ExtraGroupController extends Controller
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
                 'hotel_id' => 'required',
-                'name' => 'required|max:255'
+                'name' => 'required|max:255',
+                'extras' => 'nullable',
             ]);
             $extraGroup = ExtraGroup::create($request->all());
+            $extras = $request->input('extras');
+            foreach ($extras as $extra) {
+                $extraGroupExtraPivot = ExtraGroupExtraPivot::create([
+                    'extra_group_id' => $extraGroup->id,
+                    'extra_id' => $extra['extra_id'],
+                    'price' => $extra['price'],
+                    'unit' => $extra['unit'],
+                    'quantity' => $extra['quantity'],
+                ]);
+            }
             return response()->json(['data' => $extraGroup], '201');
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -104,7 +134,7 @@ class ExtraGroupController extends Controller
      *     tags={"ExtraGroup"},
      *     summary="Find extra group by ID",
      *     description="Returns a single extra group",
-     *     operationId="extra-groups.show",
+     *     operationId="extraGroups.show",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -147,13 +177,25 @@ class ExtraGroupController extends Controller
      *     tags={"ExtraGroup"},
      *     summary="Update an existing extra group",
      *     description="",
-     *     operationId="extra-groups.update",
+     *     operationId="extraGroups.update",
      *     @OA\RequestBody(
-     *         description="Extra group object that needs to be updated",
+     *         description="ExtraGroup object that needs to be updated",
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *             @OA\Schema(ref="#/components/schemas/ExtraGroup")
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="hotel_id",
+     *                     description="The ID of the hotel",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="The name of the extra group",
+     *                     type="string"
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -201,7 +243,7 @@ class ExtraGroupController extends Controller
      *     tags={"ExtraGroup"},
      *     summary="Deletes an extra group",
      *     description="",
-     *     operationId="extra-groups.destroy",
+     *     operationId="extraGroups.destroy",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

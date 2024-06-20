@@ -22,19 +22,42 @@ class MainCategoryController extends Controller
      * @OA\Post(
      *     path="/api/main-categories",
      *     tags={"MainCategory"},
-     *     summary="Create a new main category",
-     *     operationId="main-categories.store",
+     *     summary="Create a new main category with an image",
+     *     description="Create a new main category with an image",
+     *     operationId="mainCategories.store",
      *     @OA\RequestBody(
-     *         description="Main category data",
+     *         description="MainCategory object that needs to be added",
      *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="hotel_id",
+     *                     description="The ID of the hotel",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the main category",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                  @OA\Property(
+     *                      property="trans",
+     *                      description="name translations",
+     *                      type="string"
+     *                  )
+     *             )
+     *         ),
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref="#/components/schemas/MainCategory")
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
-     *         description="Main category created successfully"
+     *         response=200,
+     *         description="MainCategory created successfully"
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -42,7 +65,6 @@ class MainCategoryController extends Controller
      *     )
      * )
      */
-
     public function store(Request $request)
     {
 //                try {
@@ -204,12 +226,34 @@ class MainCategoryController extends Controller
      * @OA\Put(
      *     path="/api/main-categories/{id}",
      *     tags={"MainCategory"},
-     *     summary="Update an existing main category",
-     *     description="",
-     *     operationId="main-categories.update",
+     *     summary="Update an existing main category with an image",
+     *     description="Update an existing main category with an image",
+     *     operationId="mainCategories.update",
      *     @OA\RequestBody(
-     *         description="Main category object that needs to be updated",
+     *         description="MainCategory object that needs to be updated",
      *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="hotel_id",
+     *                     description="The ID of the hotel",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the main category",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                  @OA\Property(
+     *                      property="trans",
+     *                      description="name translations",
+     *                      type="string"
+     *                  )
+     *             )
+     *         ),
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref="#/components/schemas/MainCategory")
@@ -217,23 +261,14 @@ class MainCategoryController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="successful operation"
+     *         description="MainCategory updated successfully"
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid ID supplied"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Main category not found"
-     *     ),
-     *     @OA\Response(
-     *         response=405,
-     *         description="Validation exception"
+     *         description="Invalid input"
      *     )
      * )
      */
-
     public function update(Request $request, $id)
     {
 //                try {

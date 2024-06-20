@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('lang_id');
-            $table->foreign('lang_id')->references('id')->on('languages');
-            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('lang_id')->references('id')->on('languages')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->timestamps();
         });
     }

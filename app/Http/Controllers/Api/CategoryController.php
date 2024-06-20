@@ -67,18 +67,41 @@ class CategoryController extends Controller
      * @OA\Post(
      *     path="/api/categories",
      *     tags={"Category"},
-     *     summary="Create a new category",
+     *     summary="Create a new category with an image",
+     *     description="Create a new category with an image",
      *     operationId="categories.store",
      *     @OA\RequestBody(
-     *         description="Category data",
+     *         description="Category object that needs to be added",
      *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="main_cat_id",
+     *                     description="The ID of the main category",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the category",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                  @OA\Property(
+     *                      property="trans",
+     *                      description="name translations",
+     *                      type="string"
+     *                  )
+     *             )
+     *         ),
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref="#/components/schemas/Category")
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Category created successfully"
      *     ),
      *     @OA\Response(
@@ -87,7 +110,6 @@ class CategoryController extends Controller
      *     )
      * )
      */
-
     public function store(Request $request)
     {
         //        try {
@@ -193,6 +215,28 @@ class CategoryController extends Controller
      *         description="Category object that needs to be added to the store",
      *         required=true,
      *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="main_cat_id",
+     *                     description="The ID of the main category",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the category",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                  @OA\Property(
+     *                      property="trans",
+     *                      description="name translations",
+     *                      type="string"
+     *                  )
+     *             )
+     *         ),
+     *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref="#/components/schemas/Category")
      *         )
@@ -223,10 +267,11 @@ class CategoryController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $data = json_decode($request->getContent(), true);
+
+            $trans = json_decode($request->input('trans'), true);
 
             $validated = $request->validate([
-//                'image' => 'required',
+                'image' => 'required',
                 'main_cat_id' => 'required'
             ]);
             $category = Category::findOrFail($id);
@@ -243,7 +288,7 @@ class CategoryController extends Controller
                 $category->getMedia();
             }
 
-            foreach ($data['trans'] as $tran) {
+            foreach ($trans as $tran) {
                 $language = Language::where('code', $tran['lang_code'])->first();
                 $categoryTran = CategoryTran::where('category_id', $category->id)->where('lang_id', $language->id)->first();
                 if ($categoryTran) {

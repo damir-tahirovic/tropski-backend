@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('unit');
             $table->double('price');
             $table->unsignedBigInteger('item_id');
-            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('order_item_id');
             $table->unsignedBigInteger('extra_id');
-            $table->foreign('order_item_id')->references('id')->on('order_items');
-            $table->foreign('extra_id')->references('id')->on('extras');
+            $table->foreign('order_item_id')->references('id')->on('order_items')->onDelete('cascade');
+            $table->foreign('extra_id')->references('id')->on('extras')->onDelete('cascade');
             $table->timestamps();
         });
     }

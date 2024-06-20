@@ -51,12 +51,33 @@
                 "tags": [
                     "Category"
                 ],
-                "summary": "Create a new category",
+                "summary": "Create a new category with an image",
+                "description": "Create a new category with an image",
                 "operationId": "categories.store",
                 "requestBody": {
-                    "description": "Category data",
+                    "description": "Category object that needs to be added",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "main_cat_id": {
+                                        "description": "The ID of the main category",
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "description": "The image for the category",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "trans": {
+                                        "description": "name translations",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Category"
@@ -65,7 +86,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Category created successfully"
                     },
                     "400": {
@@ -116,6 +137,26 @@
                     "description": "Category object that needs to be added to the store",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "main_cat_id": {
+                                        "description": "The ID of the main category",
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "description": "The image for the category",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "trans": {
+                                        "description": "name translations",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Category"
@@ -330,7 +371,7 @@
                 "tags": [
                     "Extra"
                 ],
-                "summary": "Finds all Extras",
+                "summary": "Finds all extras",
                 "description": "Multiple status values can be provided with comma separated string",
                 "operationId": "extras.index",
                 "parameters": [
@@ -363,12 +404,33 @@
                 "tags": [
                     "Extra"
                 ],
-                "summary": "Create a new extra",
+                "summary": "Create a new extra with an image",
+                "description": "Create a new extra with an image",
                 "operationId": "extras.store",
                 "requestBody": {
-                    "description": "Extra data",
+                    "description": "Extra object that needs to be added",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "hotel_id": {
+                                        "description": "The ID of the hotel",
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "description": "The image for the extra",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "trans": {
+                                        "description": "name translations",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Extra"
@@ -377,7 +439,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Extra created successfully"
                     },
                     "400": {
@@ -425,9 +487,29 @@
                 "description": "",
                 "operationId": "extras.update",
                 "requestBody": {
-                    "description": "Extra object that needs to be updated",
+                    "description": "Extra object that needs to be added to the store",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "hotel_id": {
+                                        "description": "The ID of the hotel",
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "description": "The image for the extra",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "trans": {
+                                        "description": "name translations",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Extra"
@@ -486,9 +568,9 @@
                 "tags": [
                     "ExtraGroup"
                 ],
-                "summary": "Finds all Extra groups",
+                "summary": "Finds all extra groups",
                 "description": "Multiple status values can be provided with comma separated string",
-                "operationId": "extra-groups.index",
+                "operationId": "extraGroups.index",
                 "parameters": [
                     {
                         "name": "status",
@@ -520,21 +602,36 @@
                     "ExtraGroup"
                 ],
                 "summary": "Create a new extra group",
-                "operationId": "extra-groups.store",
+                "description": "Create a new extra group",
+                "operationId": "extraGroups.store",
                 "requestBody": {
-                    "description": "Extra group data",
+                    "description": "ExtraGroup object that needs to be added",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ExtraGroup"
+                                "properties": {
+                                    "hotel_id": {
+                                        "description": "The ID of the hotel",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "The name of the extra group",
+                                        "type": "string"
+                                    },
+                                    "extras": {
+                                        "description": "Extras to add to the extra group",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Extra group created successfully"
+                    "200": {
+                        "description": "ExtraGroup created successfully"
                     },
                     "400": {
                         "description": "Invalid input"
@@ -549,7 +646,7 @@
                 ],
                 "summary": "Find extra group by ID",
                 "description": "Returns a single extra group",
-                "operationId": "extra-groups.show",
+                "operationId": "extraGroups.show",
                 "parameters": [
                     {
                         "name": "id",
@@ -579,14 +676,24 @@
                 ],
                 "summary": "Update an existing extra group",
                 "description": "",
-                "operationId": "extra-groups.update",
+                "operationId": "extraGroups.update",
                 "requestBody": {
-                    "description": "Extra group object that needs to be updated",
+                    "description": "ExtraGroup object that needs to be updated",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ExtraGroup"
+                                "properties": {
+                                    "hotel_id": {
+                                        "description": "The ID of the hotel",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "The name of the extra group",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -612,7 +719,7 @@
                 ],
                 "summary": "Deletes an extra group",
                 "description": "",
-                "operationId": "extra-groups.destroy",
+                "operationId": "extraGroups.destroy",
                 "parameters": [
                     {
                         "name": "id",
@@ -955,28 +1062,21 @@
                     "Hotel"
                 ],
                 "summary": "Finds all hotels with its main categories",
-                "description": "Multiple status values can be provided with comma separated string",
+                "description": "Returns all hotels with their main categories",
                 "operationId": "hotels.allHotelsWithMainCategories",
-                "parameters": [
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Status values that needed to be considered for filter",
-                        "required": true,
-                        "explode": true,
-                        "schema": {
-                            "type": "string",
-                            "default": "active",
-                            "enum": [
-                                "active",
-                                "inactive"
-                            ]
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "successful operation"
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Hotel"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid status value"
@@ -990,31 +1090,36 @@
                     "Hotel"
                 ],
                 "summary": "Finds hotel with its main categories",
-                "description": "Multiple status values can be provided with comma separated string",
+                "description": "Returns a single hotel with its main categories",
                 "operationId": "hotels.hotelsWithMainCategories",
                 "parameters": [
                     {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Status values that needed to be considered for filter",
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of hotel to return",
                         "required": true,
-                        "explode": true,
                         "schema": {
-                            "type": "string",
-                            "default": "active",
-                            "enum": [
-                                "active",
-                                "inactive"
-                            ]
+                            "type": "integer",
+                            "format": "int64"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation"
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hotel"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid status value"
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Hotel not found"
                     }
                 }
             }
@@ -1025,28 +1130,21 @@
                     "Hotel"
                 ],
                 "summary": "Finds all hotels",
-                "description": "Multiple status values can be provided with comma separated string",
+                "description": "Returns all hotels",
                 "operationId": "hotels.index",
-                "parameters": [
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Status values that needed to be considered for filter",
-                        "required": true,
-                        "explode": true,
-                        "schema": {
-                            "type": "string",
-                            "default": "active",
-                            "enum": [
-                                "active",
-                                "inactive"
-                            ]
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "successful operation"
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Hotel"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid status value"
@@ -1057,13 +1155,75 @@
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "Create a new hotel",
-                "description": "Create a new hotel with the provided data",
-                "operationId": "createHotel",
+                "summary": "Create a new hotel with an image",
+                "description": "Create a new hotel with an image",
+                "operationId": "hotels.store",
                 "requestBody": {
-                    "description": "Hotel data",
+                    "description": "Hotel object that needs to be added",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of the hotel",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Description of the hotel",
+                                        "type": "string"
+                                    },
+                                    "primary_color": {
+                                        "description": "The primary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "primary_color_light": {
+                                        "description": "The primary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "primary_color_dark": {
+                                        "description": "The primary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "secondary_color": {
+                                        "description": "The secondary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "secondary_color_light": {
+                                        "description": "The secondary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "secondary_color_dark": {
+                                        "description": "The secondary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "banner_text": {
+                                        "description": "banner_text of the hotel",
+                                        "type": "string"
+                                    },
+                                    "languages": {
+                                        "description": "languages of the hotel",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The image for the hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "logo": {
+                                        "description": "The logo for the hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "banner_image": {
+                                        "description": "The banner for the hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Hotel"
@@ -1072,11 +1232,39 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Hotel created successfully"
                     },
                     "400": {
                         "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/api/hotels-languages": {
+            "get": {
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Finds all hotels with its languages",
+                "description": "Returns all hotels with their languages",
+                "operationId": "hotels.allHotelsWithLanguages",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Hotel"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value"
                     }
                 }
             }
@@ -1103,7 +1291,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation"
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hotel"
+                                }
+                            }
+                        }
                     },
                     "400": {
                         "description": "Invalid ID supplied"
@@ -1117,8 +1312,8 @@
                 "tags": [
                     "Hotel"
                 ],
-                "summary": "Updates a hotel with new data",
-                "description": "Updates a hotel with new data",
+                "summary": "Update an existing hotel",
+                "description": "Update an existing hotel",
                 "operationId": "updateHotel",
                 "parameters": [
                     {
@@ -1133,9 +1328,71 @@
                     }
                 ],
                 "requestBody": {
-                    "description": "Updated hotel data",
+                    "description": "Hotel object that needs to be updated",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of the hotel",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Description of the hotel",
+                                        "type": "string"
+                                    },
+                                    "primary_color": {
+                                        "description": "The primary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "primary_color_light": {
+                                        "description": "The primary light color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "primary_color_dark": {
+                                        "description": "The primary dark color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "secondary_color": {
+                                        "description": "The secondary color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "secondary_color_light": {
+                                        "description": "The secondary light color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "secondary_color_dark": {
+                                        "description": "The secondary dark color of the hotel",
+                                        "type": "string"
+                                    },
+                                    "banner_text": {
+                                        "description": "The banner text of the hotel",
+                                        "type": "string"
+                                    },
+                                    "languages": {
+                                        "description": "The languages of the hotel",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The image for the hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "logo": {
+                                        "description": "The logo for the hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "banner_image": {
+                                        "description": "The banner image for the hotel",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/Hotel"
@@ -1148,7 +1405,7 @@
                         "description": "Hotel updated successfully"
                     },
                     "400": {
-                        "description": "Invalid input"
+                        "description": "Invalid ID supplied"
                     },
                     "404": {
                         "description": "Hotel not found"
@@ -2180,12 +2437,33 @@
                 "tags": [
                     "MainCategory"
                 ],
-                "summary": "Create a new main category",
-                "operationId": "main-categories.store",
+                "summary": "Create a new main category with an image",
+                "description": "Create a new main category with an image",
+                "operationId": "mainCategories.store",
                 "requestBody": {
-                    "description": "Main category data",
+                    "description": "MainCategory object that needs to be added",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "hotel_id": {
+                                        "description": "The ID of the hotel",
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "description": "The image for the main category",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "trans": {
+                                        "description": "name translations",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/MainCategory"
@@ -2194,8 +2472,8 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Main category created successfully"
+                    "200": {
+                        "description": "MainCategory created successfully"
                     },
                     "400": {
                         "description": "Invalid input"
@@ -2236,13 +2514,33 @@
                 "tags": [
                     "MainCategory"
                 ],
-                "summary": "Update an existing main category",
-                "description": "",
-                "operationId": "main-categories.update",
+                "summary": "Update an existing main category with an image",
+                "description": "Update an existing main category with an image",
+                "operationId": "mainCategories.update",
                 "requestBody": {
-                    "description": "Main category object that needs to be updated",
+                    "description": "MainCategory object that needs to be updated",
                     "required": true,
                     "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "hotel_id": {
+                                        "description": "The ID of the hotel",
+                                        "type": "integer"
+                                    },
+                                    "image": {
+                                        "description": "The image for the main category",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "trans": {
+                                        "description": "name translations",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/MainCategory"
@@ -2252,16 +2550,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successful operation"
+                        "description": "MainCategory updated successfully"
                     },
                     "400": {
-                        "description": "Invalid ID supplied"
-                    },
-                    "404": {
-                        "description": "Main category not found"
-                    },
-                    "405": {
-                        "description": "Validation exception"
+                        "description": "Invalid input"
                     }
                 }
             },
@@ -2967,19 +3259,10 @@
         "schemas": {
             "Category": {
                 "required": [
-                    "name_en",
-                    "name_me",
+                    "trans",
                     "main_cat_id"
                 ],
                 "properties": {
-                    "name_en": {
-                        "description": "The English name of the category",
-                        "type": "string"
-                    },
-                    "name_me": {
-                        "description": "The Montenegrin name of the category",
-                        "type": "string"
-                    },
                     "main_cat_id": {
                         "description": "The ID of the main category",
                         "type": "integer"
@@ -3117,6 +3400,38 @@
                     "his_id": {
                         "description": "The HIS ID of the hotel",
                         "type": "integer"
+                    },
+                    "description": {
+                        "description": "The description of the hotel",
+                        "type": "string"
+                    },
+                    "primary_color": {
+                        "description": "The primary color of the hotel",
+                        "type": "string"
+                    },
+                    "primary_color_light": {
+                        "description": "The light variant of the primary color of the hotel",
+                        "type": "string"
+                    },
+                    "primary_color_dark": {
+                        "description": "The dark variant of the primary color of the hotel",
+                        "type": "string"
+                    },
+                    "secondary_color": {
+                        "description": "The secondary color of the hotel",
+                        "type": "string"
+                    },
+                    "secondary_color_light": {
+                        "description": "The light variant of the secondary color of the hotel",
+                        "type": "string"
+                    },
+                    "secondary_color_dark": {
+                        "description": "The dark variant of the secondary color of the hotel",
+                        "type": "string"
+                    },
+                    "banner_text": {
+                        "description": "The banner text of the hotel",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -3256,12 +3571,17 @@
             },
             "MainCategory": {
                 "required": [
+                    "name",
                     "hotel_id"
                 ],
                 "properties": {
                     "hotel_id": {
-                        "description": "The ID of the hotel",
+                        "description": "The ID of the hotel that the main category belongs to",
                         "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the main category",
+                        "type": "string"
                     }
                 },
                 "type": "object"

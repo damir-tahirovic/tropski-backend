@@ -156,6 +156,8 @@ class ItemController extends Controller
 //                'image' => 'required',
             ]);
 
+//            return response()->json(['types' => $request->input('types')], 400);
+
             $category = Category::findOrFail($request->input('category_id'));
             $item = Item::create($request->all());
             if ($request->hasFile('image')) {
@@ -310,23 +312,88 @@ class ItemController extends Controller
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
 //        }
+
         try {
+
             $validated = $request->validate([
-                'image' => 'required',
                 'category_id' => 'required',
+                'code' => 'required',
                 'extra_group_id' => 'nullable',
-                'code' => 'required'
+                'types' => 'required',
+                'trans' => 'required',
+//                'trans.*.description' => 'required',
+                'trans.*.name' => 'required',
+                'types.*.price' => 'required',
+                'types.*.quantity' => 'required',
+                'types.*.unit' => 'required',
+//                'image' => 'required',
             ]);
-            $item = Item::findOrFail($id);
+
+//            return response()->json(['types' => $request->input('types')], 400);
+
             $category = Category::findOrFail($request->input('category_id'));
-            Media::where('model_id', $id)
-                ->where('model_type', Item::class)
-                ->delete();
-            $item->addMediaFromRequest('image')->toMediaCollection();
-            $item->getMedia();
-            return response()->json(['item' => $item]);
+            $item = Item::findOrFail($id);
+            $item->update($request->all());
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $item->addMedia($image)->toMediaCollection();
+                $item->getMedia();
+            }
+
+            $types = json_decode($request->input('types'), true);
+            $trans = json_decode($request->input('trans'), true);
+
+//            $types = $request->input('types');
+//            $trans = $request->input('trans');
+
+            ItemType::where('item_id', $item->id)->delete();
+            ItemTran::where('item_id', $item->id)->delete();
+
+            if (count($types) == 1) {
+                $itemType = ItemType::create([
+                    'item_id' => $item->id,
+                    'quantity' => $types[0]['quantity'],
+                    'unit' => $types[0]['unit'],
+                    'price' => $types[0]['price'],
+                ]);
+//                return response()->json(['category' => $category], 430);
+                foreach ($trans as $tran) {
+                    $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
+                    ItemTran::create([
+                        'item_id' => $item->id,
+                        'lang_id' => $lang_id,
+                        'name' => $tran['name'],
+                        'description' => $tran['description'],
+                    ]);
+
+                    ItemTypeTran::create([
+                        'item_type_id' => $itemType->id,
+                        'name' => $tran['name'],
+                        'lang_id' => $lang_id
+                    ]);
+
+                }
+            } else if (count($types) > 1) {
+                foreach ($trans as $tran) {
+                    $lang_id = Language::where('code', $tran['lang_code'])->first()->id;
+                    ItemTran::create([
+                        'item_id' => $item->id,
+                        'lang_id' => $lang_id,
+                        'name' => $tran['name'],
+                        'description' => $tran['description'],
+                    ]);
+                }
+                $itemTypeController = new ItemTypeController();
+                foreach ($types as $type) {
+                    $itemTypeController->indirectStore($type, $item->id);
+                }
+            } else {
+                return response()->json(['error' => 'Types are required'], 400);
+            }
+
+            return response()->json(['items' => $item], 201);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
+            return response()->json($e->getMessage(), 400);
         }
     }
 

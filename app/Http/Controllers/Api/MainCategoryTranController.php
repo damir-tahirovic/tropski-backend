@@ -54,7 +54,7 @@ class MainCategoryTranController extends Controller
             $result = DB::table('main_categories as mc')
                 ->join('main_category_trans as mct', 'mct.main_cat_id', '=', 'mc.id')
                 ->join('languages as l', 'mct.lang_id', '=', 'l.id')
-                ->select('l.code', 'mc.id as main_category_id', 'mct.name as main_category_name')
+                ->select('l.code', 'mc.id as main_category_id', 'mct.name as main_category_name', 'mc.hotel_id')
                 ->get();
             return response()->json($result);
         } catch (Exception $e) {

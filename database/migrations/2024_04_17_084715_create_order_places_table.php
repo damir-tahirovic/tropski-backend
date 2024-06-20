@@ -20,8 +20,8 @@ return new class extends Migration
             $table->boolean('reported')->default(false);
             $table->unsignedBigInteger('hotel_id');
             $table->unsignedBigInteger('main_cat_id');
-            $table->foreign('hotel_id')->references('id')->on('hotels');
-            $table->foreign('main_cat_id')->references('id')->on('main_categories')->onDelete('cascade');
+            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade');
+            $table->foreign('main_cat_id')->references('id')->on('main_categories')->onDelete('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

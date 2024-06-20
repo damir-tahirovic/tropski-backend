@@ -19,7 +19,7 @@ class ExtraController extends Controller
      * @OA\Get(
      *     path="/api/extras",
      *     tags={"Extra"},
-     *     summary="Finds all Extras",
+     *     summary="Finds all extras",
      *     description="Multiple status values can be provided with comma separated string",
      *     operationId="extras.index",
      *     @OA\Parameter(
@@ -66,18 +66,41 @@ class ExtraController extends Controller
      * @OA\Post(
      *     path="/api/extras",
      *     tags={"Extra"},
-     *     summary="Create a new extra",
+     *     summary="Create a new extra with an image",
+     *     description="Create a new extra with an image",
      *     operationId="extras.store",
      *     @OA\RequestBody(
-     *         description="Extra data",
+     *         description="Extra object that needs to be added",
      *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="hotel_id",
+     *                     description="The ID of the hotel",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the extra",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                  @OA\Property(
+     *                      property="trans",
+     *                      description="name translations",
+     *                      type="string"
+     *                  )
+     *             )
+     *         ),
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref="#/components/schemas/Extra")
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Extra created successfully"
      *     ),
      *     @OA\Response(
@@ -94,7 +117,7 @@ class ExtraController extends Controller
 //            return response()->json($e->getMessage(), 401);
 //        }
         try {
-            $data = json_decode($request->getContent(), true);
+            $trans = json_decode($request->input('trans'), true);
 
             $hotel = Hotel::findOrFail($request->input('hotel_id'));
             $validated = $request->validate([
@@ -111,7 +134,7 @@ class ExtraController extends Controller
                 $extra->getMedia();
             }
 
-            foreach ($data['trans'] as $tran) {
+            foreach ($trans as $tran) {
                 $langId = Language::where('code', $tran['lang_code'])->first()->id;
                 ExtraTran::create([
                     'extra_id' => $extra->id,
@@ -181,8 +204,30 @@ class ExtraController extends Controller
      *     description="",
      *     operationId="extras.update",
      *     @OA\RequestBody(
-     *         description="Extra object that needs to be updated",
+     *         description="Extra object that needs to be added to the store",
      *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="hotel_id",
+     *                     description="The ID of the hotel",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the extra",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                  @OA\Property(
+     *                      property="trans",
+     *                      description="name translations",
+     *                      type="string"
+     *                  )
+     *             )
+     *         ),
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref="#/components/schemas/Extra")

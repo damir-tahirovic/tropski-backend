@@ -20,6 +20,46 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *         property="his_id",
  *         type="integer",
  *         description="The HIS ID of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         description="The description of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="primary_color",
+ *         type="string",
+ *         description="The primary color of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="primary_color_light",
+ *         type="string",
+ *         description="The light variant of the primary color of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="primary_color_dark",
+ *         type="string",
+ *         description="The dark variant of the primary color of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="secondary_color",
+ *         type="string",
+ *         description="The secondary color of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="secondary_color_light",
+ *         type="string",
+ *         description="The light variant of the secondary color of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="secondary_color_dark",
+ *         type="string",
+ *         description="The dark variant of the secondary color of the hotel"
+ *     ),
+ *     @OA\Property(
+ *         property="banner_text",
+ *         type="string",
+ *         description="The banner text of the hotel"
  *     )
  * )
  */

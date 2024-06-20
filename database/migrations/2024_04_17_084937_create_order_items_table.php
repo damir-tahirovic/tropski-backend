@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('item_type_id');
             $table->unsignedBigInteger('order_id');
             $table->text('special_instructions')->nullable();
-            $table->foreign('item_type_id')->references('id')->on('item_types');
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('item_type_id')->references('id')->on('item_types')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->timestamps();
         });
     }

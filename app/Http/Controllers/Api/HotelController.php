@@ -19,23 +19,18 @@ class HotelController extends Controller
      *     path="/api/hotels-main-categories",
      *     tags={"Hotel"},
      *     summary="Finds all hotels with its main categories",
-     *     description="Multiple status values can be provided with comma separated string",
+     *     description="Returns all hotels with their main categories",
      *     operationId="hotels.allHotelsWithMainCategories",
-     *     @OA\Parameter(
-     *         name="status",
-     *         in="query",
-     *         description="Status values that needed to be considered for filter",
-     *         required=true,
-     *         explode=true,
-     *         @OA\Schema(
-     *             default="active",
-     *             type="string",
-     *             enum={"active", "inactive"}
-     *         )
-     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="successful operation"
+     *         description="successful operation",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Hotel")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -63,31 +58,38 @@ class HotelController extends Controller
      *     path="/api/hotels-main-categories/{id}",
      *     tags={"Hotel"},
      *     summary="Finds hotel with its main categories",
-     *     description="Multiple status values can be provided with comma separated string",
+     *     description="Returns a single hotel with its main categories",
      *     operationId="hotels.hotelsWithMainCategories",
      *     @OA\Parameter(
-     *         name="status",
-     *         in="query",
-     *         description="Status values that needed to be considered for filter",
+     *         name="id",
+     *         in="path",
+     *         description="ID of hotel to return",
      *         required=true,
-     *         explode=true,
      *         @OA\Schema(
-     *             default="active",
-     *             type="string",
-     *             enum={"active", "inactive"}
+     *             type="integer",
+     *             format="int64"
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="successful operation"
+     *         description="successful operation",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 ref="#/components/schemas/Hotel"
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid status value"
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Hotel not found"
      *     )
      * )
      */
-
     public function hotelsWithMainCategories($id)
     {
         //        try {
@@ -109,23 +111,18 @@ class HotelController extends Controller
      *     path="/api/hotels",
      *     tags={"Hotel"},
      *     summary="Finds all hotels",
-     *     description="Multiple status values can be provided with comma separated string",
+     *     description="Returns all hotels",
      *     operationId="hotels.index",
-     *     @OA\Parameter(
-     *         name="status",
-     *         in="query",
-     *         description="Status values that needed to be considered for filter",
-     *         required=true,
-     *         explode=true,
-     *         @OA\Schema(
-     *             default="active",
-     *             type="string",
-     *             enum={"active", "inactive"}
-     *         )
-     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="successful operation"
+     *         description="successful operation",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Hotel")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -133,7 +130,6 @@ class HotelController extends Controller
      *     )
      * )
      */
-
     public function index()
     {
 //        try {
@@ -150,6 +146,30 @@ class HotelController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/hotels-languages",
+     *     tags={"Hotel"},
+     *     summary="Finds all hotels with its languages",
+     *     description="Returns all hotels with their languages",
+     *     operationId="hotels.allHotelsWithLanguages",
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Hotel")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
+     */
     public
     function allHotelsWithLanguages()
     {
@@ -170,16 +190,93 @@ class HotelController extends Controller
      * @OA\Post(
      *     path="/api/hotels",
      *     tags={"Hotel"},
-     *     summary="Create a new hotel",
-     *     description="Create a new hotel with the provided data",
-     *     operationId="createHotel",
+     *     summary="Create a new hotel with an image",
+     *     description="Create a new hotel with an image",
+     *     operationId="hotels.store",
      *     @OA\RequestBody(
-     *         description="Hotel data",
+     *         description="Hotel object that needs to be added",
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/Hotel")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="The name of the hotel",
+     *                     type="string"
+     *                 ),
+     *     @OA\Property(
+     *                      property="description",
+     *                      description="Description of the hotel",
+     *                      type="string"
+     *                  ),
+     *                 @OA\Property(
+     *                     property="primary_color",
+     *                     description="The primary color of the hotel",
+     *                     type="string"
+     *                 ),
+     *     @OA\Property(
+     *                      property="primary_color_light",
+     *                      description="The primary color of the hotel",
+     *                      type="string"
+     *                  ),
+     *      @OA\Property(
+     *                       property="primary_color_dark",
+     *                       description="The primary color of the hotel",
+     *                       type="string"
+     *                   ),
+     *     @OA\Property(
+     *                       property="secondary_color",
+     *                       description="The secondary color of the hotel",
+     *                       type="string"
+     *                   ),
+     *     @OA\Property(
+     *                        property="secondary_color_light",
+     *                        description="The secondary color of the hotel",
+     *                        type="string"
+     *                    ),
+     *     @OA\Property(
+     *                        property="secondary_color_dark",
+     *                        description="The secondary color of the hotel",
+     *                        type="string"
+     *                    ),
+     *     @OA\Property(
+     *                        property="banner_text",
+     *                        description="banner_text of the hotel",
+     *                        type="string"
+     *                    ),
+     *     @OA\Property(
+     *                         property="languages",
+     *                         description="languages of the hotel",
+     *                         type="string"
+     *                     ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the hotel",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *     @OA\Property(
+     *                      property="logo",
+     *                      description="The logo for the hotel",
+     *                      type="string",
+     *                      format="binary"
+     *                  ),
+     *     @OA\Property(
+     *                      property="banner_image",
+     *                      description="The banner for the hotel",
+     *                      type="string",
+     *                      format="binary"
+     *                  )
+     *             )
+     *         ),
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Hotel")
+     *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Hotel created successfully"
      *     ),
      *     @OA\Response(
@@ -267,7 +364,13 @@ class HotelController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="successful operation"
+     *         description="successful operation",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 ref="#/components/schemas/Hotel"
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -287,8 +390,11 @@ class HotelController extends Controller
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);
         try {
-            $hotel = Hotel::findOrFail($id);
-            $hotel->getMedia();
+            $hotel = Hotel::with([
+                'languages',
+            ])->findOrFail($id);
+            $hotel->load('media');
+
             return response()->json($hotel);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -299,8 +405,8 @@ class HotelController extends Controller
      * @OA\Put(
      *     path="/api/hotels/{id}",
      *     tags={"Hotel"},
-     *     summary="Updates a hotel with new data",
-     *     description="Updates a hotel with new data",
+     *     summary="Update an existing hotel",
+     *     description="Update an existing hotel",
      *     operationId="updateHotel",
      *     @OA\Parameter(
      *         name="id",
@@ -313,9 +419,86 @@ class HotelController extends Controller
      *         )
      *     ),
      *     @OA\RequestBody(
-     *         description="Updated hotel data",
+     *         description="Hotel object that needs to be updated",
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/Hotel")
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="The name of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     description="Description of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="primary_color",
+     *                     description="The primary color of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="primary_color_light",
+     *                     description="The primary light color of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="primary_color_dark",
+     *                     description="The primary dark color of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="secondary_color",
+     *                     description="The secondary color of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="secondary_color_light",
+     *                     description="The secondary light color of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="secondary_color_dark",
+     *                     description="The secondary dark color of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="banner_text",
+     *                     description="The banner text of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="languages",
+     *                     description="The languages of the hotel",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     description="The image for the hotel",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="logo",
+     *                     description="The logo for the hotel",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="banner_image",
+     *                     description="The banner image for the hotel",
+     *                     type="string",
+     *                     format="binary"
+     *                 )
+     *             )
+     *         ),
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Hotel")
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -323,7 +506,7 @@ class HotelController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid input"
+     *         description="Invalid ID supplied"
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -442,7 +625,7 @@ class HotelController extends Controller
     public
     function destroy($id)
     {
-        //        try {
+//        try {
 //            $this->authorize('forceDelete', Hotel::class);
 //        } catch (Exception $e) {
 //            return response()->json($e->getMessage(), 401);

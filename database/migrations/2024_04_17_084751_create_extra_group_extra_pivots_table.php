@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('unit');
             $table->unsignedBigInteger('extra_group_id');
             $table->unsignedBigInteger('extra_id');
-            $table->foreign('extra_id')->references('id')->on('extras');
-            $table->foreign('extra_group_id')->references('id')->on('extra_groups');
+            $table->foreign('extra_id')->references('id')->on('extras')->onDelete('cascade');
+            $table->foreign('extra_group_id')->references('id')->on('extra_groups')->onDelete('cascade');
             $table->timestamps();
         });
     }
